@@ -1,0 +1,23 @@
+# Clipboard
+clipboard-read = allow
+clipboard-write = allow
+
+# Theme
+theme = Hardcore
+theme = Monokai Remastered
+
+# Fonts
+font-size = 13
+
+font-family = "BlexMono Nerd Font Mono"
+font-family = "IBM Plex Mono"
+
+font-feature = +liga
+
+# Window
+macos-titlebar-style = hidden
+window-colorspace = display-p3
+window-padding-x = 8
+window-padding-y = 6,0
+window-save-state = always
+resize-overlay = never
