@@ -18,6 +18,12 @@ brew install --cask ghostty
 brew install --cask font-blex-mono-nerd-font
 ```
 
+### ZSH NVM
+
+```sh
+git clone https://github.com/lukechilds/zsh-nvm ~/.oh-my-zsh/custom/plugins/zsh-nvm
+```
+
 ## Set up
 
 ```sh

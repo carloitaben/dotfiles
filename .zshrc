@@ -69,6 +69,7 @@ ZSH_THEME="half-life"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
+  zsh-nvm
   pnpm-shell-completion
 )
 
