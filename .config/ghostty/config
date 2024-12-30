@@ -17,7 +17,11 @@ font-feature = +liga
 # Window
 macos-titlebar-style = hidden
 window-colorspace = display-p3
-window-padding-x = 8
-window-padding-y = 6,0
+window-width = 80
+window-height = 24
 window-save-state = always
 resize-overlay = never
+
+# Cursor
+cursor-style = block
+mouse-hide-while-typing = true
