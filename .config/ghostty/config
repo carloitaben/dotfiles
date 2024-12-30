@@ -3,8 +3,7 @@ clipboard-read = allow
 clipboard-write = allow
 
 # Theme
-theme = Hardcore
-theme = Monokai Remastered
+theme = tokyonight
 
 # Fonts
 font-size = 13
