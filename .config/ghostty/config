@@ -25,6 +25,7 @@ window-padding-y = 18
 window-padding-balance = true
 window-save-state = always
 resize-overlay = never
+confirm-close-surface = false
 
 # Cursor
 cursor-style = block
