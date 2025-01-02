@@ -118,8 +118,7 @@ vim.opt.cmdheight = 0
 --   vim.opt.clipboard = 'unnamedplus'
 -- end)
 
--- Enable break indent
-vim.opt.breakindent = true
+vim.o.foldmethod = 'indent'
 
 -- Save undo history
 vim.opt.undofile = true
@@ -154,10 +153,18 @@ vim.opt.inccommand = 'split'
 vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 10
+vim.opt.scrolloff = 5
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
+
+-- Move selection up/down on visual mode
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
+
+-- Move through quickfix list
+vim.keymap.set('n', '<C-j>', ':cnext<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<C-k>', ':cprevious<CR>', { noremap = true, silent = true })
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
