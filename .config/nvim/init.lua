@@ -168,6 +168,14 @@ vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
 vim.keymap.set('n', '<C-j>', ':cnext<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-k>', ':cprevious<CR>', { noremap = true, silent = true })
 
+-- Keep cursor centered when scrolling
+vim.keymap.set('n', '<C-u>', '<C-u>zz', { noremap = true, silent = true })
+vim.keymap.set('n', '<C-d>', '<C-d>zz', { noremap = true, silent = true })
+
+-- Keep selection after indenting
+vim.keymap.set('v', '<', '<gv')
+vim.keymap.set('v', '>', '>gv')
+
 -- Clear highlights on search when pressing <Esc> in normal mode
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
