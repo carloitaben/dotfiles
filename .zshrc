@@ -10,8 +10,9 @@ export ZSH="$HOME/.oh-my-zsh"
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="half-life"
 
-# Use Java Runtime from Android Studio
-JAVA_HOME="$HOME/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+# Android
+JAVA_HOME=$HOME/Applications/Android\ Studio.app/Contents/jbr
+ANDROID_HOME=$HOME/Library/Android/sdk/platform-tools
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
