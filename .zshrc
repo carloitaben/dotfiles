@@ -11,8 +11,10 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="half-life"
 
 # Android development
-JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
-ANDROID_HOME=/Library/Android/sdk/platform-tools
+JAVA_HOME=$HOME/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
+ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
