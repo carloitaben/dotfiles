@@ -877,21 +877,6 @@ require('lazy').setup({
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
 
-      -- Animate scroll
-      require('mini.animate').setup {
-        cursor = {
-          enable = false,
-        },
-        scroll = {
-          enable = true,
-          timing = require('mini.animate').gen_timing.cubic {
-            unit = 'total',
-            easing = 'out',
-            duration = 60,
-          },
-        },
-      }
-
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
