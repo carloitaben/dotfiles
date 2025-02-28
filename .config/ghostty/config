@@ -16,7 +16,7 @@ font-feature = +liga
 
 # Window
 macos-titlebar-style = hidden
-macos-auto-secure-onput = true
+macos-auto-secure-input = true
 macos-secure-input-indication = false
 window-colorspace = display-p3
 window-width = 80
