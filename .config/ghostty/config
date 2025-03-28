@@ -3,7 +3,7 @@ clipboard-read = allow
 clipboard-write = allow
 
 # Theme
-theme = tokyonight
+theme = oscura
 
 # Fonts
 font-size = 13
