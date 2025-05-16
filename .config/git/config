@@ -1,0 +1,23 @@
+[user]
+    name = Carlo Domínguez
+    email = hello@carlo.works
+
+[core]
+    whitespace = error  # threat incorrect whitespace as errors
+
+[init]
+    defaultBranch = main
+
+[push]
+    autoSetupRemote = true  # easier to push new branches
+    default = current  # push only current branch by default
+    followTags = true  # push also tags
+
+[pull]
+    rebase = true
+
+[rebase]
+    autoStash = true
+
+[url "git@github.com:"]
+    insteadOf = "gh:"
