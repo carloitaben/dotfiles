@@ -98,7 +98,7 @@ else
 fi
 
 export TERMINAL='ghostty'
-export BROWSER='google-chrome'
+export BROWSER=open
 
 # Compilation flags
 # export ARCHFLAGS="-arch $(uname -m)"
