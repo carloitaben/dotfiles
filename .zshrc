@@ -136,3 +136,10 @@ function smite() {
             fc -p $HISTFILE $HISTSIZE $SAVEHIST
         done
 }
+
+# pnpm
+export PNPM_HOME="/Users/carloitaben/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
