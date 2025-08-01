@@ -1,14 +1,7 @@
-vim.pack.add({
-  { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
-})
-
-require("nvim-treesitter.configs").setup({
-  ensure_installed = { "svelte", "typescript", "javascript" },
-  highlight = { enable = true }
-})
-
+require("git")
 require("keybinds")
 require("lsp")
 require("options")
 require("theme")
+require("tree")
 require("treesitter")
