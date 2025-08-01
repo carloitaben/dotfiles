@@ -3,12 +3,6 @@ vim.pack.add({
 })
 
 require("nvim-treesitter.configs").setup({
-  ensure_installed = { "svelte", "typescript", "javascript" },
+  ensure_installed = { "typescript", "javascript" },
   highlight = { enable = true }
 })
-
-require("keybinds")
-require("lsp")
-require("options")
-require("theme")
-require("treesitter")
