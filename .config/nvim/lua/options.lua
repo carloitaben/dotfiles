@@ -2,8 +2,8 @@ vim.o.number = true
 vim.o.relativenumber = true
 vim.o.signcolumn = "yes"
 vim.o.wrap = false
-vim.o.tabstop = 2
 vim.o.swapfile = false
+vim.o.tabstop = 2
 vim.o.expandtab = true
 vim.o.mouse = 'a'
 vim.o.showmode = false
@@ -19,7 +19,8 @@ vim.o.foldenable = false
 vim.o.ignorecase = true
 vim.o.smartcase = true
 
-vim.o.inccommand = 'split'
+-- vim.o.inccommand = 'split'
+
 
 vim.o.splitright = true
 vim.o.splitbelow = true
@@ -30,3 +31,5 @@ vim.o.list = true
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.have_nerd_font = true
+
+-- vim.o.winborder = "single"
