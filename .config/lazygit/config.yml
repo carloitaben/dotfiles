@@ -1,0 +1,5 @@
+gui:
+  showFileIcons: false
+  border: single
+
+quitOnTopLevelReturn: true

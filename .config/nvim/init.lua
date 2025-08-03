@@ -1,7 +1,8 @@
-require("git")
+-- require("git")
 require("keybinds")
 require("lsp")
 require("options")
 require("theme")
 require("tree")
 require("treesitter")
+

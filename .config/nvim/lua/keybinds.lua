@@ -1,25 +1,24 @@
 vim.pack.add({
-        { src = "https://github.com/folke/which-key.nvim" },
+	{ src = "https://github.com/folke/which-key.nvim" },
 })
 
 -- opts.win.height.max = math.huge
 
-
 require("which-key").setup({
-        delay = 0,
-        preset = "helix",
-        win = {
-                height = {
-                        max = math.huge
-                }
+	delay = 0,
+	preset = "helix",
+	win = {
+		height = {
+			max = math.huge
+		}
 
-        },
-        icons = {
-                mappings = false,
+	},
+	icons = {
+		mappings = false,
 
-        },
-        -- show_help = false,
-        -- show_keys = false,
+	},
+	-- show_help = false,
+	-- show_keys = false,
 })
 
 vim.keymap.set("n", "<leader>lf", vim.lsp.buf.format)
@@ -43,9 +42,9 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 vim.api.nvim_create_autocmd('TextYankPost', {
-        desc = 'Highlight when yanking text',
-        -- group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
-        callback = function()
-                vim.highlight.on_yank()
-        end,
+	desc = 'Highlight when yanking text',
+	-- group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
+	callback = function()
+		vim.highlight.on_yank()
+	end,
 })

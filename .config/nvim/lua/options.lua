@@ -3,14 +3,14 @@ vim.o.relativenumber = true
 vim.o.signcolumn = "yes"
 vim.o.wrap = false
 vim.o.swapfile = false
-vim.o.tabstop = 2
-vim.o.expandtab = true
+-- vim.o.tabstop = 2
+-- vim.o.expandtab = true
 vim.o.mouse = 'a'
-vim.o.showmode = false
+-- vim.o.showmode = false
 vim.o.scrolloff = 5
 
 -- Hide command bar
-vim.o.cmdheight = 0
+-- vim.o.cmdheight = 0
 
 vim.o.foldmethod = 'indent'
 vim.o.foldenable = false
@@ -20,16 +20,14 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 
 -- vim.o.inccommand = 'split'
-
-
 vim.o.splitright = true
 vim.o.splitbelow = true
 
-vim.o.list = true
+-- vim.o.list = true
 -- vim.o.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.have_nerd_font = true
 
--- vim.o.winborder = "single"
+vim.o.winborder = "single"
