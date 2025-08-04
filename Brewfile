@@ -8,7 +8,6 @@ brew "neovim"
 brew "railway"
 brew "ripgrep"
 brew "stow"
-brew "git-delta"
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
 
