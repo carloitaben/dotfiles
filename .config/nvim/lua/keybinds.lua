@@ -1,8 +1,15 @@
 vim.pack.add({
 	{ src = "https://github.com/folke/which-key.nvim" },
+	{ src = "https://github.com/echasnovski/mini.nvim" },
 })
 
 -- opts.win.height.max = math.huge
+
+require("mini.pairs").setup()
+
+require("mini.ai").setup()
+
+require("mini.surround").setup()
 
 require("which-key").setup({
 	delay = 0,
