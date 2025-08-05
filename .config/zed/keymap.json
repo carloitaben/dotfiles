@@ -1,0 +1,94 @@
+// Zed keymap
+//
+// For information on binding keys, see the Zed
+// documentation: https://zed.dev/docs/key-bindings
+//
+// To see the default key bindings run `zed: open default keymap`
+// from the command palette.
+[
+  {
+    "context": "Workspace",
+    "bindings": {
+      "cmd-j": "workspace::ToggleRightDock",
+      "cmd-r": "editor::RestartLanguageServer"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "cmd-shift-g": [
+        "task::Spawn",
+        { "task_name": "start lazygit", "reveal_target": "center" }
+      ],
+      "cmd-/": ["editor::ToggleComments", { "advance_downwards": false }]
+    }
+  },
+  {
+    "context": "vim_operator == a || vim_operator == i || vim_operator == cs",
+    "bindings": {
+      "q": "vim::MiniQuotes",
+      "b": "vim::MiniBrackets"
+    }
+  },
+  {
+    "context": "Dock",
+    "bindings": {
+      "ctrl-w k": "workspace::ActivatePaneUp",
+      "ctrl-w j": "workspace::ActivatePaneDown",
+      "ctrl-w h": "workspace::ActivatePaneLeft",
+      "ctrl-w l": "workspace::ActivatePaneRight"
+    }
+  },
+  // {
+  //   "context": "Dock && !Terminal",
+  //   "bindings": {
+  //     "space k": "workspace::ActivatePaneUp",
+  //     "space j": "workspace::ActivatePaneDown",
+  //     "space h": "workspace::ActivatePaneLeft",
+  //     "space l": "workspace::ActivatePaneRight"
+  //   }
+  // },
+  {
+    "context": "VimControl && !menu",
+    "bindings": {
+      "g o": ["workspace::SendKeystrokes", "g g 0"],
+      "J": "vim::WindowBottom",
+      "K": "vim::WindowTop",
+      "H": "pane::ActivatePreviousItem",
+      "L": "pane::ActivateNextItem",
+      "space f": "editor::Format"
+    }
+  },
+  {
+    "context": "Terminal",
+    "bindings": {
+      "ctrl-w v": "pane::SplitVertical",
+      "ctrl-w s": "pane::SplitHorizontal"
+    }
+  },
+  // {
+  //   "context": "VimControl && !!Editor && !Terminal",
+  //   "bindings": {
+  //     "space h": "workspace::ActivatePaneLeft",
+  //     "space l": "workspace::ActivatePaneRight",
+  //     "space k": "workspace::ActivatePaneUp",
+  //     "space j": "workspace::ActivatePaneDown",
+  //     "space shift-h": "workspace::SwapPaneLeft",
+  //     "space shift-l": "workspace::SwapPaneRight",
+  //     "space shift-k": "workspace::SwapPaneUp",
+  //     "space shift-j": "workspace::SwapPaneDown",
+  //     "space v": "pane::SplitVertical",
+  //     "space s": "pane::SplitHorizontal",
+  //   }
+  // },
+  {
+    "context": "vim_mode == visual",
+    "bindings": {
+      "p": ["workspace::SendKeystrokes", "p g v y"],
+      ">": ["workspace::SendKeystrokes", "> g v"],
+      "<": ["workspace::SendKeystrokes", "< g v"],
+      "K": "editor::MoveLineUp",
+      "J": "editor::MoveLineDown"
+    }
+  }
+]
