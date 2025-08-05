@@ -14,7 +14,7 @@ require("nvim-tree").setup({
 		sorter = "case_sensitive",
 	},
 	view = {
-		width = 30,
+		width = 40,
 	},
 	  system_open =
     -- identify OS and set OS-specific cmd with args
@@ -89,5 +89,4 @@ require("nvim-tree").setup({
 	git = {},
 })
 
-vim.api.nvim_set_keymap("n", "<C-h>", ":NvimTreeFocus<cr>", { silent = true, noremap = true })
-
+vim.api.nvim_set_keymap("n", "<D-S-e>", ":NvimTreeFocus<cr>", { silent = true, noremap = true })

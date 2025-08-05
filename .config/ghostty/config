@@ -31,3 +31,11 @@ confirm-close-surface = false
 # Cursor
 cursor-style = block
 mouse-hide-while-typing = true
+
+# Keybinds
+keybind = clear
+keybind = super+c=copy_to_clipboard
+keybind = super+q=quit
+keybind = super+shift+n=new_window
+keybind = super+shift+w=close_window
+keybind = super+k=clear_screen
