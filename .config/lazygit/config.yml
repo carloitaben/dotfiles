@@ -1,5 +1,7 @@
 gui:
-  showFileIcons: false
   border: single
+  scrollHeight: 5
+  showFileIcons: false
+  tabWidth: 2
 
 quitOnTopLevelReturn: true
