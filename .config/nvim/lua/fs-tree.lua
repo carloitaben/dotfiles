@@ -87,8 +87,8 @@ require("nvim-tree").setup({
             symlink_arrow = " ➛ ",
             show = {
                 file = true,
-                folder = true,
-                folder_arrow = false,
+                folder = false,
+                folder_arrow = true,
                 git = true,
                 modified = true,
                 hidden = false,
@@ -104,12 +104,6 @@ require("nvim-tree").setup({
                 folder = {
                     arrow_closed = "+",
                     arrow_open = "−",
-                    default = "+",
-                    open = "−",
-                    empty = "+",
-                    empty_open = "−",
-                    symlink = "",
-                    symlink_open = "",
                 },
                 git = {
                     unstaged = "·",
@@ -130,5 +124,15 @@ require("nvim-tree").setup({
     git = {},
 })
 
+function toggle_nvimtree()
+	if vim.fn.bufname():match 'NvimTree_' then
+		vim.cmd.wincmd 'p'
+	else
+		vim.cmd('NvimTreeFindFile')
+	end
+end
 
-vim.api.nvim_set_keymap("n", "<D-S-e>", ":NvimTreeFocus<cr>", { silent = true, noremap = true })
+vim.keymap.set("n", "<D-S-e>", "<cmd>:lua toggle_nvimtree()<CR>", { silent = true, noremap = true, desc= "File Explorer: Focus" })
+
+vim.keymap.set("n", "<D-b>", ":NvimTreeToggle<CR>", { silent = true, noremap = true, desc= "File Explorer: Toggle" })
+
