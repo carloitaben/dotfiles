@@ -2,6 +2,7 @@ gui:
   border: single
   scrollHeight: 5
   showFileIcons: false
+  showFileTree: false
   tabWidth: 2
 
 quitOnTopLevelReturn: true
