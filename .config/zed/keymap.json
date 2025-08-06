@@ -56,7 +56,9 @@
       "K": "vim::WindowTop",
       "H": "pane::ActivatePreviousItem",
       "L": "pane::ActivateNextItem",
-      "space f": "editor::Format"
+      "space f": "editor::Format",
+      "ctrl-u": ["workspace::SendKeystrokes", "ctrl+u z z"],
+      "ctrl-d": ["workspace::SendKeystrokes", "ctrl+d z z"]
     }
   },
   {
