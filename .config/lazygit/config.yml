@@ -4,5 +4,17 @@ gui:
   showFileIcons: false
   showFileTree: false
   tabWidth: 2
+  spinner:
+    frames:
+      - "⠋"
+      - "⠙"
+      - "⠹"
+      - "⠸"
+      - "⠼"
+      - "⠴"
+      - "⠦"
+      - "⠧"
+      - "⠇"
+      - "⠏"
 
 quitOnTopLevelReturn: true
