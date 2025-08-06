@@ -13,7 +13,7 @@
       "cmd-r": "editor::RestartLanguageServer",
       "cmd-shift-g": [
         "task::Spawn",
-        { "task_name": "start lazygit", "reveal_target": "center" }
+        { "task_name": "Start lazygit", "reveal_target": "center" }
       ]
     }
   },
