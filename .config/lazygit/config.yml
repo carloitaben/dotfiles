@@ -18,3 +18,9 @@ gui:
       - "⠏"
 
 quitOnTopLevelReturn: true
+
+customCommands:
+  - key: "t"
+    command: "git fetch --prune && git for-each-ref --format '%(refname:short) %(upstream:track)' | fgrep '[gone]' | cut -d' ' -f1 | xargs -r git branch -D"
+    context: "localBranches"
+    description: "Trim branches whose remotes are merged"
