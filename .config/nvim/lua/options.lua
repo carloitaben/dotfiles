@@ -7,7 +7,6 @@ vim.o.softtabstop = 2
 vim.o.tabstop = 2
 vim.o.smartindent = true
 vim.o.expandtab = true
-vim.o.cursorcolumn = false
 vim.o.mouse = 'a'
 -- vim.o.showmode = false
 vim.o.scrolloff = 10
@@ -30,8 +29,6 @@ vim.o.smartcase = true
 vim.o.splitright = true
 vim.o.splitbelow = true
 
--- vim.o.list = true
--- vim.o.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
@@ -39,3 +36,5 @@ vim.g.have_nerd_font = true
 
 vim.o.winborder = "single"
 
+-- Preview substitutions live
+vim.o.inccommand = 'split'
