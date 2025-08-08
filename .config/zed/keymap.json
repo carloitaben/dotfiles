@@ -39,15 +39,6 @@
       "ctrl-w l": "workspace::ActivatePaneRight"
     }
   },
-  // {
-  //   "context": "Dock && !Terminal",
-  //   "bindings": {
-  //     "space k": "workspace::ActivatePaneUp",
-  //     "space j": "workspace::ActivatePaneDown",
-  //     "space h": "workspace::ActivatePaneLeft",
-  //     "space l": "workspace::ActivatePaneRight"
-  //   }
-  // },
   {
     "context": "VimControl && !menu",
     "bindings": {
@@ -56,9 +47,7 @@
       "K": "vim::WindowTop",
       "H": "pane::ActivatePreviousItem",
       "L": "pane::ActivateNextItem",
-      "space f": "editor::Format",
-      "ctrl-u": ["workspace::SendKeystrokes", "ctrl+u z z"],
-      "ctrl-d": ["workspace::SendKeystrokes", "ctrl+d z z"]
+      "space f": "editor::Format"
     }
   },
   {
@@ -68,21 +57,6 @@
       "ctrl-w s": "pane::SplitHorizontal"
     }
   },
-  // {
-  //   "context": "VimControl && !!Editor && !Terminal",
-  //   "bindings": {
-  //     "space h": "workspace::ActivatePaneLeft",
-  //     "space l": "workspace::ActivatePaneRight",
-  //     "space k": "workspace::ActivatePaneUp",
-  //     "space j": "workspace::ActivatePaneDown",
-  //     "space shift-h": "workspace::SwapPaneLeft",
-  //     "space shift-l": "workspace::SwapPaneRight",
-  //     "space shift-k": "workspace::SwapPaneUp",
-  //     "space shift-j": "workspace::SwapPaneDown",
-  //     "space v": "pane::SplitVertical",
-  //     "space s": "pane::SplitHorizontal",
-  //   }
-  // },
   {
     "context": "vim_mode == visual",
     "bindings": {
