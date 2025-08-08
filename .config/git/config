@@ -1,9 +1,10 @@
 [user]
-    name = Carlo Domínguez
     email = hello@carlo.works
+    name = Carlo Domínguez
 
 [core]
-    whitespace = error  # threat incorrect whitespace as errors
+    editor = nvim    
+    whitespace = error
 
 [init]
     defaultBranch = main
@@ -23,4 +24,4 @@
     autoStash = true
 
 [url "git@github.com:"]
-    insteadOf = "gh:"
+    insteadOf = gh:

@@ -23,6 +23,7 @@ window-width = 80
 window-height = 24
 window-padding-x = 17
 window-padding-y = 17
+window-padding-color = background
 window-padding-balance = true
 window-save-state = always
 resize-overlay = never
@@ -31,6 +32,7 @@ confirm-close-surface = false
 # Cursor
 cursor-style = block
 mouse-hide-while-typing = true
+mouse-scroll-multiplier = 0.4
 
 # Keybinds
 keybind = clear
@@ -40,3 +42,4 @@ keybind = super+v=paste_from_clipboard
 keybind = super+k=clear_screen
 keybind = super+shift+n=new_window
 keybind = super+shift+w=close_window
+
