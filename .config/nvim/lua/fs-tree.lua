@@ -12,6 +12,8 @@ vim.pack.add({
 local api = require("nvim-tree.api")
 
 require("nvim-tree").setup({
+    disable_netrw = true,
+    hijack_netrw = true,
     on_attach = function(bufnr)
         local opts = { buffer = bufnr }
         api.config.mappings.default_on_attach(bufnr)
@@ -125,14 +127,14 @@ require("nvim-tree").setup({
 })
 
 function toggle_nvimtree()
-	if vim.fn.bufname():match 'NvimTree_' then
-		vim.cmd.wincmd 'p'
-	else
-		vim.cmd('NvimTreeFindFile')
-	end
+    if vim.fn.bufname():match 'NvimTree_' then
+        vim.cmd.wincmd 'p'
+    else
+        vim.cmd('NvimTreeFindFile')
+    end
 end
 
-vim.keymap.set("n", "<D-S-e>", "<cmd>:lua toggle_nvimtree()<CR>", { silent = true, noremap = true, desc= "File Explorer: Focus" })
+vim.keymap.set("n", "<D-S-e>", "<cmd>:lua toggle_nvimtree()<CR>",
+    { silent = true, noremap = true, desc = "File Explorer: Focus" })
 
-vim.keymap.set("n", "<D-b>", ":NvimTreeToggle<CR>", { silent = true, noremap = true, desc= "File Explorer: Toggle" })
-
+vim.keymap.set("n", "<D-b>", ":NvimTreeToggle<CR>", { silent = true, noremap = true, desc = "File Explorer: Toggle" })

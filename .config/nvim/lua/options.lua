@@ -3,11 +3,18 @@ vim.o.relativenumber = true
 vim.o.signcolumn = "yes"
 vim.o.wrap = false
 vim.o.swapfile = false
+vim.o.softtabstop = 2
 vim.o.tabstop = 2
+vim.o.smartindent = true
 vim.o.expandtab = true
+vim.o.cursorcolumn = false
 vim.o.mouse = 'a'
 -- vim.o.showmode = false
-vim.o.scrolloff = 5
+vim.o.scrolloff = 10
+vim.opt.sidescrolloff = 10
+vim.opt.backup = false
+vim.o.undofile = true
+vim.o.smoothscroll = true
 
 -- Hide command bar
 -- vim.o.cmdheight = 0
@@ -31,3 +38,4 @@ vim.g.maplocalleader = " "
 vim.g.have_nerd_font = true
 
 vim.o.winborder = "single"
+

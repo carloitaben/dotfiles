@@ -1,4 +1,4 @@
--- require("git")
+require("git")
 require("keybinds")
 require("lsp")
 require("options")
@@ -6,4 +6,4 @@ require("theme")
 -- require("fs-oil")
 require("fs-tree")
 require("treesitter")
-
+require("plugin-telescope")

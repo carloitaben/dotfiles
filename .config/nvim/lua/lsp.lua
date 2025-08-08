@@ -3,7 +3,18 @@ vim.pack.add({
         { src = "https://github.com/mason-org/mason.nvim" },
 })
 
-vim.lsp.enable({ "lua_ls", "bashls", "" })
+vim.lsp.enable({ "lua_ls", "bashls" })
+
+vim.lsp.config("lua_ls", {
+        settings = {
+                Lua = {
+                        workspace = {
+                                library = vim.api.nvim_get_runtime_file("", true)
+                        }
+
+                }
+        }
+})
 
 require("mason").setup()
 
