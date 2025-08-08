@@ -50,10 +50,17 @@ miniclue.setup({
                 { mode = 'n', keys = '[' },
                 { mode = 'n', keys = ']' },
 
+                -- Surrounds
+                { mode = "n", keys = "s" },
+
+                -- Built-in completion
+                { mode = "i", keys = "<C-x>" },
+
         },
 
         clues = {
-                -- Enhance this by adding descriptions for <Leader> mapping groups
+                { mode = "n", keys = "<Leader>s",  desc = "Search" },
+                { mode = "n", keys = "<Leader>gh", desc = "GitHub" },
                 miniclue.gen_clues.builtin_completion(),
                 miniclue.gen_clues.g(),
                 miniclue.gen_clues.marks(),
