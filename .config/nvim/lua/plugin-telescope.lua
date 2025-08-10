@@ -3,6 +3,7 @@ vim.pack.add({
         { src = "https://github.com/nvim-telescope/telescope.nvim" },
         { src = "https://github.com/nvim-telescope/telescope-ui-select.nvim" },
         { src = "https://github.com/nvim-telescope/telescope-github.nvim" },
+        { src = "https://github.com/debugloop/telescope-undo.nvim" },
 })
 
 local telescope = require("telescope")
@@ -47,6 +48,11 @@ vim.keymap.set('n', '<leader>s/', function()
         }
 end, { desc = '[S]earch [/] in Open Files' })
 
+telescope.load_extension("undo")
+vim.keymap.set('n', '<leader>su', function()
+        telescope.extensions.undo.undo()
+end
+, { desc = 'Search undo history' })
 
 telescope.load_extension("gh")
 
