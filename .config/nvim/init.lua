@@ -1,4 +1,4 @@
-require("git")
+-- require("gitsigns")
 require("keybinds")
 require("lsp")
 require("options")
