@@ -71,8 +71,9 @@ miniclue.setup({
 })
 
 vim.keymap.set("n", "<D-s>", "<cmd>:w<CR>", { noremap = true, silent = true })
-
-vim.keymap.set("n", "<leader>lf", vim.lsp.buf.format, { noremap = true, silent = true, desc = "[F]ormat document" })
+vim.keymap.set("n", "<leader>,", ":e ~/.config/nvim/init.lua<CR>",
+        { noremap = true, silent = true, desc = "Open config" })
+vim.keymap.set("n", "<leader>lf", vim.lsp.buf.format, { noremap = true, silent = true, desc = "Format document" })
 
 -- Move selection up/down on visual mode
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
@@ -115,3 +116,10 @@ vim.keymap.set("v", "p", "pgvy", { noremap = true, silent = true })
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+
+vim.keymap.set({ "n", "v" }, "<leader>ff", function() require('snacks').picker.files() end, { desc = "Files" })
+vim.keymap.set({ "n", "v" }, "<leader>fh", function() require('snacks').picker.help() end, { desc = "Help pages" })
+vim.keymap.set({ "n", "v" }, "<leader>fD", function() require('snacks').picker.diagnostics() end,
+        { desc = "Diagnostics" })
+vim.keymap.set({ "n", "v" }, "<leader>fd", function() require('snacks').picker.diagnostics_buffer() end,
+        { desc = "Buffer diagnostics" })
