@@ -9,15 +9,6 @@ oil.setup({
         columns = {
                 "icon",
         },
-        float = {
-                preview_split = "right",
-                win_options = {
-                        number = true,
-                        relativenumber = true,
-                        signcolumn = "no",
-                        cursorline = true,
-                }
-        },
         delete_to_trash = false,
         skip_confirm_for_simple_edits = true,
         show_hidden = true,
@@ -47,7 +38,6 @@ oil.setup({
         float = {
                 max_width = 0.9,
                 max_height = 0.9,
-
                 border = "single",
         },
         ssh = {
