@@ -5,7 +5,7 @@
 [core]
     editor = nvim
     whitespace = error
-    pager = diff-so-fancy | less --tabs=2 -RF
+    pager = delta
 
 [init]
     defaultBranch = main
@@ -21,11 +21,17 @@
 [pull]
     rebase = true
 
+[merge]
+    conflictStyle = zdiff3
+
 [rebase]
     autoStash = true
 
 [interactive]
-    diffFilter = diff-so-fancy --patch
+    diffFilter = delta --color-only
 
 [url "git@github.com:"]
     insteadOf = gh:
+
+[delta]
+    navigate = true
