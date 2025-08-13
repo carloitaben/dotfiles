@@ -3,9 +3,7 @@ vim.pack.add({
 })
 
 require("mini.pairs").setup()
-
 require("mini.ai").setup()
-
 require("mini.surround").setup()
 
 local miniclue = require("mini.clue")
@@ -70,9 +68,19 @@ miniclue.setup({
         },
 })
 
-vim.keymap.set("n", "<D-s>", "<cmd>:w<CR>", { noremap = true, silent = true })
+-- ⌘+s to write file
+vim.keymap.set({ "n", "v", "i"}, "<D-s>", "<cmd>:w<CR>", { noremap = true, silent = true, desc = "Write file" })
+
+-- ⌘+shift-s to write all files
+vim.keymap.set({ "n", "v", "i"}, "<D-S-s>", "<cmd>:wa<CR>", { noremap = true, silent = true, desc = "Write all files" })
+
+-- ⌘+, to open dotfiles
+vim.keymap.set({"n", "v", "i" }, "<D-,>", ":e ~/.config<CR>",
+        { noremap = true, silent = true, desc = "Open dotfiles" })
+
 vim.keymap.set("n", "<leader>,", ":e ~/.config/nvim/init.lua<CR>",
         { noremap = true, silent = true, desc = "Open config" })
+
 vim.keymap.set("n", "<leader>lf", vim.lsp.buf.format, { noremap = true, silent = true, desc = "Format document" })
 
 -- Move selection up/down on visual mode
@@ -117,9 +125,3 @@ vim.keymap.set("v", "p", "pgvy", { noremap = true, silent = true })
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
-vim.keymap.set({ "n", "v" }, "<leader>ff", function() require('snacks').picker.files() end, { desc = "Files" })
-vim.keymap.set({ "n", "v" }, "<leader>fh", function() require('snacks').picker.help() end, { desc = "Help pages" })
-vim.keymap.set({ "n", "v" }, "<leader>fD", function() require('snacks').picker.diagnostics() end,
-        { desc = "Diagnostics" })
-vim.keymap.set({ "n", "v" }, "<leader>fd", function() require('snacks').picker.diagnostics_buffer() end,
-        { desc = "Buffer diagnostics" })
