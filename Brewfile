@@ -1,6 +1,7 @@
 brew "node"
 brew "ffmpeg"
 brew "fzf"
+brew "diff-so-fancy"
 brew "gh"
 brew "jq"
 brew "luarocks"

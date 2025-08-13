@@ -1,3 +1,8 @@
+git:
+  paging:
+    colorArg: always
+    pager: diff-so-fancy
+
 gui:
   border: single
   scrollHeight: 5

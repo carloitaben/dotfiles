@@ -3,8 +3,9 @@
     name = Carlo Domínguez
 
 [core]
-    editor = nvim    
+    editor = nvim
     whitespace = error
+    pager = diff-so-fancy | less --tabs=2 -RF
 
 [init]
     defaultBranch = main
@@ -22,6 +23,9 @@
 
 [rebase]
     autoStash = true
+
+[interactive]
+    diffFilter = diff-so-fancy --patch
 
 [url "git@github.com:"]
     insteadOf = gh:
