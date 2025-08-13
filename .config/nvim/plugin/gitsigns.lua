@@ -6,19 +6,20 @@ local gitsigns = require("gitsigns")
 gitsigns.setup({
     current_line_blame = true,
     current_line_blame_opts = {
-        virt_text_pos = 'right_align',         -- 'eol' |  'right_align'
         delay = 0,
+        virt_text_pos = 'right_align',
     },
-    -- signs = {
-    --     add          = { text = '│' },
-    --     change       = { text = '│' },
-    --     delete       = { text = '_' },
-    --     topdelete    = { text = '‾' },
-    --     changedelete = { text = '│' },
-    --     untracked    = { text = '│' },
-    -- },
+    signs = {
+        add          = { text = '+' },
+        change       = { text = '~' },
+        delete       = { text = '−' },
+        topdelete    = { text = '^' },
+        changedelete = { text = '*' },
+        untracked    = { text = '?' },
+    }
 })
 
+-- Jump to next git change
 vim.keymap.set("n", "]c",
     function()
         if vim.wo.diff then
@@ -30,6 +31,7 @@ vim.keymap.set("n", "]c",
     { desc = "Jump to next git change" }
 )
 
+-- Jump to previous git change
 vim.keymap.set("n", "[c",
     function()
         if vim.wo.diff then

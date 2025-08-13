@@ -78,9 +78,6 @@ vim.keymap.set({ "n", "v", "i"}, "<D-S-s>", "<cmd>:wa<CR>", { noremap = true, si
 vim.keymap.set({"n", "v", "i" }, "<D-,>", ":e ~/.config<CR>",
         { noremap = true, silent = true, desc = "Open dotfiles" })
 
-vim.keymap.set("n", "<leader>,", ":e ~/.config/nvim/init.lua<CR>",
-        { noremap = true, silent = true, desc = "Open config" })
-
 vim.keymap.set("n", "<leader>lf", vim.lsp.buf.format, { noremap = true, silent = true, desc = "Format document" })
 
 -- Move selection up/down on visual mode
