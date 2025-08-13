@@ -10,7 +10,10 @@ local miniclue = require("mini.clue")
 
 miniclue.setup({
         window = {
-                config = {},
+                config = {
+                        width = 'auto',
+                },
+
                 delay = 0
         },
         triggers = {
@@ -57,8 +60,7 @@ miniclue.setup({
         },
 
         clues = {
-                { mode = "n", keys = "<Leader>s",  desc = "Search" },
-                { mode = "n", keys = "<Leader>gh", desc = "GitHub" },
+                { mode = "n", keys = "<Leader>s", desc = "+Search" },
                 miniclue.gen_clues.builtin_completion(),
                 miniclue.gen_clues.g(),
                 miniclue.gen_clues.marks(),
@@ -69,13 +71,13 @@ miniclue.setup({
 })
 
 -- ⌘+s to write file
-vim.keymap.set({ "n", "v", "i"}, "<D-s>", "<cmd>:w<CR>", { noremap = true, silent = true, desc = "Write file" })
+vim.keymap.set({ "n", "v", "i" }, "<D-s>", "<cmd>:w<CR>", { noremap = true, silent = true, desc = "Write file" })
 
 -- ⌘+shift-s to write all files
-vim.keymap.set({ "n", "v", "i"}, "<D-S-s>", "<cmd>:wa<CR>", { noremap = true, silent = true, desc = "Write all files" })
+vim.keymap.set({ "n", "v", "i" }, "<D-S-s>", "<cmd>:wa<CR>", { noremap = true, silent = true, desc = "Write all files" })
 
 -- ⌘+, to open dotfiles
-vim.keymap.set({"n", "v", "i" }, "<D-,>", ":e ~/.config<CR>",
+vim.keymap.set({ "n", "v", "i" }, "<D-,>", ":e ~/.config<CR>",
         { noremap = true, silent = true, desc = "Open dotfiles" })
 
 vim.keymap.set("n", "<leader>lf", vim.lsp.buf.format, { noremap = true, silent = true, desc = "Format document" })
@@ -121,4 +123,3 @@ vim.keymap.set("v", "p", "pgvy", { noremap = true, silent = true })
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
-
