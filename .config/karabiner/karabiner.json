@@ -11,12 +11,11 @@
                   "key_code": "caps_lock",
                   "modifiers": { "optional": ["any"] }
                 },
-                "to": [
-                  {
-                    "key_code": "left_command",
-                    "lazy": true
-                  }
-                ],
+                "parameters": {
+                  "basic.to_if_alone_timeout_milliseconds": 200,
+                  "basic.to_if_held_down_threshold_milliseconds": 200
+                },
+                "to": [{ "key_code": "left_command" }],
                 "to_if_alone": [{ "key_code": "escape" }],
                 "type": "basic"
               }
