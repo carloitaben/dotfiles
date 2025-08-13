@@ -1,7 +1,7 @@
 git:
   paging:
     colorArg: always
-    pager: delta --paging=never --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+    pager: delta --paging=never --hunk-header-style="" --file-style=omit --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
 
 gui:
   border: single
