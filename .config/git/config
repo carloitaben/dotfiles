@@ -35,4 +35,4 @@
 
 [delta]
     navigate = true
-    line-numbers = true
+    line-numbers = false
