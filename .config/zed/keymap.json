@@ -31,6 +31,12 @@
     }
   },
   {
+    "context": "vim_mode == visual",
+    "bindings": {
+      "shift-s": ["vim::PushAddSurrounds", {}]
+    }
+  },
+  {
     "context": "Dock",
     "bindings": {
       "ctrl-w k": "workspace::ActivatePaneUp",
