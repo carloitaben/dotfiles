@@ -1,20 +1,29 @@
 -- vim.pack.add({
---         { src = "https://github.com/nvim-lua/plenary.nvim" },
---         { src = "https://github.com/nvim-telescope/telescope.nvim" },
---         { src = "https://github.com/nvim-telescope/telescope-ui-select.nvim" },
---         { src = "https://github.com/nvim-telescope/telescope-github.nvim" },
---         { src = "https://github.com/debugloop/telescope-undo.nvim" },
+--   { src = "https://github.com/nvim-lua/plenary.nvim" },
+--   { src = "https://github.com/nvim-telescope/telescope.nvim" },
+--   { src = "https://github.com/nvim-telescope/telescope-ui-select.nvim" },
+--   { src = "https://github.com/debugloop/telescope-undo.nvim" },
 -- })
 --
 -- local telescope = require("telescope")
+-- local actions = require("telescope.actions")
 --
 -- telescope.setup({
---         extensions = {
---                 ['ui-select'] = {
---                         require('telescope.themes').get_dropdown(),
---                 },
---         },
---
+--   defaults = {
+--     mappings = {
+--       i = {
+--         ["<esc>"] = actions.close
+--       },
+--     },
+--   },
+--   extensions = {
+--     ['ui-select'] = {
+--       require('telescope.themes').get_dropdown(),
+--     },
+--     undo = {
+--       saved_only = true,
+--     }
+--   },
 -- })
 --
 -- telescope.load_extension("ui-select")
@@ -34,32 +43,22 @@
 -- vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = 'Find existing buffers' })
 --
 -- vim.keymap.set('n', '<leader>/', function()
---         -- You can pass additional configuration to Telescope to change the theme, layout, etc.
---         builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
---                 winblend = 10,
---                 previewer = false,
---         })
+--   -- You can pass additional configuration to Telescope to change the theme, layout, etc.
+--   builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+--     winblend = 10,
+--     previewer = false,
+--   })
 -- end, { desc = '[/] Fuzzily search in current buffer' })
 --
 -- vim.keymap.set('n', '<leader>s/', function()
---         builtin.live_grep {
---                 grep_open_files = true,
---                 prompt_title = 'Live Grep in Open Files',
---         }
+--   builtin.live_grep {
+--     grep_open_files = true,
+--     prompt_title = 'Live Grep in Open Files',
+--   }
 -- end, { desc = '[S]earch [/] in Open Files' })
 --
 -- telescope.load_extension("undo")
 -- vim.keymap.set('n', '<leader>su', function()
---         telescope.extensions.undo.undo()
+--   telescope.extensions.undo.undo()
 -- end
 -- , { desc = 'Search undo history' })
---
--- telescope.load_extension("gh")
---
--- vim.keymap.set("n", "<leader>ghi", function()
---         telescope.extensions.gh.issues()
--- end, { noremap = true, silent = true, desc = "GitHub issues" })
---
--- vim.keymap.set("n", "<leader>ghp", function()
---         telescope.extensions.gh.pull_request()
--- end, { noremap = true, silent = true, desc = "GitHub PRs" })

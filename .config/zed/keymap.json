@@ -60,7 +60,8 @@
     "context": "Terminal",
     "bindings": {
       "ctrl-w v": "pane::SplitVertical",
-      "ctrl-w s": "pane::SplitHorizontal"
+      "ctrl-w s": "pane::SplitHorizontal",
+      "ctrl-w c": ["pane::CloseActiveItem", { "close_pinned": false }]
     }
   },
   {

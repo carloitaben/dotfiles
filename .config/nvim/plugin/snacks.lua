@@ -1,32 +1,46 @@
--- vim.pack.add({
---     { src = "https://github.com/folke/snacks.nvim"},
--- })
---
--- local snacks = require("snacks")
---
--- snacks.setup({
---       picker = {
---         layout = {
---                 preset = "telescope" },
---         -- hidden = true,
---         -- file = true,
---         -- current = true,
---         -- matcher = {
---         --   fuzzy = true,
---         --   frecency = true,
---         --   filename_bonus = false,
---         -- },
---       },
---       lazygit = {
---                 win = {
---     border= "single"
---   },
---
---
---       }
--- })
---
--- vim.keymap.set("n", "<leader><space>", function() snacks.picker.recent() end, { desc = "Smart find files" })
+vim.pack.add({
+  { src = "https://github.com/folke/snacks.nvim" },
+})
+
+local snacks = require("snacks")
+
+snacks.setup({
+  picker = {
+    ui_select = false,
+    layout = {
+      preset = "telescope"
+    },
+    win = {
+      input = {
+        keys = {
+          ["<Esc>"] = { "close", mode = { "n", "i" } },
+        }
+      }
+    }
+    -- hidden = true,
+    -- file = true,
+    -- current = true,
+    -- matcher = {
+    --   fuzzy = true,
+    --   frecency = true,
+    --   filename_bonus = false,
+    -- },
+  },
+  lazygit = {
+    win = {
+      border = "single"
+    },
+  }
+})
+
+-- vim.keymap.set("n", "<leader><space>", function()
+--   snacks.picker.recent({
+--     filter = {
+--       cwd = true
+--     }
+--   })
+-- end, { desc = "Search recent files" })
+
 -- vim.keymap.set({ "n", "v" }, "<leader>ff", function() snacks.picker.files() end, { desc = "Files" })
 -- vim.keymap.set({ "n", "v" }, "<leader>fh", function() snacks.picker.help() end, { desc = "Help pages" })
 -- vim.keymap.set({ "n", "v" }, "<leader>sh", function() snacks.picker.undo() end, { desc = "Undo history" })
