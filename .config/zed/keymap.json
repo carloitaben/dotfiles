@@ -10,7 +10,18 @@
     "context": "Workspace",
     "bindings": {
       "cmd-j": "workspace::ToggleRightDock",
-      "cmd-r": "editor::RestartLanguageServer",
+      "cmd-r": "editor::RestartLanguageServer"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "cmd-/": ["editor::ToggleComments", { "advance_downwards": false }]
+    }
+  },
+  {
+    "context": "Workspace || Editor || Terminal",
+    "bindings": {
       "cmd-shift-g": [
         "task::Spawn",
         { "task_name": "Start lazygit", "reveal_target": "center" }
