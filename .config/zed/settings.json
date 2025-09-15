@@ -33,7 +33,7 @@
     "folder_icons": false
   },
   "title_bar": {
-    "show_sign_in": false
+    "show": false
   },
   "toolbar": {
     "breadcrumbs": false,
