@@ -53,6 +53,22 @@
   "Gen Function": {
     "prefix": "gen",
     "body": ["function* () {}"],
-    "description": "Generator FUnction with $ input"
+    "description": "Generator Function with $ input"
+  },
+  "Effect Tagged Error": {
+    "prefix": "etaggederror",
+    "body": [
+      "export class ${1} extends Data.TaggedError(\"${1}\")<ErrorOptions> {}"
+    ]
+  },
+  "Effect Service": {
+    "prefix": "eservice",
+    "body": [
+      "export class ${1} extends Effect.Service<${1}>()(\"${1}\", {}) {${2}}"
+    ]
+  },
+  "Effect Tag": {
+    "prefix": "etag",
+    "body": ["export class ${1} extends Context.Tag(\"${1}\")<${1}, {}>() {}"]
   }
 }
