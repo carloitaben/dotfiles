@@ -20,7 +20,7 @@
     }
   },
   {
-    "context": "Workspace || Editor || Terminal",
+    "context": "Workspace || Editor || Terminal",
     "bindings": {
       "cmd-shift-g": [
         "task::Spawn",
@@ -39,12 +39,6 @@
     "bindings": {
       "q": "vim::MiniQuotes",
       "b": "vim::MiniBrackets"
-    }
-  },
-  {
-    "context": "vim_mode == visual",
-    "bindings": {
-      "shift-s": ["vim::PushAddSurrounds", {}]
     }
   },
   {
