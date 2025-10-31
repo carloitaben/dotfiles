@@ -142,6 +142,17 @@ function smite() {
         done
 }
 
+# Taken from Sylvan Franklin.
+# Opens the [g]it[h]ub [r]emote in the browser
+ghr() {
+    url=$(git remote get-url origin 2>/dev/null)
+    if [ -n "$url" ]; then
+        open "$url"
+    else
+        echo 'no remote found'
+    fi
+}
+
 # pnpm
 export PNPM_HOME="/Users/carloitaben/Library/pnpm"
 case ":$PATH:" in
