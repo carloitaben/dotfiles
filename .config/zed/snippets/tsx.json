@@ -48,12 +48,12 @@
   "Effect Gen Function": {
     "prefix": "egen",
     "body": ["Effect.gen(function* () {\n\t$0\n})"],
-    "description": "Effect generator FUnction with $ input"
+    "description": "Effect generator function"
   },
   "Gen Function": {
     "prefix": "gen",
-    "body": ["function* () {}"],
-    "description": "Generator Function with $ input"
+    "body": ["function* () {\n\t$0\n}"],
+    "description": "Generator function"
   },
   "Effect Tagged Error": {
     "prefix": "etaggederror",
