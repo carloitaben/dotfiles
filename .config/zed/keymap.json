@@ -22,6 +22,7 @@
   {
     "context": "Workspace || Editor || Terminal",
     "bindings": {
+      "cmd-shift-j": "workspace::NewCenterTerminal",
       "cmd-shift-g": [
         "task::Spawn",
         { "task_name": "Start lazygit", "reveal_target": "center" }
