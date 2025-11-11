@@ -80,7 +80,6 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
-  vi-mode
   zsh-nvm
   pnpm-shell-completion
 )
