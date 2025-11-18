@@ -1,38 +1,38 @@
-vim.pack.add({
-  { src = "https://github.com/folke/snacks.nvim" },
-})
-
-local snacks = require("snacks")
-
-snacks.setup({
-  picker = {
-    ui_select = false,
-    layout = {
-      preset = "telescope"
-    },
-    win = {
-      input = {
-        keys = {
-          ["<Esc>"] = { "close", mode = { "n", "i" } },
-        }
-      }
-    }
-    -- hidden = true,
-    -- file = true,
-    -- current = true,
-    -- matcher = {
-    --   fuzzy = true,
-    --   frecency = true,
-    --   filename_bonus = false,
-    -- },
-  },
-  lazygit = {
-    win = {
-      border = "single"
-    },
-  }
-})
-
+-- vim.pack.add({
+--   { src = "https://github.com/folke/snacks.nvim" },
+-- })
+--
+-- local snacks = require("snacks")
+--
+-- snacks.setup({
+--   picker = {
+--     ui_select = false,
+--     layout = {
+--       preset = "telescope"
+--     },
+--     win = {
+--       input = {
+--         keys = {
+--           ["<Esc>"] = { "close", mode = { "n", "i" } },
+--         }
+--       }
+--     }
+--     -- hidden = true,
+--     -- file = true,
+--     -- current = true,
+--     -- matcher = {
+--     --   fuzzy = true,
+--     --   frecency = true,
+--     --   filename_bonus = false,
+--     -- },
+--   },
+--   lazygit = {
+--     win = {
+--       border = "single"
+--     },
+--   }
+-- })
+--
 -- vim.keymap.set("n", "<leader><space>", function()
 --   snacks.picker.recent({
 --     filter = {

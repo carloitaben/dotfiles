@@ -2,7 +2,6 @@ vim.o.number          = true
 vim.o.relativenumber  = true
 vim.o.signcolumn      = "yes"
 vim.o.wrap            = false
-vim.o.swapfile        = false
 vim.o.softtabstop     = 2
 vim.o.tabstop         = 2
 vim.o.shiftwidth      = 2
@@ -12,31 +11,44 @@ vim.o.mouse           = 'a'
 vim.o.showmode        = false
 vim.o.scrolloff       = 10
 vim.opt.sidescrolloff = 10
+
+-- Disable backups as they just get in the way
 vim.opt.backup        = false
+vim.opt.writebackup   = false
+
+vim.o.swapfile        = false
+
 vim.o.undofile        = true
+
 vim.o.smoothscroll    = true
+
 vim.o.cmdheight       = 0
 
 -- Auto select the first entry but don't insert also show additional
 -- information, if available
 vim.o.completeopt     = 'noinsert,menuone,popup'
 
--- Preview substitutions live
-vim.o.inccommand      = 'split'
 
-vim.o.foldmethod      = 'indent'
-vim.o.foldenable      = false
+-- Limit the height of popups
+vim.o.pumheight = 5
+
+
+-- Preview substitutions live
+vim.o.inccommand     = 'split'
+
+vim.o.foldmethod     = 'indent'
+vim.o.foldenable     = false
 
 -- Case-insensitive searching unless \C or one or more capital letters in the
 -- search term
-vim.o.ignorecase      = true
-vim.o.smartcase       = true
+vim.o.ignorecase     = true
+vim.o.smartcase      = true
 
-vim.o.splitright      = true
-vim.o.splitbelow      = true
+vim.o.splitright     = true
+vim.o.splitbelow     = true
 
-vim.g.mapleader       = " "
-vim.g.maplocalleader  = " "
-vim.g.have_nerd_font  = true
+vim.g.mapleader      = " "
+vim.g.maplocalleader = " "
+vim.g.have_nerd_font = true
 
-vim.o.winborder       = "single"
+vim.o.winborder      = "single"
