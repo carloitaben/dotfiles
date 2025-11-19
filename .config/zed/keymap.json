@@ -59,7 +59,15 @@
       "K": "vim::WindowTop",
       "H": "pane::ActivatePreviousItem",
       "L": "pane::ActivateNextItem",
-      "space f": "editor::Format"
+      "space f": "editor::Format",
+      "ctrl-o": [
+        "action::Sequence",
+        ["pane::GoBack", "editor::ScrollCursorCenter"]
+      ],
+      "ctrl-i": [
+        "action::Sequence",
+        ["pane::GoForward", "editor::ScrollCursorCenter"]
+      ]
     }
   },
   {
