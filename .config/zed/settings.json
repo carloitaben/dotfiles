@@ -18,8 +18,8 @@
   "ui_font_family": "BlexMono Nerd Font",
   "buffer_font_family": "BlexMono Nerd Font",
   "ui_font_weight": 450,
-  "relative_line_numbers": true,
   "buffer_font_weight": 450,
+  "relative_line_numbers": "enabled",
   "theme": {
     "mode": "system",
     "light": "Vesper",
