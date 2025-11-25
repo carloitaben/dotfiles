@@ -67,7 +67,8 @@
       "ctrl-i": [
         "action::Sequence",
         ["pane::GoForward", "editor::ScrollCursorCenter"]
-      ]
+      ],
+      "%": ["action::Sequence", ["vim::Matching", "editor::ScrollCursorCenter"]]
     }
   },
   {
