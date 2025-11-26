@@ -7,6 +7,12 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "git_panel": {
+    "button": false
+  },
+  "tab_bar": {
+    "show_nav_history_buttons": false
+  },
   "base_keymap": "VSCode",
   "telemetry": {
     "metrics": false,
@@ -29,6 +35,8 @@
     "dock": "right"
   },
   "project_panel": {
+    "hide_root": true,
+    "default_width": 300.0,
     "file_icons": false,
     "folder_icons": false
   },
