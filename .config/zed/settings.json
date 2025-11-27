@@ -7,6 +7,7 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "snippet_sort_order": "top",
   "git_panel": {
     "button": false
   },
@@ -57,6 +58,7 @@
     "show_user_picture": false
   },
   "agent": {
+    "dock": "left",
     "button": false
   },
   "vim": {

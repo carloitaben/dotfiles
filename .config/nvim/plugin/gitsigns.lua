@@ -5,12 +5,12 @@ vim.pack.add({
 local gitsigns = require("gitsigns")
 gitsigns.setup({
   signs = {
-    add          = { text = '+' },
-    change       = { text = '~' },
+    add          = { text = '┃' },
+    change       = { text = '┃' },
     delete       = { text = '−' },
     topdelete    = { text = '−' },
     changedelete = { text = '*' },
-    untracked    = { text = '?' },
+    untracked    = { text = '┆' },
   },
   signs_staged_enable = false,
   current_line_blame = true,
@@ -49,6 +49,13 @@ vim.keymap.set("v", "<leader>hs", function()
   gitsigns.stage_hunk { vim.fn.line '.', vim.fn.line 'v' }
 end, { desc = "Toggle stage hunk" })
 
+-- Add hunks as text object
+vim.keymap.set({ 'o', 'x' }, 'ih', '<Cmd>Gitsigns select_hunk<CR>')
+
+-- Keybinds from Zed
+vim.keymap.set('n', 'do', gitsigns.preview_hunk_inline, { desc = 'Expand diff hunk' })
+vim.keymap.set('n', 'dp', gitsigns.reset_hunk, { desc = 'Restore hunk' })
+
 vim.keymap.set('n', '<leader>hs', gitsigns.stage_hunk, { desc = 'Stage hunk' })
 vim.keymap.set('n', '<leader>hr', gitsigns.reset_hunk, { desc = 'Reset hunk' })
 vim.keymap.set('n', '<leader>hS', gitsigns.stage_buffer, { desc = 'Stage buffer' })
@@ -57,6 +64,3 @@ vim.keymap.set('n', '<leader>hu', gitsigns.undo_stage_hunk, { desc = 'Undo stage
 vim.keymap.set('n', '<leader>hp', gitsigns.preview_hunk, { desc = 'Preview hunk' })
 vim.keymap.set('n', '<leader>hb', gitsigns.blame_line, { desc = 'Blame line' })
 vim.keymap.set('n', '<leader>hd', gitsigns.diffthis, { desc = 'Diff against index' })
-vim.keymap.set('n', '<leader>hD', function()
-  gitsigns.diffthis '@'
-end, { desc = 'Fiff against last commit' })
