@@ -10,7 +10,11 @@
     "context": "Workspace",
     "bindings": {
       "cmd-j": "workspace::ToggleRightDock",
-      "cmd-r": "editor::RestartLanguageServer"
+      "cmd-r": "editor::RestartLanguageServer",
+      "cmd-?": [
+        "task::Spawn",
+        { "task_name": "Start opencode", "reveal_target": "center" }
+      ]
     }
   },
   {
