@@ -45,6 +45,16 @@
       "}, [])"
     ]
   },
+  "Effect Function": {
+    "prefix": "efn",
+    "body": ["Effect.fn(function* () {\n\t$0\n})"],
+    "description": "Effect function"
+  },
+  "Effect Function (Untraced)": {
+    "prefix": "efnu",
+    "body": ["Effect.fnUntraced(function* () {\n\t$0\n})"],
+    "description": "Effect function (untraced)"
+  },
   "Effect Gen Function": {
     "prefix": "egen",
     "body": ["Effect.gen(function* () {\n\t$0\n})"],
