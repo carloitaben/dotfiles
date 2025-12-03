@@ -12,6 +12,11 @@
     "body": ["Effect.fn(function* () {\n\t$0\n})"],
     "description": "Effect function"
   },
+  "Effect Function (Traced)": {
+    "prefix": "efnt",
+    "body": ["Effect.fn(\"${0}\")(function* () {\n\t$1\n})"],
+    "description": "Effect function"
+  },
   "Effect Function (Untraced)": {
     "prefix": "efnu",
     "body": ["Effect.fnUntraced(function* () {\n\t$0\n})"],
