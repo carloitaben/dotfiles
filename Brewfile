@@ -11,6 +11,7 @@ brew "ripgrep"
 brew "stow"
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
+brew "zoxide"
 
 cask "font-blex-mono-nerd-font"
 cask "ghostty"
