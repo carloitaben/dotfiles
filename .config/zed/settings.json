@@ -9,15 +9,15 @@
 {
   "snippet_sort_order": "top",
   "git_panel": {
-    "button": false
+    "button": false,
   },
   "tab_bar": {
-    "show_nav_history_buttons": false
+    "show_nav_history_buttons": false,
   },
   "base_keymap": "VSCode",
   "telemetry": {
     "metrics": false,
-    "diagnostics": false
+    "diagnostics": false,
   },
   "vim_mode": true,
   "ui_font_size": 13,
@@ -30,45 +30,48 @@
   "theme": {
     "mode": "system",
     "light": "Vesper",
-    "dark": "Vesper"
+    "dark": "Vesper",
   },
   "terminal": {
-    "dock": "right"
+    "dock": "right",
   },
   "project_panel": {
     "hide_root": true,
     "default_width": 300.0,
     "file_icons": false,
-    "folder_icons": false
+    "folder_icons": false,
   },
   "toolbar": {
     "breadcrumbs": false,
     "quick_actions": false,
-    "selections_menu": false
+    "selections_menu": false,
   },
   "notification_panel": {
-    "button": false
+    "button": false,
   },
   "collaboration_panel": {
-    "button": false
+    "button": false,
   },
   "title_bar": {
     "show_onboarding_banner": false,
     "show_sign_in": false,
-    "show_user_picture": false
+    "show_user_picture": false,
   },
   "agent": {
     "dock": "left",
-    "button": false
+    "button": false,
   },
   "vim": {
-    "use_system_clipboard": "on_yank"
+    "use_system_clipboard": "on_yank",
   },
   "lsp": {
     "tailwindcss-language-server": {
       "settings": {
-        "classFunctions": ["cva", "cx"]
-      }
-    }
-  }
+        "classFunctions": ["cva", "cx"],
+      },
+    },
+  },
+  "file_types": {
+    "HTML": ["*.svg"],
+  },
 }
