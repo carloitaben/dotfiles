@@ -11,40 +11,40 @@
     "bindings": {
       "cmd-j": "workspace::ToggleRightDock",
       "cmd-r": "editor::RestartLanguageServer",
-      "cmd-?": [
-        "task::Spawn",
-        { "task_name": "Start opencode", "reveal_target": "center" }
-      ]
-    }
+    },
   },
   {
     "context": "Editor",
     "bindings": {
-      "cmd-/": ["editor::ToggleComments", { "advance_downwards": false }]
-    }
+      "cmd-/": ["editor::ToggleComments", { "advance_downwards": false }],
+    },
   },
   {
     "context": "Workspace || Editor || Terminal",
     "bindings": {
+      "cmd-?": [
+        "task::Spawn",
+        { "task_name": "opencode", "reveal_target": "center" },
+      ],
       "cmd-shift-j": "workspace::NewCenterTerminal",
       "cmd-shift-g": [
         "task::Spawn",
-        { "task_name": "Start lazygit", "reveal_target": "center" }
-      ]
-    }
+        { "task_name": "lazygit", "reveal_target": "center" },
+      ],
+    },
   },
   {
     "context": "Editor",
     "bindings": {
-      "cmd-/": ["editor::ToggleComments", { "advance_downwards": false }]
-    }
+      "cmd-/": ["editor::ToggleComments", { "advance_downwards": false }],
+    },
   },
   {
     "context": "vim_operator == a || vim_operator == i || vim_operator == cs",
     "bindings": {
       "q": "vim::MiniQuotes",
-      "b": "vim::MiniBrackets"
-    }
+      "b": "vim::MiniBrackets",
+    },
   },
   {
     "context": "Dock",
@@ -52,8 +52,8 @@
       "ctrl-w k": "workspace::ActivatePaneUp",
       "ctrl-w j": "workspace::ActivatePaneDown",
       "ctrl-w h": "workspace::ActivatePaneLeft",
-      "ctrl-w l": "workspace::ActivatePaneRight"
-    }
+      "ctrl-w l": "workspace::ActivatePaneRight",
+    },
   },
   {
     "context": "VimControl && !menu",
@@ -63,16 +63,16 @@
       "K": "vim::WindowTop",
       "H": "pane::ActivatePreviousItem",
       "L": "pane::ActivateNextItem",
-      "space f": "editor::Format"
-    }
+      "space f": "editor::Format",
+    },
   },
   {
     "context": "Terminal",
     "bindings": {
       "ctrl-w v": "pane::SplitVertical",
       "ctrl-w s": "pane::SplitHorizontal",
-      "ctrl-w c": ["pane::CloseActiveItem", { "close_pinned": false }]
-    }
+      "ctrl-w c": ["pane::CloseActiveItem", { "close_pinned": false }],
+    },
   },
   {
     "context": "vim_mode == visual",
@@ -81,7 +81,7 @@
       ">": ["workspace::SendKeystrokes", "> g v"],
       "<": ["workspace::SendKeystrokes", "< g v"],
       "K": "editor::MoveLineUp",
-      "J": "editor::MoveLineDown"
-    }
-  }
+      "J": "editor::MoveLineDown",
+    },
+  },
 ]
