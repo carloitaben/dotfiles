@@ -58,6 +58,8 @@
   {
     "context": "VimControl && !menu",
     "bindings": {
+      "g k": ["editor::AddSelectionAbove", { "skip_soft_wrap": false }],
+      "g j": ["editor::AddSelectionBelow", { "skip_soft_wrap": false }],
       "g o": ["workspace::SendKeystrokes", "g g 0"],
       "J": "vim::WindowBottom",
       "K": "vim::WindowTop",
