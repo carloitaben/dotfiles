@@ -79,7 +79,6 @@
   {
     "context": "vim_mode == visual",
     "bindings": {
-      "p": ["workspace::SendKeystrokes", "p g v y"],
       ">": ["action::Sequence", ["vim::Indent", "vim::RestoreVisualSelection"]],
       "<": [
         "action::Sequence",
