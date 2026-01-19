@@ -80,8 +80,15 @@
     "context": "vim_mode == visual",
     "bindings": {
       "p": ["workspace::SendKeystrokes", "p g v y"],
-      ">": ["workspace::SendKeystrokes", "> g v"],
-      "<": ["workspace::SendKeystrokes", "< g v"],
+      ">": ["action::Sequence", ["vim::Indent", "vim::RestoreVisualSelection"]],
+      "<": [
+        "action::Sequence",
+        ["vim::Outdent", "vim::RestoreVisualSelection"],
+      ],
+      "=": [
+        "action::Sequence",
+        ["vim::AutoIndent", "vim::RestoreVisualSelection"],
+      ],
       "K": "editor::MoveLineUp",
       "J": "editor::MoveLineDown",
     },
