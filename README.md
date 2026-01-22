@@ -2,25 +2,27 @@
 
 ## Steps
 
-1. Clone the repo.
-
-```sh
-git clone https://github.com/carloitaben/dotfiles.git "${XDG_CONFIG_HOME:-$HOME/.dotfiles}"
-```
-
-2. Install [Homebrew](https://brew.sh/).
+1. Install [Homebrew](https://brew.sh/).
 
 ```sh
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-3. Run the Homebrew Bundle file.
+2. Install [git](https://git-scm.com/install/mac).
+
+3. Clone the repo.
+
+```sh
+git clone https://github.com/carloitaben/dotfiles.git "${XDG_CONFIG_HOME:-$HOME/.dotfiles}"
+```
+
+4. Run the Homebrew Bundle file.
 
 ```sh
 brew bundle --file=~/.dotfiles/Brewfile
 ```
 
-4. Run `stow`.
+5. Run `stow`.
 
 ```sh
 stow .
