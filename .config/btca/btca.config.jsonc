@@ -1,0 +1,36 @@
+{
+  "$schema": "https://btca.dev/btca.schema.json",
+  "dataDirectory": ".btca",
+  "model": "claude-haiku-4-5",
+  "provider": "opencode",
+  "providerTimeoutMs": 300000,
+  "resources": [
+    {
+      "type": "git",
+      "name": "svelte",
+      "url": "https://github.com/sveltejs/svelte.dev",
+      "branch": "main",
+      "searchPath": "apps/svelte.dev",
+      "specialNotes": "Focus on the content directory for docs",
+    },
+    {
+      "type": "git",
+      "name": "effect",
+      "url": "https://github.com/Effect-TS/effect",
+      "branch": "main",
+    },
+    {
+      "type": "git",
+      "name": "payload",
+      "url": "https://github.com/payloadcms/payload",
+      "branch": "main",
+    },
+    {
+      "type": "git",
+      "name": "replicache",
+      "url": "https://github.com/rocicorp/mono",
+      "branch": "main",
+      "searchPath": "packages/replicache",
+    },
+  ],
+}
