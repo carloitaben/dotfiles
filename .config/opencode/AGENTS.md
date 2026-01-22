@@ -26,3 +26,13 @@ Comments and docstrings:
 - At the end of each plan, give me a list of unresolved questions to answer,
   if any. Make the questions extremely concise. Sacrifice grammar for the sake
   of concision.
+
+## btca
+
+When the user says "use btca" for codebase questions.
+
+Run:
+
+- btca ask -r <resource> -q "<question>"
+
+The resource refers to the specific codebase in question.
