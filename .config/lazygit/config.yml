@@ -3,9 +3,6 @@ git:
     - pager: delta --paging=never --hunk-header-style=omit --file-style=omit --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
       colorArg: never
 
-# initialize a new repo when opening Lazygit outside of a git repo
-notARepository: create
-
 gui:
   border: single
   scrollHeight: 5
