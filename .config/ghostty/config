@@ -3,7 +3,7 @@ clipboard-read = allow
 clipboard-write = allow
 
 # Theme
-theme = oscura
+theme = vesper
 
 # Fonts
 font-size = 13
@@ -42,4 +42,3 @@ keybind = super+v=paste_from_clipboard
 keybind = super+k=clear_screen
 keybind = super+shift+n=new_window
 keybind = super+shift+w=close_window
-
