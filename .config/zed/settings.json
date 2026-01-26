@@ -75,4 +75,16 @@
   "file_types": {
     "HTML": ["*.svg"],
   },
+  "languages": {
+    "TSX": {
+      "code_actions_on_format": {
+        "source.fixAll.eslint": true,
+      },
+    },
+    "TypeScript": {
+      "code_actions_on_format": {
+        "source.fixAll.eslint": true,
+      },
+    },
+  },
 }
