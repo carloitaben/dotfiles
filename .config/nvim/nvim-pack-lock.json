@@ -92,6 +92,10 @@
       "rev": "9a88eae817ef395952e08650b3283726786fb5fb",
       "src": "https://github.com/akinsho/toggleterm.nvim"
     },
+    "vesper.nvim": {
+      "rev": "bc7b5865613732dfeab89ff6b1da382209cbff2e",
+      "src": "https://github.com/nexxeln/vesper.nvim"
+    },
     "vim-tmux-navigator": {
       "rev": "c45243dc1f32ac6bcf6068e5300f3b2b237e576a",
       "src": "https://github.com/christoomey/vim-tmux-navigator"
