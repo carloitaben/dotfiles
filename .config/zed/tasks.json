@@ -4,14 +4,19 @@
     "label": "lazygit",
     "command": "lazygit -p $ZED_WORKTREE_ROOT",
     "hide": "on_success",
+    "show_command": false,
     "shell": {
       "program": "sh",
     },
   },
   {
     "label": "opencode",
-    "command": "OPENCODE_EXPERIMENTAL_PLAN_MODE=1 OPENCODE_EXPERIMENTAL_LSP_TOOL=1 opencode --continue",
+    "command": "opencode",
     "hide": "on_success",
+    "env": {
+      "OPENCODE_EXPERIMENTAL_PLAN_MODE": "1",
+      "OPENCODE_EXPERIMENTAL_LSP_TOOL": "1",
+    },
     "use_new_terminal": true,
     "allow_concurrent_runs": true,
     "shell": {
