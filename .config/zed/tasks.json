@@ -11,7 +11,7 @@
   },
   {
     "label": "opencode",
-    "command": "opencode",
+    "command": "opencode --continue",
     "hide": "on_success",
     "env": {
       "OPENCODE_EXPERIMENTAL_PLAN_MODE": "1",
