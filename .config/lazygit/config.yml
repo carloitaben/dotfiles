@@ -25,6 +25,14 @@ gui:
 quitOnTopLevelReturn: true
 
 customCommands:
+  - key: "G"
+    command: "gh pr view --repo $(git remote get-url origin) -w {{.SelectedLocalBranch.Name}}"
+    context: "localBranches"
+    description: "Open Github PR in browser"
+  - key: "G"
+    command: "gh pr view --repo $(git remote get-url origin) -w"
+    context: "commits"
+    description: "Open Github PR in browser"
   - key: "<c-x>"
     context: "global"
     description: "Open remote in browser"
