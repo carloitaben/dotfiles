@@ -25,12 +25,13 @@ gui:
 quitOnTopLevelReturn: true
 
 customCommands:
-  - key: "t"
-    context: "localBranches"
-    description: "Trim local branches whose remotes are gone from upstream"
-    command: >
-      git fetch --prune &&
-      git for-each-ref --format '%(refname:short) %(upstream:track)' refs/heads |
-      grep '\[gone\]' |
-      cut -d' ' -f1 |
-      xargs -r git branch -D
+  - key: "<c-x>"
+    context: "global"
+    description: "Open remote in browser"
+    command: |
+      url=$(git remote get-url origin 2>/dev/null)
+      if [ -n "$url" ]; then
+          open "$url"
+      else
+          echo 'no remote found'
+      fi
