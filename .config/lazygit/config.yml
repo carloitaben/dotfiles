@@ -27,6 +27,15 @@ quitOnTopLevelReturn: true
 # When working with forks, set the default repo
 # using `gh repo set-default` for these to work
 customCommands:
+  - key: "t"
+    context: "localBranches"
+    description: "Trim local branches whose remotes are gone from upstream"
+    command: >
+      git fetch --prune &&
+      git for-each-ref --format '%(refname:short) %(upstream:track)' refs/heads |
+      grep '\[gone\]' |
+      cut -d' ' -f1 |
+      xargs -r git branch -D
   - key: "v"
     context: "localBranches"
     loadingText: "Checking out GitHub Pull Request..."
