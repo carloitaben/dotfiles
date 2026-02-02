@@ -41,12 +41,6 @@ customCommands:
         filter: "#(?P<number>[0-9]+): (?P<title>.+) - (?P<ref_name>[^ ]+)"
         valueFormat: "{{.number}}"
         labelFormat: '{{"#" | black | bold}}{{.number | white | bold}} {{.title | yellow | bold}}{{" [" | black | bold}}{{.ref_name | green}}{{"]" | black | bold}}'
-  - key: "<c-x>"
-    description: "GitHub"
-    commandMenu:
-      - key: "<enter>"
-        command: "gh repo set-default"
-        description: "Set repo as default"
   - key: "G"
     command: "gh pr view -w {{.SelectedLocalBranch.Name}}"
     context: "localBranches"
