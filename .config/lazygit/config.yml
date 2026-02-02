@@ -24,30 +24,28 @@ gui:
 
 quitOnTopLevelReturn: true
 
+# When working with forks, set the default repo
+# using `gh repo set-default` for these to work
 customCommands:
+  - key: "<c-x>"
+    description: "GitHub"
+    commandMenu:
+      - key: "<enter>"
+        command: "gh repo set-default"
+        description: "Set repo as default"
   - key: "G"
-    command: "gh pr view --repo $(git remote get-url origin) -w {{.SelectedLocalBranch.Name}}"
+    command: "gh pr view -w {{.SelectedLocalBranch.Name}}"
     context: "localBranches"
     description: "Open Github PR in browser"
   - key: "G"
-    command: "gh pr view --repo $(git remote get-url origin) -w"
+    command: "gh pr view -w"
     context: "commits"
     description: "Open Github PR in browser"
   - key: "x"
+    command: "gh repo view --web --branch {{.SelectedLocalBranch.Name}}"
     context: "localBranches"
     description: "Open branch in browser"
-    command: "gh repo view --web --branch {{.SelectedLocalBranch.Name}} $(git remote get-url origin)"
   - key: "x"
+    command: "gh repo view --web --branch {{.SelectedRemoteBranch.Name}}"
     context: "remoteBranches"
     description: "Open branch in browser"
-    command: "gh repo view --web --branch {{.SelectedRemoteBranch.Name}} $(git remote get-url upstream)"
-  - key: "<c-x>"
-    context: "global"
-    description: "Open remote in browser"
-    command: |
-      url=$(git remote get-url origin 2>/dev/null)
-      if [ -n "$url" ]; then
-          open "$url"
-      else
-          echo 'no remote found'
-      fi
