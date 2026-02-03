@@ -38,8 +38,9 @@ customCommands:
       xargs -r git branch -D
   - key: "v"
     context: "localBranches"
-    loadingText: "Checking out GitHub Pull Request..."
     command: "gh pr checkout {{.Form.PullRequestNumber}}"
+    description: "Select GitHub PR for Checkout"
+    loadingText: "Checking out GitHub Pull Request..."
     prompts:
       - type: "menuFromCommand"
         title: "Which PR do you want to check out?"
