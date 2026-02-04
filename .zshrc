@@ -13,7 +13,6 @@ export XDG_CONFIG_HOME="$HOME/.config"
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="half-life"
 
 # Android development
 JAVA_HOME=$HOME/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
@@ -118,28 +117,6 @@ export BROWSER=open
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-
-# Taken from https://esham.io/2025/05/shell-history
-function smite() {
-    setopt LOCAL_OPTIONS ERR_RETURN PIPE_FAIL
-
-    local opts=( -I )
-    if [[ $1 == '-a' ]]; then
-        opts=()
-    elif [[ -n $1 ]]; then
-        print >&2 'usage: smite [-a]'
-        return 1
-    fi
-
-    fc -l -n $opts 1 | \
-        fzf --no-sort --tac --multi | \
-        while IFS='' read -r command_to_delete; do
-            printf 'Removing history entry "%s"\n' $command_to_delete
-            local HISTORY_IGNORE="${(b)command_to_delete}"
-            fc -W
-            fc -p $HISTFILE $HISTSIZE $SAVEHIST
-        done
-}
 
 # pnpm
 export PNPM_HOME="/Users/carloitaben/Library/pnpm"
