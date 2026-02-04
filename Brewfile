@@ -13,6 +13,7 @@ brew "stow"
 brew "zoxide"
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
+brew "zsh-vi-mode"
 
 cask "font-blex-mono-nerd-font"
 cask "ghostty"
