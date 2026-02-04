@@ -12,6 +12,7 @@
   "git_panel": {
     "button": false,
   },
+  "file_scan_inclusions": [".env", ".env*"],
   "tab_bar": {
     "show_nav_history_buttons": false,
   },
