@@ -23,6 +23,7 @@ you cut will be cut again.
 
 - Write tests that verify semantically correct behavior
 - Failing tests are acceptable when they expose genuine bugs and test correct behavior
+- Use agent-browser to test frontends. Run agent-browser --help to see available commands
 
 ## Code Documentation
 
