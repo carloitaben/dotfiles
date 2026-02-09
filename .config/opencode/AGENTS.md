@@ -23,7 +23,6 @@ you cut will be cut again.
 
 - Write tests that verify semantically correct behavior
 - Failing tests are acceptable when they expose genuine bugs and test correct behavior
-- Use agent-browser to test frontends. Run agent-browser --help to see available commands
 
 ## Code Documentation
 
@@ -43,6 +42,12 @@ Comments and docstrings:
 ## Plans
 
 - At the end of each plan, give me a list of unresolved questions to answer, if any. Make the questions extremely concise. Sacrifice grammar for the sake of concision.
+
+## agent-browser
+
+When the user requests debugging in the browser, use the agent-browser CLI. To view the available commands, run:
+
+- agent-browser --help
 
 ## btca
 
