@@ -1,7 +1,6 @@
 ---
 description: Extract durable rules, decisions, and learnings from the current session into a markdown memory file
 agent: plan
-subtask: true
 ---
 
 You are performing structured knowledge extraction from the CURRENT SESSION.
