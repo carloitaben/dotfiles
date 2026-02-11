@@ -118,9 +118,3 @@ If this session suggests improving:
 Propose changes here as bullets.
 
 (If none, write "None recorded.")
-
----
-
-End the document with:
-
-"Load this file as context in future sessions when working on related areas."
