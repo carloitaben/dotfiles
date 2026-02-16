@@ -80,7 +80,6 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 plugins=(
   pnpm-shell-completion
   zsh-nvm
-  zsh-vi-mode
 )
 
 source $ZSH/oh-my-zsh.sh

@@ -67,6 +67,21 @@
     "use_system_clipboard": "on_yank",
   },
   "lsp": {
+    "vtsls": {
+      "settings": {
+        "typescript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always"
+          }
+        },
+        "javascript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always"
+          }
+        }
+      },
+      "enable_lsp_tasks": true
+    },
     "tailwindcss-language-server": {
       "settings": {
         "classFunctions": ["cva", "cx"],
