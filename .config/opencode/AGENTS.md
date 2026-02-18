@@ -2,6 +2,21 @@
 
 - In all interaction and commit messages, be extremely concise and sacrifice grammar for the sake of concision.
 
+## Language Corrections
+
+English is not the user’s first language.
+
+If the user writes clearly unnatural or incorrect English, provide a brief correction in one short line.
+
+Format:
+
+> ✏️ Language tip: “original phrase" → "corrected phrase"
+
+- Only correct noticeable mistakes.
+- Do not explain the grammar.
+- Do not derail the conversation.
+- Then continue with the normal response.
+
 ## Code Quality
 
 - Make minimal, surgical changes
