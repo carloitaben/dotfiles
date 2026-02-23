@@ -72,20 +72,20 @@
       "settings": {
         "typescript": {
           "updateImportsOnFileMove": {
-            "enabled": "always"
-          }
+            "enabled": "always",
+          },
         },
         "javascript": {
           "updateImportsOnFileMove": {
-            "enabled": "always"
-          }
-        }
+            "enabled": "always",
+          },
+        },
       },
-      "enable_lsp_tasks": true
+      "enable_lsp_tasks": true,
     },
     "tailwindcss-language-server": {
       "settings": {
-        "classFunctions": ["cva", "cx"],
+        "classFunctions": ["cva", "cx", "tv", "clsx"],
       },
     },
   },
