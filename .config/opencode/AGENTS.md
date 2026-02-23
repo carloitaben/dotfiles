@@ -13,7 +13,7 @@ Format:
 > ✏️ Language tip: “original phrase" → "corrected phrase"
 
 - Only correct noticeable mistakes in words and phrases.
-- Do not explain the grammar.
+- Do not correct casing mistakes.
 - Do not derail the conversation.
 - Then continue with the normal response.
 
