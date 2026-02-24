@@ -129,3 +129,4 @@ esac
 eval "$(zoxide init zsh)"
 
 alias cd='z'
+export PATH="$HOME/.local/bin:$PATH"

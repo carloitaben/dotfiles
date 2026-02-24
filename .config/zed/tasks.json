@@ -10,8 +10,8 @@
     },
   },
   {
-    "label": "opencode",
-    "command": "opencode --continue || claude",
+    "label": "agent",
+    "command": "test \"$USER\" = \"carlo\" && claude --permission-mode plan || opencode --continue",
     "hide": "on_success",
     "env": {
       "OPENCODE_EXPERIMENTAL_PLAN_MODE": "1",

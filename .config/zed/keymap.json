@@ -24,7 +24,7 @@
     "bindings": {
       "cmd-?": [
         "task::Spawn",
-        { "task_name": "opencode", "reveal_target": "center" },
+        { "task_name": "agent", "reveal_target": "center" },
       ],
       "cmd-shift-j": "workspace::NewCenterTerminal",
       "cmd-shift-g": [
