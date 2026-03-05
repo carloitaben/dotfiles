@@ -26,6 +26,13 @@
         "task::Spawn",
         { "task_name": "agent", "reveal_target": "center" },
       ],
+      "ctrl-w cmd-?": [
+        "action::Sequence",
+        [
+          "pane::SplitVertical",
+          ["task::Spawn", { "task_name": "agent", "reveal_target": "center" }],
+        ],
+      ],
       "cmd-shift-j": "workspace::NewCenterTerminal",
       "cmd-shift-g": [
         "task::Spawn",
