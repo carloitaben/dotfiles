@@ -68,6 +68,15 @@
     "use_system_clipboard": "on_yank",
   },
   "lsp": {
+    "vscode-css-language-server": {
+      "settings": {
+        "css": {
+          "lint": {
+            "unknownAtRules": "ignore",
+          },
+        },
+      },
+    },
     "vtsls": {
       "settings": {
         "typescript": {
@@ -102,9 +111,6 @@
       "code_actions_on_format": {
         "source.fixAll.eslint": true,
       },
-    },
-    "CSS": {
-      "language_servers": ["tailwindcss-language-server"],
     },
   },
 }
