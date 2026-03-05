@@ -103,5 +103,8 @@
         "source.fixAll.eslint": true,
       },
     },
+    "CSS": {
+      "language_servers": ["tailwindcss-language-server"],
+    },
   },
 }
