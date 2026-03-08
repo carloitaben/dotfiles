@@ -23,6 +23,7 @@ Format:
 - Never compromise type safety: no `any`, no non-null assertion operator (`!`), no type assertions (`as Type`)
 - Make illegal states unrepresentable: model domain with ADTs/discriminated unions; parse inputs at boundaries into typed structures; if state can't exist, code can't mishandle it
 - Abstractions: Consciously constrained, pragmatically parameterised, doggedly documented
+- Colocation: Place code as close to its relevant context as possible
 
 This codebase will outlive you. Every shortcut you take becomes
 someone else's burden. Every hack compounds into technical debt
