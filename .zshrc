@@ -98,6 +98,9 @@ case ":$PATH:" in
 esac
 
 # zoxide
-eval "$(zoxide init zsh)"
-alias cd='z'
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+  alias cd='z'
+fi
+
 export PATH="$HOME/.local/bin:$PATH"

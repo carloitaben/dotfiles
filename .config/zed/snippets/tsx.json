@@ -68,17 +68,52 @@
   "Effect Tagged Error": {
     "prefix": "etaggederror",
     "body": [
-      "export class ${1} extends Data.TaggedError(\"${1}\")<ErrorOptions> {}"
+      "export class ${1} extends Data.TaggedError(\"${1}\")<{ readonly cause: unknown }> {}"
     ]
   },
-  "Effect Service": {
-    "prefix": "eservice",
+  "Effect ServiceMap Service (Fn)": {
+    "prefix": "esmf",
     "body": [
-      "export class ${1} extends Effect.Service<${1}>()(\"${1}\", {}) {${2}}"
-    ]
+      "interface ${1:Database} {",
+      "\treadonly ${2:query}: (${3:sql}: string) => ${4:string}",
+      "}",
+      "",
+      "const ${1} = ServiceMap.Service<${1}>(\"${1}\")$0"
+    ],
+    "description": "ServiceMap service (fn syntax)"
   },
-  "Effect Tag": {
-    "prefix": "etag",
-    "body": ["export class ${1} extends Context.Tag(\"${1}\")<${1}, {}>() {}"]
+  "Effect ServiceMap Service (Class)": {
+    "prefix": "esmc",
+    "body": [
+      "class ${1:Database} extends ServiceMap.Service<${1}, {",
+      "\treadonly ${2:query}: (${3:sql}: string) => ${4:string}",
+      "}>()(\"${1}\") {}$0"
+    ],
+    "description": "ServiceMap service (class syntax)"
+  },
+  "Effect ServiceMap Service (Class + make)": {
+    "prefix": "esmcm",
+    "body": [
+      "class ${1:Logger} extends ServiceMap.Service<${1}>()(\"${1}\", {",
+      "\tmake: Effect.gen(function* () {",
+      "\t\tconst ${2:config} = yield* ${3:Config}",
+      "\t\treturn { ${4:log}: (msg: string) => Effect.log(`[${2}.prefix] ${msg}`) }",
+      "\t})",
+      "}) {",
+      "\tstatic readonly layer = Layer.effect(this, this.make).pipe(",
+      "\t\tLayer.provide(${3}.layer)",
+      "\t)",
+      "}$0"
+    ],
+    "description": "ServiceMap service (class syntax, with make)"
+  },
+  "Effect ServiceMap Reference": {
+    "prefix": "esmr",
+    "body": [
+      "const ${1:LogLevel} = ServiceMap.Reference<${2:\"info\" | \"warn\" | \"error\"}>(\"${1}\", {",
+      "\tdefaultValue: () => ${3:\"info\" as const}",
+      "})$0"
+    ],
+    "description": "ServiceMap reference"
   }
 }
