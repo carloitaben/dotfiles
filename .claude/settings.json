@@ -1,8 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(agent-browser *)",
-      "agent-browser *",
+      "Bash(agent-browser:*)",
+      "Read(/tmp/*)",
       "mcp__figma-desktop__*"
     ]
   }
