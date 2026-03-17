@@ -4,7 +4,8 @@
       "Bash(agent-browser:*)",
       "Read(/tmp/*)",
       "Read(**/opensrc/**)",
-      "mcp__figma-desktop__*"
+      "mcp__figma-desktop__*",
+      "mcp__ark-ui__*"
     ]
   }
 }
