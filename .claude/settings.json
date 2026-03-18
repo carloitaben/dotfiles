@@ -7,6 +7,9 @@
       "Bash(pkill -f agent-browser:*)",
       "Read(/private/tmp/*)",
       "Read(**/opensrc/**)",
+      "Glob(**/opensrc/**)",
+      "Read(**/node_modules/**)",
+      "Glob(**/node_modules/**)",
       "mcp__figma-desktop__*",
       "mcp__ark-ui__*"
     ]
