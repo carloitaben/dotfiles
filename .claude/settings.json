@@ -4,6 +4,7 @@
     "defaultMode": "plan",
     "allow": [
       "Bash(agent-browser:*)",
+      "Bash(pkill -f agent-browser:*)",
       "Read(/tmp/*)",
       "Read(**/opensrc/**)",
       "mcp__figma-desktop__*",
