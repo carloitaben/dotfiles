@@ -24,9 +24,32 @@ gui:
 
 quitOnTopLevelReturn: true
 
-# When working with forks, set the default repo
-# using `gh repo set-default` for these to work
+# Some of these requiore `gh repo set-default` to work with forks
 customCommands:
+  # Create worktree from current branch (when in worktrees view)
+  # From https://www.jamescrosswell.dev/posts/switching-to-git-worktrees/
+  - key: "N"
+    context: "worktrees"
+    description: "Create new worktree from current branch"
+    prompts:
+      - type: "input"
+        title: "Create a new worktree from {{ .CheckedOutBranch.Name }} with what name?"
+        key: "Name"
+        initialValue: ""
+    command: "git worktree add ../{{ .Form.Name }} {{ .CheckedOutBranch.Name }} -b {{ .Form.Name }}"
+
+  # Create worktree from selected branch (when in branches view)
+  # From https://www.jamescrosswell.dev/posts/switching-to-git-worktrees/
+  - key: "N"
+    context: "localBranches"
+    description: "Create new worktree from selected branch"
+    prompts:
+      - type: "input"
+        title: "Create a new worktree from {{ .SelectedLocalBranch.Name }} with what name?"
+        key: "Name"
+        initialValue: ""
+    command: "git worktree add ../{{ .Form.Name }} {{ .SelectedLocalBranch.Name }} -b {{ .Form.Name }}"
+
   - key: "t"
     context: "localBranches"
     description: "Trim local branches whose remotes are gone from upstream"
@@ -36,6 +59,7 @@ customCommands:
       grep '\[gone\]' |
       cut -d' ' -f1 |
       xargs -r git branch -D
+
   - key: "v"
     context: "localBranches"
     command: "gh pr checkout {{.Form.PullRequestNumber}}"
@@ -51,18 +75,22 @@ customCommands:
         filter: "#(?P<number>[0-9]+): (?P<title>.+) - (?P<ref_name>[^ ]+)"
         valueFormat: "{{.number}}"
         labelFormat: '{{"#" | black | bold}}{{.number | white | bold}} {{.title | yellow | bold}}{{" [" | black | bold}}{{.ref_name | green}}{{"]" | black | bold}}'
+
   - key: "G"
     command: "gh pr view -w {{.SelectedLocalBranch.Name}}"
     context: "localBranches"
     description: "Open Github PR in browser"
+
   - key: "G"
     command: "gh pr view -w"
     context: "commits"
     description: "Open Github PR in browser"
+
   - key: "x"
     command: "gh repo view --web --branch {{.SelectedLocalBranch.Name}}"
     context: "localBranches"
     description: "Open branch in browser"
+
   - key: "x"
     command: "gh repo view --web --branch {{.SelectedRemoteBranch.Name}}"
     context: "remoteBranches"
