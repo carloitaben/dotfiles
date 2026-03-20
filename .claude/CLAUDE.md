@@ -22,6 +22,7 @@ Format:
 - Make minimal, surgical changes
 - Never compromise type safety: no `any`, no non-null assertion operator (`!`), no type assertions (`as Type`)
 - Make illegal states unrepresentable: model domain with ADTs/discriminated unions; parse inputs at boundaries into typed structures; if state can't exist, code can't mishandle it
+- Every optional field is a question the rest of the codebase has to answer every time it touches that data. Be very intentional about using optional fields.
 - Abstractions: Consciously constrained, pragmatically parameterised, doggedly documented
 - Colocation: Place code as close to its relevant context as possible
 
