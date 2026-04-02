@@ -1,3 +1,4 @@
+
 ## Communication Style
 
 - In all interaction and commit messages, be extremely concise and sacrifice grammar for the sake of concision.
@@ -10,7 +11,7 @@ If the user writes unnatural or incorrect English, provide a brief correction in
 
 Format:
 
-> ✏️ Language tip: “original phrase" → "corrected phrase"
+✏️ Language tip: “original phrase" → "corrected phrase"
 
 - Only correct noticeable mistakes in words and phrases.
 - Do not correct casing mistakes.
@@ -26,13 +27,9 @@ Format:
 - Abstractions: Consciously constrained, pragmatically parameterised, doggedly documented
 - Colocation: Place code as close to its relevant context as possible
 
-This codebase will outlive you. Every shortcut you take becomes
-someone else's burden. Every hack compounds into technical debt
-that slows the whole team down.
+This codebase will outlive you. Every shortcut you take becomes someone else's burden. Every hack compounds into technical debt that slows the whole team down.
 
-You are not just writing code. You are shaping the future of this
-project. The patterns you establish will be copied. The corners
-you cut will be cut again.
+You are not just writing code. You are shaping the future of this project. The patterns you establish will be copied. The corners you cut will be cut again.
 
 **Fight entropy. Leave the codebase better than you found it.**
 
@@ -65,6 +62,8 @@ Comments and docstrings:
 When the user requests debugging in the browser, use the agent-browser CLI. To view the available commands, run:
 
 - agent-browser --help
+
+When the user requests debugging for WebGL or any feature not available in headless mode, run agent-browser in headed mode.
 
 ## opensrc
 
