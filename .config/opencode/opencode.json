@@ -8,6 +8,22 @@
       "*.env.*": "deny",
       "*.env.example": "allow",
     },
+    "glob": {
+      "/opt/homebrew/Cellar/neovim/*/share/nvim/runtime/doc": "allow",
+      "/opt/homebrew/Cellar/neovim/*/share/nvim/runtime/doc/**": "allow",
+    },
+    "grep": {
+      "/opt/homebrew/Cellar/neovim/*/share/nvim/runtime/doc": "allow",
+      "/opt/homebrew/Cellar/neovim/*/share/nvim/runtime/doc/**": "allow",
+    },
+    "list": {
+      "/opt/homebrew/Cellar/neovim/*/share/nvim/runtime/doc": "allow",
+      "/opt/homebrew/Cellar/neovim/*/share/nvim/runtime/doc/**": "allow",
+    },
+    "external_directory": {
+      "/opt/homebrew/Cellar/neovim/*/share/nvim/runtime/doc": "allow",
+      "/opt/homebrew/Cellar/neovim/*/share/nvim/runtime/doc/**": "allow",
+    },
     "git *": "ask",
   },
   "plugin": ["@mohak34/opencode-notifier@latest"],

@@ -1,25 +1,59 @@
+local function build_telescope_fzf_native(path)
+    local result = vim.system({ "make" }, { cwd = path, text = true }):wait()
+
+    if result.code ~= 0 then
+        error(("Failed to build telescope-fzf-native.nvim:\n%s%s"):format(result.stdout, result.stderr))
+    end
+end
+
+vim.api.nvim_create_autocmd("PackChanged", {
+    callback = function(event)
+        local data = event.data
+
+        if data.spec.name ~= "telescope-fzf-native.nvim" then
+            return
+        end
+
+        if data.kind ~= "install" and data.kind ~= "update" then
+            return
+        end
+
+        build_telescope_fzf_native(data.path)
+    end,
+})
+
 vim.pack.add({
-  { src = "https://github.com/nvim-lua/plenary.nvim" },
-  { src = "https://github.com/nvim-telescope/telescope.nvim" },
-  { src = "https://github.com/debugloop/telescope-undo.nvim" },
+    { src = "https://github.com/nvim-lua/plenary.nvim" },
+    { src = "https://github.com/nvim-telescope/telescope.nvim" },
+    { src = "https://github.com/nvim-telescope/telescope-fzf-native.nvim" },
+    { src = "https://github.com/debugloop/telescope-undo.nvim" },
 })
 
 local telescope = require("telescope")
 local actions = require("telescope.actions")
 
 telescope.setup({
-  defaults = {
-    mappings = {
-      i = {
-        ["<esc>"] = actions.close
-      },
+    defaults = {
+        preview = {
+            treesitter = {
+                disable = { "typescriptreact" },
+            },
+        },
+        mappings = {
+            i = {
+                ["<esc>"] = actions.close
+            },
+        },
     },
-  },
-  extensions = {
-    undo = {
-      saved_only = true,
-    }
-  },
+    extensions = {
+        fzf = {
+            override_file_sorter = true,
+            override_generic_sorter = true,
+        },
+        undo = {
+            saved_only = true,
+        }
+    },
 })
 
 local builtin = require('telescope.builtin')
@@ -51,5 +85,6 @@ vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = 'Find existing
 --   }
 -- end, { desc = 'Find [/] in Open Files' })
 
+telescope.load_extension("fzf")
 telescope.load_extension("undo")
 vim.keymap.set('n', '<leader>fu', telescope.extensions.undo.undo, { desc = 'Find undo history' })

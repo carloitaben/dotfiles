@@ -1,5 +1,9 @@
 {
   "plugins": {
+    "fff.nvim": {
+      "rev": "e83b137be5d9a2947f59e1b68e0b8c4ab3eac2f3",
+      "src": "https://github.com/dmtrKovalenko/fff.nvim"
+    },
     "fzf-lua": {
       "rev": "ee37d2860a221ae2e75c08abd28240b4a9746e23",
       "src": "https://github.com/ibhagwan/fzf-lua"
@@ -42,7 +46,8 @@
     },
     "nvim-treesitter": {
       "rev": "42fc28ba918343ebfd5565147a42a26580579482",
-      "src": "https://github.com/nvim-treesitter/nvim-treesitter"
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter",
+      "version": "'main'"
     },
     "oil.nvim": {
       "rev": "bbad9a76b2617ce1221d49619e4e4b659b3c61fc",
