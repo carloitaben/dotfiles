@@ -1,3 +1,10 @@
+vim.pack.add({
+    { src = "https://github.com/nvim-lua/plenary.nvim" },
+    { src = "https://github.com/nvim-telescope/telescope.nvim" },
+    { src = "https://github.com/nvim-telescope/telescope-fzf-native.nvim" },
+    { src = "https://github.com/debugloop/telescope-undo.nvim" },
+})
+
 local function build_telescope_fzf_native(path)
     local result = vim.system({ "make" }, { cwd = path, text = true }):wait()
 
@@ -22,23 +29,17 @@ vim.api.nvim_create_autocmd("PackChanged", {
     end,
 })
 
-vim.pack.add({
-    { src = "https://github.com/nvim-lua/plenary.nvim" },
-    { src = "https://github.com/nvim-telescope/telescope.nvim" },
-    { src = "https://github.com/nvim-telescope/telescope-fzf-native.nvim" },
-    { src = "https://github.com/debugloop/telescope-undo.nvim" },
-})
-
 local telescope = require("telescope")
 local actions = require("telescope.actions")
+local themes = require("telescope.themes")
 
 telescope.setup({
     defaults = {
-        preview = {
-            treesitter = {
-                disable = { "typescriptreact" },
-            },
-        },
+        -- preview = {
+        --     treesitter = {
+        --         disable = { "typescriptreact" },
+        --     },
+        -- },
         mappings = {
             i = {
                 ["<esc>"] = actions.close
@@ -56,6 +57,9 @@ telescope.setup({
     },
 })
 
+telescope.load_extension("fzf")
+telescope.load_extension("undo")
+
 local builtin = require('telescope.builtin')
 
 vim.keymap.set('n', '<D-p>', builtin.find_files, { desc = 'Find files' })
@@ -70,21 +74,18 @@ vim.keymap.set('n', '<leader>fr', builtin.resume, { desc = 'Find resume' })
 vim.keymap.set('n', '<leader>f.', builtin.oldfiles, { desc = 'Find recent files ("." for repeat)' })
 vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = 'Find existing buffers' })
 
--- vim.keymap.set('n', '<leader>/', function()
---   -- You can pass additional configuration to Telescope to change the theme, layout, etc.
---   builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
---     winblend = 10,
---     previewer = false,
---   })
--- end, { desc = '[/] Fuzzily find in current buffer' })
+vim.keymap.set('n', '<leader>/', function()
+    builtin.current_buffer_fuzzy_find(themes.get_dropdown {
+        winblend = 10,
+        previewer = false,
+    })
+end, { desc = 'Fuzzily find in current buffer' })
 
--- vim.keymap.set('n', '<leader>f/', function()
---   builtin.live_grep {
---     grep_open_files = true,
---     prompt_title = 'Live Grep in Open Files',
---   }
--- end, { desc = 'Find [/] in Open Files' })
+vim.keymap.set('n', '<leader>f/', function()
+    builtin.live_grep {
+        grep_open_files = true,
+        prompt_title = 'Live Grep in Open Files',
+    }
+end, { desc = 'Find by grep in open files' })
 
-telescope.load_extension("fzf")
-telescope.load_extension("undo")
 vim.keymap.set('n', '<leader>fu', telescope.extensions.undo.undo, { desc = 'Find undo history' })

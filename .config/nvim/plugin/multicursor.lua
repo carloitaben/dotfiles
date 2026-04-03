@@ -33,8 +33,8 @@ vim.keymap.set({ "n", "x" }, "<D-d>", function() multicursor.matchAddCursor(1) e
 -- Add or skip adding a new cursor by matching word/selection
 -- vim.keymap.set({ "n", "x" }, "<leader>n", function() multicursor.matchAddCursor(1) end)
 -- vim.keymap.set({ "n", "x" }, "<leader>N", function() multicursor.matchAddCursor(-1) end)
---
--- -- Add and remove cursors with control + left click.
--- vim.keymap.set("n", "<c-leftmouse>", multicursor.handleMouse)
--- vim.keymap.set("n", "<c-leftdrag>", multicursor.handleMouseDrag)
--- vim.keymap.set("n", "<c-leftrelease>", multicursor.handleMouseRelease)
+
+-- Add and remove cursors with control + left click.
+vim.keymap.set("n", "<c-leftmouse>", multicursor.handleMouse)
+vim.keymap.set("n", "<c-leftdrag>", multicursor.handleMouseDrag)
+vim.keymap.set("n", "<c-leftrelease>", multicursor.handleMouseRelease)
