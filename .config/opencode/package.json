@@ -3,7 +3,7 @@
     "generate:skill-commands": "bun scripts/generate-skill-commands.ts"
   },
   "dependencies": {
-    "@opencode-ai/plugin": "1.3.3"
+    "@opencode-ai/plugin": "1.3.10"
   },
   "devDependencies": {
     "@types/bun": "^1.3.10"
