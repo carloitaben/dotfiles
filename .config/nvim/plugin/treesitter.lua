@@ -40,12 +40,15 @@ local languages = {
 -- enable treesitter highlighting, folding and indents
 vim.api.nvim_create_autocmd("FileType", {
     callback = function(args)
+        -- Skip special buffers like Telescope/Oil prompts; they are not real files.
         if vim.bo[args.buf].buftype ~= "" then
             return
         end
 
         local filetype = args.match
         local lang = vim.treesitter.language.get_lang(filetype)
+        -- Some filetypes map to another parser name, and some have no parser at
+        -- all, so guard both parser loading and startup.
         if lang ~= nil and pcall(vim.treesitter.language.add, lang) and pcall(vim.treesitter.start, args.buf, lang) then
             vim.wo.foldmethod = "expr"
             vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
