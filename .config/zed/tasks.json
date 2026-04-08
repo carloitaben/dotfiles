@@ -11,7 +11,7 @@
   },
   {
     "label": "agent",
-    "command": "test \"$USER\" = \"carlo\" && claude --permission-mode plan || opencode --continue",
+    "command": "test \"$USER\" = \"carlo\" && claude --permission-mode plan || opencode",
     "hide": "on_success",
     "env": {
       "OPENCODE_EXPERIMENTAL_PLAN_MODE": "1",

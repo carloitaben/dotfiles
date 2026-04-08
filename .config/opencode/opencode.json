@@ -27,4 +27,18 @@
     "git *": "ask",
   },
   "plugin": ["@mohak34/opencode-notifier@latest"],
-}
+  "mcp": {
+    "figma": {
+      "type": "local",
+      "enabled": true,
+      "command": [
+        "node",
+        "{env:HOME}/Developer/github/figma-mcp-free/packages/mcp-server/dist/index.js"
+      ],
+      "environment": {
+        "FIGMA_TOKEN": "{env:FIGMA_TOKEN}"
+      },
+      "timeout": 30000
+    }
+  },
+  }
