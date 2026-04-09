@@ -16,10 +16,10 @@
 git clone https://github.com/carloitaben/dotfiles.git "${XDG_CONFIG_HOME:-$HOME/.dotfiles}"
 ```
 
-4. Run the Homebrew Bundle file.
+4. Run the bootstrap script.
 
 ```sh
-brew bundle --file=~/.dotfiles/Brewfile
+sh ~/.dotfiles/bootstrap.sh
 ```
 
 5. Run `stow`.

@@ -24,6 +24,3 @@ cask "font-blex-mono-nerd-font"
 cask "ghostty"
 cask "karabiner-elements"
 
-npm "@mariozechner/pi-coding-agent"
-npm "corepack"
-npm "opensrc"
