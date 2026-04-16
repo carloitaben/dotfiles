@@ -1,4 +1,3 @@
-
 ## Communication Style
 
 - In all interaction and commit messages, be extremely concise and sacrifice grammar for the sake of concision.
@@ -25,13 +24,39 @@ Format:
 - Make illegal states unrepresentable: model domain with ADTs/discriminated unions; parse inputs at boundaries into typed structures; if state can't exist, code can't mishandle it
 - Every optional field is a question the rest of the codebase has to answer every time it touches that data. Be very intentional about using optional fields.
 - Abstractions: Consciously constrained, pragmatically parameterised, doggedly documented
-- Colocation: Place code as close to its relevant context as possible
 
 This codebase will outlive you. Every shortcut you take becomes someone else's burden. Every hack compounds into technical debt that slows the whole team down.
 
 You are not just writing code. You are shaping the future of this project. The patterns you establish will be copied. The corners you cut will be cut again.
 
 **Fight entropy. Leave the codebase better than you found it.**
+
+## Code Structure
+
+- Prefer vertical structure: group code by what it does, not by technical type.
+- Code that changes together should live together.
+- Avoid broad top-level buckets like `components`, `hooks`, `utils`, `types` when a domain or feature name is available.
+- Start with the smallest useful vertical, usually a route, page, domain, or shared product area.
+- Shared code must earn its place: either move it into a real shared vertical or the design system. Do not dump it into generic `utils`.
+- Give each vertical a small public surface. Default internals to private. Avoid deep imports across verticals.
+
+```
+Bad: same concern separated by API type
+.
+└── src/
+    ├── hooks/
+    │   └── useMediaQuery.ts
+    ├── types/
+    │   └── media.ts
+    └── utils/
+        └── mediaQueryObserver.ts
+
+Good: hooks, types, utilities… all in the same file
+.
+└── src/
+    └── lib/
+        └── media.ts
+```
 
 ## Testing
 
