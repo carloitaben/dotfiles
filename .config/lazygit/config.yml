@@ -76,16 +76,6 @@ customCommands:
         valueFormat: "{{.number}}"
         labelFormat: '{{"#" | black | bold}}{{.number | white | bold}} {{.title | yellow | bold}}{{" [" | black | bold}}{{.ref_name | green}}{{"]" | black | bold}}'
 
-  - key: "G"
-    command: "gh pr view -w {{.SelectedLocalBranch.Name}}"
-    context: "localBranches"
-    description: "Open Github PR in browser"
-
-  - key: "G"
-    command: "gh pr view -w"
-    context: "commits"
-    description: "Open Github PR in browser"
-
   - key: "x"
     command: "gh repo view --web --branch {{.SelectedLocalBranch.Name}}"
     context: "localBranches"
