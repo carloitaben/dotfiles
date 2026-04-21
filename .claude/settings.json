@@ -1,5 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "skipAutoPermissionPrompt": true,
   "permissions": {
     "defaultMode": "plan",
     "allow": [
