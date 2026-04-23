@@ -1,3 +1,5 @@
-opencode-notifier-state.json
+.DS_Store
 .opencode/plans/
+node_modules/
+opencode-notifier-state.json
 opensrc/
