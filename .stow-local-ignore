@@ -1,1 +1,7 @@
+Brewfile
+README\.md
 \.DS_Store
+\.git
+\.gitignore
+\.stow-local-ignore
+bootstrap\.sh

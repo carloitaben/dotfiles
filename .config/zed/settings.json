@@ -7,9 +7,13 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "outline_panel": {
+    "dock": "left",
+  },
   "disable_ai": true,
   "snippet_sort_order": "top",
   "git_panel": {
+    "dock": "left",
     "button": false,
   },
   "file_scan_inclusions": [".env", ".env*"],
@@ -39,6 +43,7 @@
     "dock": "right",
   },
   "project_panel": {
+    "dock": "left",
     "hide_root": true,
     "default_width": 300.0,
     "file_icons": false,
@@ -49,10 +54,8 @@
     "quick_actions": false,
     "selections_menu": false,
   },
-  "notification_panel": {
-    "button": false,
-  },
   "collaboration_panel": {
+    "dock": "left",
     "button": false,
   },
   "title_bar": {

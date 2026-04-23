@@ -14,4 +14,6 @@ npm install -g \
   corepack \
   opensrc
 
+corepack enable
+
 echo "🎉"
