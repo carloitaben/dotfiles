@@ -1,8 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "skipAutoPermissionPrompt": true,
   "permissions": {
-    "defaultMode": "plan",
     "allow": [
       "Bash(agent-browser:*)",
       "Bash(pkill -f agent-browser:*)",
@@ -13,6 +11,9 @@
       "Glob(**/node_modules/**)",
       "mcp__figma-desktop__*",
       "mcp__ark-ui__*"
-    ]
-  }
+    ],
+    "defaultMode": "plan"
+  },
+  "theme": "dark-ansi",
+  "editorMode": "vim"
 }
