@@ -92,19 +92,10 @@ When the user requests debugging for WebGL or any feature not available in headl
 
 ## opensrc
 
-Source code for dependencies is available in opensrc/ for deeper understanding of implementation details.
+Source code for dependencies is available in `~/.opensrc/` for deeper understanding of implementation details.
 
-See opensrc/sources.json for the list of available packages and their versions.
+`opensrc path <pkg>` prints the absolute path to cached source. If not cached, it fetches automatically. Progress goes to stderr, path to stdout, so `$(opensrc path ...)` works in subshells.
 
-Use this source code when you need to understand how a package works internally, not just its types/interface.
-
-Do this when the user asks questions about a package or repository. Always prefer to consult the source code before searching the web.
-
-To fetch the source code for a package or repository not available in opensrc/, ask the user to run:
-
-```sh
-npx opensrc <package> # npm package (e.g., npx opensrc zod)
-npx opensrc pypi:<package> # Python package (e.g., npx opensrc pypi:requests)
-npx opensrc crates:<package> # Rust crate (e.g., npx opensrc crates:serde)
-npx opensrc <owner>/<repo> # GitHub repo (e.g., npx opensrc vercel/ai)
-```
+ALWAYS asume that the APIs, conventions, and file structure of libraries may all differ from your training data. 
+ALWAYS use the source code when you need to understand how a package works internally, not just its types/interface. 
+ALWAYS prefer to consult the source code before searching the web.
