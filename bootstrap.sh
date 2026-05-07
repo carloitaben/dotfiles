@@ -12,7 +12,8 @@ echo "🌀 Installing npm global packages"
 npm install -g \
   @mariozechner/pi-coding-agent \
   corepack \
-  opensrc
+  opensrc \
+  agentation-mcp
 
 corepack enable
 
