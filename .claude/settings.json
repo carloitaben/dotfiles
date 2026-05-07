@@ -15,6 +15,5 @@
     "defaultMode": "plan"
   },
   "theme": "dark-ansi",
-  "editorMode": "vim",
-  "disableAutoMode": "disable"
+  "editorMode": "vim"
 }
