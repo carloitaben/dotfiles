@@ -1,5 +1,6 @@
 .DS_Store
-.opencode/plans/
+.opencode/*
 node_modules/
 opencode-notifier-state.json
+package-lock.json
 opensrc/

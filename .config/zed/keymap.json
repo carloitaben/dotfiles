@@ -7,6 +7,20 @@
 // from the command palette.
 [
   {
+    // Disabling these since I want space on the FS
+    "context": "!Editor && !Terminal",
+    "bindings": {
+      "space f": null,
+      "space /": null,
+      "space shift-s": null,
+      "space w h": null,
+      "space w j": null,
+      "space w k": null,
+      "space w l": null,
+      "space w q": null,
+    },
+  },
+  {
     "context": "Workspace",
     "bindings": {
       "cmd-j": "workspace::ToggleRightDock",
@@ -64,6 +78,7 @@
       "H": "pane::ActivatePreviousItem",
       "L": "pane::ActivateNextItem",
       "space f": "editor::Format",
+      "space w": "vim::HelixJumpToWord",
     },
   },
   {

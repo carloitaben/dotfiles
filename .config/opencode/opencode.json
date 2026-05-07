@@ -2,32 +2,21 @@
   "$schema": "https://opencode.ai/config.json",
   "autoupdate": true,
   "permission": {
-    "read": {
-      "*": "allow",
-      "*.env": "deny",
-      "*.env.*": "deny",
-      "*.env.example": "allow",
-    },
-    "glob": {
-      "/opt/homebrew/Cellar/neovim/*/share/nvim/runtime/doc": "allow",
-      "/opt/homebrew/Cellar/neovim/*/share/nvim/runtime/doc/**": "allow",
-    },
-    "grep": {
-      "/opt/homebrew/Cellar/neovim/*/share/nvim/runtime/doc": "allow",
-      "/opt/homebrew/Cellar/neovim/*/share/nvim/runtime/doc/**": "allow",
-    },
-    "list": {
-      "/opt/homebrew/Cellar/neovim/*/share/nvim/runtime/doc": "allow",
-      "/opt/homebrew/Cellar/neovim/*/share/nvim/runtime/doc/**": "allow",
-    },
     "external_directory": {
       "/opt/homebrew/Cellar/neovim/*/share/nvim/runtime/doc": "allow",
       "/opt/homebrew/Cellar/neovim/*/share/nvim/runtime/doc/**": "allow",
+      "~/.opensrc": "allow",
+      "~/.opensrc/**": "allow"
     },
-    "git *": "ask",
+    "git *": "ask"
   },
   "plugin": ["@mohak34/opencode-notifier@latest"],
   "mcp": {
+    "agentation": {
+      "type": "local",
+      "enabled": true,
+      "command": ["npx", "agentation-mcp", "server", "--port", "4747"]
+    },
     "figma": {
       "type": "local",
       "enabled": true,
@@ -40,5 +29,5 @@
       },
       "timeout": 30000
     }
-  },
   }
+}
