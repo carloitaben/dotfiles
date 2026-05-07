@@ -10,6 +10,15 @@
     },
   },
   {
+    "label": "ghui",
+    "command": "ghui",
+    "hide": "on_success",
+    "show_command": false,
+    "shell": {
+      "program": "sh",
+    },
+  },
+  {
     "label": "agent",
     "command": "test \"$USER\" = \"carlo\" && claude --permission-mode plan || opencode",
     "hide": "on_success",

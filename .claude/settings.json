@@ -16,5 +16,5 @@
   },
   "theme": "dark-ansi",
   "editorMode": "vim",
-  "skipAutoPermissionPrompt": true
+  "disableAutoMode": "disable"
 }

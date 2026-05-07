@@ -27,6 +27,10 @@
         "task::Spawn",
         { "task_name": "lazygit", "reveal_target": "center" },
       ],
+      "cmd-shift-alt-g": [
+        "task::Spawn",
+        { "task_name": "ghui", "reveal_target": "center" },
+      ],
     },
   },
   {
