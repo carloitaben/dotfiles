@@ -23,4 +23,3 @@ brew "zsh-vi-mode"
 cask "font-blex-mono-nerd-font"
 cask "ghostty"
 cask "karabiner-elements"
-

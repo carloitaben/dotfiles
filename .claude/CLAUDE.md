@@ -58,6 +58,10 @@ Good: hooks, types, utilities… all in the same file
         └── media.ts
 ```
 
+## Breaking changes
+
+Never add fallbacks, never think about legacy fallbacks, or worry about breaking changes unless explicitly told. By default, assume breaking changes are OK.
+
 ## Testing
 
 - Write tests that verify semantically correct behavior
