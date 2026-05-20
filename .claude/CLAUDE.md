@@ -94,6 +94,8 @@ When the user requests debugging in the browser, use the agent-browser CLI. To v
 
 When the user requests debugging for WebGL or any feature not available in headless mode, run agent-browser in headed mode.
 
+When the user requested debugging in the browser during the conversation, and later on, more frontend-related changes are requested, assume the user still wants you to test with agent-browser.
+
 ## opensrc
 
 Source code for dependencies is available in `~/.opensrc/` for deeper understanding of implementation details.
