@@ -1,15 +1,7 @@
-// Zed settings
-//
-// For information on how to configure Zed, see the Zed
-// documentation: https://zed.dev/docs/configuring-zed
-//
-// To see all of Zed's default settings without changing your
-// custom settings, run `zed: open default settings` from the
-// command palette (cmd-shift-p / ctrl-shift-p)
 {
   "which_key": {
     "delay_ms": 0,
-    "enabled": true
+    "enabled": true,
   },
   "buffer_line_height": "standard",
   "cli_default_open_behavior": "new_window",
