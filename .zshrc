@@ -91,6 +91,7 @@ fi
 
 export TERMINAL='ghostty'
 export BROWSER=open
+export OPENCODE_EXPERIMENTAL=1
 
 # pnpm
 export PNPM_HOME="$HOME/Library/pnpm"
