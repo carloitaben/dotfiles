@@ -54,7 +54,7 @@
     },
   },
   {
-    "context": "Dock",
+    "context": "Dock || Terminal",
     "bindings": {
       "ctrl-w k": "workspace::ActivatePaneUp",
       "ctrl-w j": "workspace::ActivatePaneDown",
