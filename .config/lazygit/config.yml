@@ -77,6 +77,11 @@ customCommands:
         labelFormat: '{{"#" | black | bold}}{{.number | white | bold}} {{.title | yellow | bold}}{{" [" | black | bold}}{{.ref_name | green}}{{"]" | black | bold}}'
 
   - key: "x"
+    command: "open -R {{.SelectedFile.Name}}"
+    context: "files"
+    description: "Reveal in Finder"
+
+  - key: "x"
     command: "gh repo view --web --branch {{.SelectedLocalBranch.Name}}"
     context: "localBranches"
     description: "Open branch in browser"
