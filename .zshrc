@@ -19,16 +19,16 @@ setopt HIST_IGNORE_SPACE    # commands starting with space are not stored
 export NVM_LAZY_LOAD=true
 source ~/.oh-my-zsh/custom/plugins/zsh-nvm/zsh-nvm.plugin.zsh
 
-# pnpm tab completions
-source ~/.oh-my-zsh/custom/plugins/pnpm-shell-completion/pnpm-shell-completion.plugin.zsh
-
-# Completions engine
+# Completions engine — must run before any plugin that calls compdef
 autoload -Uz compinit
 if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
   compinit
 else
   compinit -C
 fi
+
+# pnpm tab completions (needs compdef, so comes after compinit)
+source ~/.oh-my-zsh/custom/plugins/pnpm-shell-completion/pnpm-shell-completion.plugin.zsh
 
 # Syntax highlighting (must come before autosuggestions)
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
