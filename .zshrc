@@ -20,11 +20,12 @@ export NVM_LAZY_LOAD=true
 source ~/.oh-my-zsh/custom/plugins/zsh-nvm/zsh-nvm.plugin.zsh
 
 # Completions engine — must run before any plugin that calls compdef
+# -u skips the security check (Homebrew dirs are group-writable by design)
 autoload -Uz compinit
 if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
-  compinit
+  compinit -u
 else
-  compinit -C
+  compinit -Cu
 fi
 
 # pnpm tab completions (needs compdef, so comes after compinit)
