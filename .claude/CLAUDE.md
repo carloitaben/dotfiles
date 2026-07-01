@@ -98,10 +98,14 @@ When the user requested debugging in the browser during the conversation, and la
 
 ## opensrc
 
-Source code for dependencies is available in `~/.opensrc/` for deeper understanding of implementation details.
+MANDATORY, NON-NEGOTIABLE: never consult a dependency's source in `node_modules/`. 
 
-`opensrc path <pkg>` prints the absolute path to cached source. If not cached, it fetches automatically. Progress goes to stderr, path to stdout, so `$(opensrc path ...)` works in subshells.
+No Read/Grep/Glob there to understand how a package works. `node_modules` is OFF LIMITS for that purpose, full stop.
 
-ALWAYS asume that the APIs, conventions, and file structure of libraries may all differ from your training data. 
-ALWAYS use the source code when you need to understand how a package works internally, not just its types/interface. 
-ALWAYS prefer to consult the source code before searching the web.
+Source code for dependencies lives ONLY at `~/.opensrc/`. Never inspect `node_modules` for this, even for a quick check.
+
+`opensrc path <pkg>` prints the absolute path to cached source. If not cached, it fetches automatically. Progress goes to stderr, path to stdout, so `$(opensrc path ...)` works in subshells. Run this BEFORE reading any dependency source — do not locate it yourself under `node_modules`.
+
+ALWAYS assume the APIs, conventions, and file structure of libraries differ from training data.
+ALWAYS resolve the path via `opensrc path <pkg>` first, then Read/Grep inside that path — when you need to understand how a package works internally, not just its types/interface.
+ALWAYS prefer the resolved opensrc source over web search.
