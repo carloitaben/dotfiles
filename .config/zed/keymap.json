@@ -71,6 +71,12 @@
       "K": "vim::WindowTop",
       "H": "pane::ActivatePreviousItem",
       "L": "pane::ActivateNextItem",
+    },
+  },
+  {
+    "context": "Editor && vim_mode == normal && !VimWaiting && !menu",
+    "bindings": {
+      "space": null,
       "space f": "editor::Format",
       "space w": "vim::HelixJumpToWord",
     },
