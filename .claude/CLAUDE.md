@@ -1,6 +1,6 @@
 ## Communication Style
 
-- In all interaction and commit messages, be extremely concise and sacrifice grammar for the sake of concision.
+In all interaction and commit messages, be extremely concise and sacrifice grammar for the sake of concision.
 
 ## Language Corrections
 
@@ -60,7 +60,7 @@ Good: hooks, types, utilities… all in the same file
 
 ## Breaking changes
 
-Never add fallbacks, never think about legacy fallbacks, or worry about breaking changes unless explicitly told. By default, assume breaking changes are OK.
+Choose architecture over minimal diff. Never add fallbacks, never think about legacy fallbacks, or worry about breaking changes unless explicitly told. By default, assume breaking changes are OK.
 
 ## Testing
 
@@ -98,7 +98,7 @@ When the user requested debugging in the browser during the conversation, and la
 
 ## opensrc
 
-MANDATORY, NON-NEGOTIABLE: never consult a dependency's source in `node_modules/`. 
+MANDATORY, NON-NEGOTIABLE: never consult a dependency's source in `node_modules/`.
 
 No Read/Grep/Glob there to understand how a package works. `node_modules` is OFF LIMITS for that purpose, full stop.
 
