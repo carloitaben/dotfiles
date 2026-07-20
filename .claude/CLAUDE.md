@@ -96,6 +96,8 @@ When the user requests debugging for WebGL or any feature not available in headl
 
 When the user requested debugging in the browser during the conversation, and later on, more frontend-related changes are requested, assume the user still wants you to test with agent-browser.
 
+When debugging React re-renders, use agent-browser's React DevTools-backed commands instead of manual console.log/profiling. Run `agent-browser --help` (and `agent-browser react --help` if available) to see the current `react ...` subcommands — don't assume a fixed list, the CLI evolves.
+
 ## opensrc
 
 MANDATORY, NON-NEGOTIABLE: never consult a dependency's source in `node_modules/`.
