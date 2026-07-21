@@ -69,6 +69,9 @@ vim.o.splitright     = true
 -- Open horizontal splits below the current window.
 vim.o.splitbelow     = true
 
+-- Also highlight matching <> pairs (on top of the default (){}[]).
+vim.opt.matchpairs:append('<:>')
+
 -- Use Space as the main leader key for custom mappings.
 vim.g.mapleader      = " "
 -- Use Space as the local leader key for buffer-local mappings.
