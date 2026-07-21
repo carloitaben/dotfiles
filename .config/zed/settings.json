@@ -35,8 +35,6 @@
   "terminal": {
     "cursor_shape": "bar",
     "dock": "right",
-    "copy_on_select": true,
-    "keep_selection_on_copy": false
   },
   "project_panel": {
     "dock": "left",
