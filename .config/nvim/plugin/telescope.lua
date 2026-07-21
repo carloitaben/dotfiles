@@ -64,6 +64,18 @@ telescope.setup({
 telescope.load_extension("fzf")
 telescope.load_extension("undo")
 
+-- Force the preview parse to happen synchronously
+local sync_highlight = require("ts_sync_highlight").sync_highlight
+local previewer_utils = require("telescope.previewers.utils")
+local original_ts_highlighter = previewer_utils.ts_highlighter
+previewer_utils.ts_highlighter = function(bufnr, ft)
+    local attached = original_ts_highlighter(bufnr, ft)
+    if attached ~= false then
+        sync_highlight(bufnr)
+    end
+    return attached
+end
+
 local builtin = require('telescope.builtin')
 
 local function open_project_in_new_terminal(root)

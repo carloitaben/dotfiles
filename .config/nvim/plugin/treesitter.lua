@@ -37,6 +37,8 @@ local languages = {
     "yaml",
 }
 
+local sync_highlight = require("ts_sync_highlight").sync_highlight
+
 -- enable treesitter highlighting, folding and indents
 vim.api.nvim_create_autocmd("FileType", {
     callback = function(args)
@@ -53,6 +55,8 @@ vim.api.nvim_create_autocmd("FileType", {
             vim.wo.foldmethod = "expr"
             vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
             vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+            -- Force the first parse to happen synchronously
+            sync_highlight(args.buf)
         end
     end,
 })
@@ -70,5 +74,4 @@ vim.api.nvim_create_autocmd("PackChanged", {
     end,
 })
 
--- Installs languages
-require("nvim-treesitter").install(languages)
+require("nvim-treesitter.install").ensure_installed(languages)
