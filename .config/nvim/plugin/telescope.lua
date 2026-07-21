@@ -33,6 +33,7 @@ local telescope = require("telescope")
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
 local config = require("telescope.config").values
+local entry_display = require("telescope.pickers.entry_display")
 local finders = require("telescope.finders")
 local pickers = require("telescope.pickers")
 local themes = require("telescope.themes")
@@ -179,7 +180,155 @@ local function open_recent_project()
     }):find()
 end
 
+-- Native Ex commands (:write, :split, ...) aren't in nvim_get_commands(), only
+-- user/plugin-defined ones are. Their one-line descriptions live in the help
+-- index instead, so scrape that for a name -> description map, keeping only
+-- entries that resolve to a real, fully-named command.
+local builtin_commands_cache
+
+local function get_builtin_commands()
+    if builtin_commands_cache then
+        return builtin_commands_cache
+    end
+
+    builtin_commands_cache = {}
+
+    local runtime = vim.env.VIMRUNTIME
+    local ok, lines = pcall(vim.fn.readfile, runtime and (runtime .. '/doc/index.txt') or '')
+
+    if not ok then
+        return builtin_commands_cache
+    end
+
+    local current
+    for _, line in ipairs(lines) do
+        local name, desc = line:match('^|:([%w_]+)|%s+:%S+%s+(.*)$')
+        if name then
+            desc = vim.trim(desc)
+            desc = desc:sub(1, 1):upper() .. desc:sub(2)
+            current = vim.fn.exists(':' .. name) == 2 and { name = name, desc = desc } or nil
+            if current then
+                table.insert(builtin_commands_cache, current)
+            end
+        elseif current and line:match('^%s+%S') then
+            current.desc = current.desc .. ' ' .. vim.trim(line)
+        else
+            current = nil
+        end
+    end
+
+    return builtin_commands_cache
+end
+
+-- A command's `definition` doubles as its description: set to the `desc`
+-- given at creation, if any, otherwise the raw script/Lua body that runs.
+-- There is no way to tell those two cases apart from the API, so fall back to
+-- pattern-matching what code tends to look like and blank it out.
+local function describe_user_command(definition)
+    if
+        definition == ''
+        or definition:match('^:')
+        or definition:match('^call ')
+        or definition:match('^lua ')
+        or definition:match('^silent')
+        or definition:match('<f%-args>')
+        or definition:match('<q%-args>')
+        or definition:match('<args>')
+        or definition:match('<bang>')
+        or definition:match("require[('\"]")
+    then
+        return ''
+    end
+    return definition
+end
+
+local function collect_commands()
+    local by_name = {}
+
+    for _, cmd in ipairs(get_builtin_commands()) do
+        by_name[cmd.name] = cmd
+    end
+
+    for _, cmd in pairs(vim.api.nvim_get_commands({})) do
+        by_name[cmd.name] = { name = cmd.name, desc = describe_user_command(cmd.definition) }
+    end
+
+    local buf_commands = vim.api.nvim_buf_get_commands(0, {})
+    buf_commands[true] = nil
+    for _, cmd in pairs(buf_commands) do
+        by_name[cmd.name] = { name = cmd.name, desc = describe_user_command(cmd.definition) }
+    end
+
+    local results = {}
+    for _, cmd in pairs(by_name) do
+        table.insert(results, cmd)
+    end
+    table.sort(results, function(a, b) return a.name < b.name end)
+
+    return results
+end
+
+local command_palette_displayer = entry_display.create({
+    separator = ' ',
+    items = {
+        { width = 30 },
+        { remaining = true },
+    },
+})
+
+local function command_palette()
+    pickers.new(themes.get_dropdown({
+        previewer = false,
+        prompt_title = 'Command Palette',
+        layout_config = {
+            width = 100,
+        },
+    }), {
+        finder = finders.new_table({
+            results = collect_commands(),
+            entry_maker = function(cmd)
+                return {
+                    name = cmd.name,
+                    desc = cmd.desc,
+                    value = cmd,
+                    ordinal = cmd.name .. ' ' .. cmd.desc,
+                    display = function(entry)
+                        return command_palette_displayer({
+                            { entry.name, 'TelescopeResultsIdentifier' },
+                            entry.desc,
+                        })
+                    end,
+                }
+            end,
+        }),
+        sorter = config.generic_sorter({}),
+        attach_mappings = function(prompt_bufnr)
+            actions.select_default:replace(function()
+                local selection = action_state.get_selected_entry()
+
+                actions.close(prompt_bufnr)
+
+                if selection == nil then
+                    return
+                end
+
+                -- Run it outright, like a VSCode/Zed palette would. Nvim
+                -- validates required arguments before a command's body runs,
+                -- so a missing-argument error surfaces here safely; fall back
+                -- to dropping it on the command line for the user to finish.
+                vim.cmd('stopinsert')
+                if not pcall(vim.cmd, selection.name) then
+                    vim.api.nvim_feedkeys((':%s '):format(selection.name), 'nt', false)
+                end
+            end)
+
+            return true
+        end,
+    }):find()
+end
+
 vim.keymap.set('n', '<D-p>', builtin.find_files, { desc = 'Find files' })
+vim.keymap.set('n', '<D-S-p>', command_palette, { desc = 'Command palette' })
 vim.keymap.set('n', '<D-M-o>', open_recent_project, { desc = 'Open recent project' })
 vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Find files' })
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Find help' })

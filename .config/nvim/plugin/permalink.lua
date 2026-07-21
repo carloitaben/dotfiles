@@ -79,7 +79,7 @@ vim.api.nvim_create_user_command("CopyPermalink", function(opts)
 
     vim.fn.setreg("+", url)
     vim.fn.setreg('"', url)
-end, { range = true })
+end, { range = true, desc = "Copy permalink to line" })
 
 vim.api.nvim_create_user_command("OpenPermalink", function(opts)
     local url = permalink(opts)
@@ -88,4 +88,4 @@ vim.api.nvim_create_user_command("OpenPermalink", function(opts)
     end
 
     vim.ui.open(url)
-end, { range = true })
+end, { range = true, desc = "Open permalink to line" })
