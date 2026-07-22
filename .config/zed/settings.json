@@ -4,6 +4,10 @@
   "outline_panel": {
     "dock": "left",
   },
+  "which_key": {
+    "delay_ms": 0,
+    "enabled": true,
+  },
   "disable_ai": true,
   "snippet_sort_order": "top",
   "git_panel": {

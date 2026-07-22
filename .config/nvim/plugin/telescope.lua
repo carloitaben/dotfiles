@@ -327,10 +327,37 @@ local function command_palette()
     }):find()
 end
 
+local function open_selected_in_tabs(prompt_bufnr)
+    local picker = action_state.get_current_picker(prompt_bufnr)
+    local selections = picker:get_multi_selection()
+
+    if vim.tbl_isempty(selections) then
+        local entry = action_state.get_selected_entry()
+        if entry then
+            selections = { entry }
+        end
+    end
+
+    actions.close(prompt_bufnr)
+
+    for _, entry in ipairs(selections) do
+        local filename = entry.path or entry.filename
+        if filename then
+            vim.cmd.tabedit(vim.fn.fnameescape(filename))
+        end
+    end
+end
+
 local function find_files_reversed()
     builtin.find_files({
         sorting_strategy = 'ascending',
         layout_config = { prompt_position = 'top' },
+        attach_mappings = function(_, map)
+            actions.select_default:replace(actions.select_tab_drop)
+            map({ 'i', 'n' }, '<D-CR>', open_selected_in_tabs)
+            map({ 'i', 'n' }, '<D-Enter>', open_selected_in_tabs)
+            return true
+        end,
     })
 end
 
