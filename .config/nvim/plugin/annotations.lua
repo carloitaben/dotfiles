@@ -115,8 +115,8 @@ local function render_buffer(bufnr)
 
             if visible then
                 local indicator = nil
-                if annotation.line ~= annotation.end_line or annotation.col then
-                    indicator = format_range(annotation, "L") .. " "
+                if annotation.preview then
+                    indicator = "[" .. annotation.preview .. "] "
                 end
 
                 local virt_lines = {}
@@ -274,6 +274,32 @@ local function find_annotation(file, start_line, end_line, col, end_col)
     return nil
 end
 
+-- Snapshot of the selected text itself, shown in the virtual-text indicator
+-- instead of a repeated line/col range (the range is redundant there --
+-- you're already looking right at the line -- but the export still wants
+-- it, see format_range). Only worth capturing for an actual sub-line or
+-- multi-line range; a whole-line note has nothing extra to preview.
+local function capture_preview(start_line, end_line, col, end_col)
+    local ok, lines
+    if col then
+        ok, lines = pcall(vim.api.nvim_buf_get_text, 0, start_line - 1, col - 1, end_line - 1, end_col, {})
+    else
+        ok, lines = pcall(vim.api.nvim_buf_get_lines, 0, start_line - 1, end_line, false)
+    end
+    if not ok or not lines then
+        return nil
+    end
+
+    local joined = vim.trim(table.concat(lines, " "))
+    if joined == "" then
+        return nil
+    end
+    if #joined > 60 then
+        joined = joined:sub(1, 57) .. "..."
+    end
+    return joined
+end
+
 local function annotate_range(start_line, end_line, opts)
     opts = opts or {}
     local file = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":.")
@@ -282,6 +308,9 @@ local function annotate_range(start_line, end_line, opts)
         vim.notify("Annotations: current buffer has no file", vim.log.levels.ERROR)
         return
     end
+
+    local is_range = start_line ~= end_line or opts.col ~= nil
+    local preview = is_range and capture_preview(start_line, end_line, opts.col, opts.end_col) or nil
 
     local existing_index = find_annotation(file, start_line, end_line, opts.col, opts.end_col)
     local initial_message = existing_index and annotations[existing_index].message or nil
@@ -298,6 +327,7 @@ local function annotate_range(start_line, end_line, opts)
             end_line = end_line,
             col = opts.col,
             end_col = opts.end_col,
+            preview = preview,
             message = message,
         }
         if existing_index then
