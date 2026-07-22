@@ -44,4 +44,4 @@ Good: hooks, types, utilities… all in the same file
 
 ## Comments
 
-- Avoid comments/docstrings unless they explain non-obvious logic — don't restate what the signature already says.
+- Don't narrate the bug or task being fixed in a comment (e.g. "use `.click()`, not `.focus()` — because focusing a button doesn't also trigger it, unlike native label-click semantics"). If it's inferable from reading the code in context, skip it entirely — a comment should capture a genuinely non-obvious invariant, not restate the diff's own story. Why: reads as leftover task narration 6 months later, not documentation.

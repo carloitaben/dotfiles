@@ -8,6 +8,7 @@ local sign_group = "AnnotationSigns"
 vim.fn.sign_define("AnnotationMark", { text = "▶", texthl = "DiagnosticHint" })
 
 local annotations = {}
+local visible = true
 
 -- annotation.col/end_col are only present for charwise selections (a
 -- linewise `V` selection has no meaningful column range). Shared by the
@@ -34,8 +35,38 @@ local function format_range(annotation, line_prefix)
     return string.format("%s%d-%d", line_prefix, annotation.line, annotation.end_line)
 end
 
+-- Stored outside the project (nothing to accidentally commit or clutter the
+-- tree with) under stdpath("state"), keyed by project root + git branch so
+-- switching branches doesn't mix up annotations meant for different work.
+local cached_annotations_path = nil
+
+local function git_branch(root)
+    local result = vim.system({ "git", "-C", root, "rev-parse", "--abbrev-ref", "HEAD" }, { text = true }):wait()
+    if result.code ~= 0 then
+        return nil
+    end
+    return vim.trim(result.stdout)
+end
+
+local function compute_annotations_path()
+    local cwd = vim.fn.getcwd()
+    local root = vim.fs.root(cwd, { ".git" }) or cwd
+    local branch = git_branch(root)
+
+    local slug = root:gsub("[/\\:]", "%%")
+    local filename = branch and (slug .. "@" .. branch:gsub("[/\\:]", "%%")) or slug
+
+    local dir = vim.fn.stdpath("state") .. "/annotations"
+    vim.fn.mkdir(dir, "p")
+
+    return dir .. "/" .. filename .. ".json"
+end
+
 local function annotations_path()
-    return vim.fn.getcwd() .. "/.annotations.json"
+    if not cached_annotations_path then
+        cached_annotations_path = compute_annotations_path()
+    end
+    return cached_annotations_path
 end
 
 local function load_annotations()
@@ -78,27 +109,49 @@ local function render_buffer(bufnr)
             and annotation.end_line <= line_count
 
         if annotation.file == bufname and valid_range then
+            -- The sign stays regardless of `visible` -- it's the "there's an
+            -- annotation here" indicator you keep even with notes folded away.
             vim.fn.sign_place(0, sign_group, "AnnotationMark", bufnr, { lnum = annotation.line, priority = 100 })
 
-            local virt_lines = {}
-            if annotation.line ~= annotation.end_line or annotation.col then
-                table.insert(virt_lines, {
-                    { "▎ " .. format_range(annotation, "L"), "DiagnosticHint" },
+            if visible then
+                local indicator = nil
+                if annotation.line ~= annotation.end_line or annotation.col then
+                    indicator = format_range(annotation, "L") .. " "
+                end
+
+                local virt_lines = {}
+                for index, line in ipairs(vim.split(annotation.message, "\n", { plain = true })) do
+                    if index == 1 and indicator then
+                        virt_lines[1] = { { "▎ " .. indicator, "DiagnosticHint" }, { line, "Comment" } }
+                    else
+                        table.insert(virt_lines, { { "▎ " .. line, "Comment" } })
+                    end
+                end
+
+                vim.api.nvim_buf_set_extmark(bufnr, ns, annotation.end_line - 1, 0, {
+                    virt_lines = virt_lines,
                 })
             end
-            for _, line in ipairs(vim.split(annotation.message, "\n", { plain = true })) do
-                table.insert(virt_lines, { { "▎ " .. line, "Comment" } })
-            end
-
-            vim.api.nvim_buf_set_extmark(bufnr, ns, annotation.end_line - 1, 0, {
-                virt_lines = virt_lines,
-            })
         end
     end
 end
 
 local function render_current_buffer()
     render_buffer(vim.api.nvim_get_current_buf())
+end
+
+local function render_all_buffers()
+    for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+        if vim.api.nvim_buf_is_loaded(bufnr) then
+            render_buffer(bufnr)
+        end
+    end
+end
+
+local function toggle_visibility()
+    visible = not visible
+    render_all_buffers()
+    vim.notify("Annotations: " .. (visible and "shown" or "folded"), vim.log.levels.INFO)
 end
 
 local function clear_all_rendering()
@@ -118,9 +171,7 @@ load_annotations()
 vim.schedule(render_current_buffer)
 
 -- Minimal floating markdown scratch buffer for typing a note. <C-s> in
--- normal or insert mode, or :w, submits. <Esc> (normal mode) also submits
--- -- if editing an existing annotation, an empty save leaves it untouched
--- rather than deleting it (see the empty-message check in annotate_range).
+-- normal or insert mode, or :w, submits. <Esc> (normal mode) discards.
 -- Always leaves you back in Normal mode (never stuck in Insert from the
 -- note editor). opts.restore_visual re-selects the original visual range
 -- with `gv` on cancel only -- saving deselects, matching a normal
@@ -148,8 +199,8 @@ local function prompt_for_note(initial_message, on_submit, opts)
         style = "minimal",
         border = "single",
         title = initial_message
-            and " Edit annotation (<C-s>/<Esc> save, <C-c> discard) "
-            or " Annotation (<C-s>/<Esc> save, <C-c> discard) ",
+            and " Edit annotation (<C-s> save, <Esc> discard) "
+            or " Annotation (<C-s> save, <Esc> discard) ",
         title_pos = "center",
     })
 
@@ -196,8 +247,7 @@ local function prompt_for_note(initial_message, on_submit, opts)
     end
 
     vim.keymap.set({ "n", "i" }, "<C-s>", submit, { buffer = buf, desc = "Save annotation note" })
-    vim.keymap.set("n", "<Esc>", submit, { buffer = buf, desc = "Save annotation note" })
-    vim.keymap.set({ "n", "i" }, "<C-c>", cancel, { buffer = buf, desc = "Discard annotation note" })
+    vim.keymap.set("n", "<Esc>", cancel, { buffer = buf, desc = "Discard annotation note" })
     vim.api.nvim_create_autocmd("BufWriteCmd", { buffer = buf, callback = submit })
     vim.api.nvim_create_autocmd("BufWipeout", {
         buffer = buf,
@@ -209,9 +259,15 @@ local function prompt_for_note(initial_message, on_submit, opts)
     })
 end
 
-local function find_annotation(file, start_line, end_line)
+local function find_annotation(file, start_line, end_line, col, end_col)
     for index, annotation in ipairs(annotations) do
-        if annotation.file == file and annotation.line == start_line and annotation.end_line == end_line then
+        if
+            annotation.file == file
+            and annotation.line == start_line
+            and annotation.end_line == end_line
+            and annotation.col == col
+            and annotation.end_col == end_col
+        then
             return index
         end
     end
@@ -227,7 +283,7 @@ local function annotate_range(start_line, end_line, opts)
         return
     end
 
-    local existing_index = find_annotation(file, start_line, end_line)
+    local existing_index = find_annotation(file, start_line, end_line, opts.col, opts.end_col)
     local initial_message = existing_index and annotations[existing_index].message or nil
 
     prompt_for_note(initial_message, function(message)
@@ -375,3 +431,4 @@ vim.keymap.set("n", "<leader>na", annotate_current_line, { desc = "Annotations: 
 vim.keymap.set("n", "<leader>ny", copy_and_clear_annotations, { desc = "Annotations: copy to clipboard and clear" })
 vim.keymap.set("n", "<leader>nY", copy_annotations_and_notify, { desc = "Annotations: copy to clipboard" })
 vim.keymap.set("n", "<leader>nc", clear_annotations_and_notify, { desc = "Annotations: clear" })
+vim.keymap.set("n", "<leader>nz", toggle_visibility, { desc = "Annotations: toggle visibility (fold)" })
