@@ -20,7 +20,7 @@ Split the diff between the current branch and its target into multiple independe
 
 Using both commit boundaries and diff content, propose named feature groups covering every changed file/hunk (no leftovers — anything not obviously part of a feature becomes its own group, never silently dropped). For each group note which files/hunks it owns, and whether it depends on another group's code being present (dependency = stacking edge, not just "related").
 
-Present the plan via AskUserQuestion and iterate: let the user merge/split groups, reassign files, or change dependency edges. Loop until confirmed. **No git writes yet.**
+Present the plan, along with branch names, via AskUserQuestion and iterate: let the user merge/split groups, reassign files, rename branches, or change dependency edges. Loop until confirmed. **No git writes yet.**
 
 ## 4. Build local branches
 
