@@ -20,9 +20,6 @@ Format:
 ## Code Quality
 
 - Make minimal, surgical changes
-- Never compromise type safety: no `any`, no non-null assertion operator (`!`), no type assertions (`as Type`)
-- Make illegal states unrepresentable: model domain with ADTs/discriminated unions; parse inputs at boundaries into typed structures; if state can't exist, code can't mishandle it
-- Every optional field is a question the rest of the codebase has to answer every time it touches that data. Be very intentional about using optional fields.
 - Abstractions: Consciously constrained, pragmatically parameterised, doggedly documented
 
 This codebase will outlive you. Every shortcut you take becomes someone else's burden. Every hack compounds into technical debt that slows the whole team down.
@@ -33,50 +30,13 @@ You are not just writing code. You are shaping the future of this project. The p
 
 ## Code Structure
 
-- Prefer vertical structure: group code by what it does, not by technical type.
 - Code that changes together should live together.
-- Avoid broad top-level buckets like `components`, `hooks`, `utils`, `types` when a domain or feature name is available.
 - Start with the smallest useful vertical, usually a route, page, domain, or shared product area.
-- Shared code must earn its place: either move it into a real shared vertical or the design system. Do not dump it into generic `utils`.
-- Give each vertical a small public surface. Default internals to private. Avoid deep imports across verticals.
 
-```
-Bad: same concern separated by API type
-.
-└── src/
-    ├── hooks/
-    │   └── useMediaQuery.ts
-    ├── types/
-    │   └── media.ts
-    └── utils/
-        └── mediaQueryObserver.ts
+## Nitpicks
 
-Good: hooks, types, utilities… all in the same file
-.
-└── src/
-    └── lib/
-        └── media.ts
-```
-
-## Breaking changes
-
-Choose architecture over minimal diff. Never add fallbacks, never think about legacy fallbacks, or worry about breaking changes unless explicitly told. By default, assume breaking changes are OK.
-
-## Testing
-
-- Write tests that verify semantically correct behavior
-- Failing tests are acceptable when they expose genuine bugs and test correct behavior
-
-## Code Documentation
-
-Comments and docstrings:
-
-- AVOID unnecessary comments or docstrings unless explicitly asked by the user
-- Good code should be self-documenting through clear naming and structure
-- ONLY add inline comments when needed to explain non-obvious logic, workarounds, or important context that isn't clear from the code
-- ONLY add docstrings when necessary for their intended purpose (API contracts, public interfaces, complex behavior)
-- DO NOT write docstrings that simply restate the function name or parameters
-- If a function name and signature clearly explain what it does, no docstring is needed
+- MANDATORY, USER IS NITPICKY ABOUT THIS: before making edits, ALWAYS check `~/.claude/skills/nitpicks/NITPICKS.md` (or invoke the `nitpicks` skill) for saved style/pattern corrections that apply to the files being touched.
+- After a round of feedback/corrections on code style or patterns, consider invoking the `nitpicks-save` skill to capture it for future sessions.
 
 ## GitHub
 

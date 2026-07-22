@@ -123,6 +123,33 @@ local function replace_current_session(root)
     vim.cmd.enew()
 end
 
+local project_displayer = require('telescope.pickers.entry_display').create({
+    separator = '  ',
+    items = {
+        { width = 30 },
+        { remaining = true },
+    },
+})
+
+local function project_display(entry)
+    return project_displayer({
+        { entry.name, 'TelescopeResultsIdentifier' },
+        { entry.parent, 'Comment' },
+    })
+end
+
+local function project_entry_maker(root)
+    return {
+        root,
+        value = root,
+        ordinal = root,
+        display = project_display,
+        name = vim.fn.fnamemodify(root, ':t'),
+        -- ":~" collapses the home directory to "~", same idea for any path.
+        parent = vim.fn.fnamemodify(vim.fn.fnamemodify(root, ':h'), ':~'),
+    }
+end
+
 local function select_recent_project(prompt_bufnr, action)
     local selection = action_state.get_selected_entry()
 
@@ -159,6 +186,7 @@ local function open_recent_project()
     }), {
         finder = finders.new_table({
             results = roots,
+            entry_maker = project_entry_maker,
         }),
         sorter = config.generic_sorter({}),
         attach_mappings = function(prompt_bufnr, map)
