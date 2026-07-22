@@ -327,10 +327,17 @@ local function command_palette()
     }):find()
 end
 
-vim.keymap.set('n', '<D-p>', builtin.find_files, { desc = 'Find files' })
+local function find_files_reversed()
+    builtin.find_files({
+        sorting_strategy = 'ascending',
+        layout_config = { prompt_position = 'top' },
+    })
+end
+
+vim.keymap.set('n', '<D-p>', find_files_reversed, { desc = 'Find files' })
 vim.keymap.set('n', '<D-S-p>', command_palette, { desc = 'Command palette' })
 vim.keymap.set('n', '<D-M-o>', open_recent_project, { desc = 'Open recent project' })
-vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Find files' })
+vim.keymap.set('n', '<leader>ff', find_files_reversed, { desc = 'Find files' })
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Find help' })
 vim.keymap.set('n', '<leader>fk', builtin.keymaps, { desc = 'Find keymaps' })
 vim.keymap.set('n', '<leader>fs', builtin.builtin, { desc = 'Find Select Telescope' })
