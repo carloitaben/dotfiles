@@ -46,6 +46,13 @@ You are not just writing code. You are shaping the future of this project. The p
 
 - At the end of each plan, give me a list of unresolved questions to answer, if any. Make the questions extremely concise. Sacrifice grammar for the sake of concision.
 
+## Implementation Ownership
+
+- Default to NOT writing code. When asked for a non-trivial change, first use AskUserQuestion: "who implements — you or me?" Options: "You" (I point you to files/functions + what to change, recommended) / "Me" (I implement it — opt in when you want it done for you).
+- Skip the ask for: typos, one-liners, trivial fixes, mid-task follow-ups already in scope, or when the user already said "implement"/"just do it"/similar.
+- If "You": give a terse list of files/functions + what changes. No Edit/Write/Agent-that-edits. Don't implement even if it looks simple.
+- This overrides the general "don't stop to ask" auto-mode bias — always ask here unless skip conditions above apply.
+
 ## agent-browser
 
 When the user requests debugging in the browser, use the agent-browser CLI. To view the available commands, run:

@@ -20,7 +20,17 @@ Split the diff between the current branch and its target into multiple independe
 
 Using both commit boundaries and diff content, propose named feature groups covering every changed file/hunk (no leftovers — anything not obviously part of a feature becomes its own group, never silently dropped). For each group note which files/hunks it owns, and whether it depends on another group's code being present (dependency = stacking edge, not just "related").
 
-Present the plan, along with branch names, via AskUserQuestion and iterate: let the user merge/split groups, reassign files, rename branches, or change dependency edges. Loop until confirmed. **No git writes yet.**
+Present the plan as an ASCII tree — base branch as root, independent groups as its children, dependent groups nested under their parent group (nesting = stacking order). Annotate each node with file/hunk count. Example:
+
+```
+main
+├── auth-refactor (12 files)
+├── api-pagination (5 files)
+└── ui-cleanup (8 files)
+    └── ui-cleanup-tests (3 files)
+```
+
+Show this tree via AskUserQuestion and iterate: let the user merge/split groups, reassign files, rename branches, or change dependency edges — redraw the tree each round. Loop until confirmed. **No git writes yet.**
 
 ## 4. Build local branches
 
@@ -34,7 +44,7 @@ Original branch is left untouched throughout.
 
 ## 5. Single confirmation gate
 
-Show the final plan: branch names, stack order, base for each, file counts. Ask one explicit go/no-go for the **whole batch** — not per branch. Do not push or touch GitHub before this.
+Show the final plan as the same ASCII tree from step 3. Ask one explicit go/no-go for the **whole batch** — not per branch. Do not push or touch GitHub before this.
 
 ## 6. Push + draft PRs
 
