@@ -41,6 +41,7 @@ Good: hooks, types, utilities… all in the same file
 ## Testing
 
 - Tests should verify semantically correct behavior; a failing test that exposes a genuine bug is fine to leave failing.
+- If an `agent-browser` repro turns into repeated rechecking, pause and write a Playwright test instead when the project has Playwright installed.
 
 ## Comments
 
