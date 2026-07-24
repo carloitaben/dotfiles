@@ -10,11 +10,24 @@
       "Read(**/node_modules/**)",
       "mcp__figma-desktop__*",
       "mcp__ark-ui__*"
-    ],
-    "defaultMode": "plan"
+    ]
   },
   "theme": "dark-ansi",
   "editorMode": "vim",
   "skipAutoPermissionPrompt": true,
-  "remoteControlAtStartup": false
+  "remoteControlAtStartup": false,
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // .tool_response.filePath // empty' | { read -r f; [ -z \"$f\" ] && exit 0; case \"$f\" in *.js|*.jsx|*.ts|*.tsx|*.json|*.css|*.scss|*.md|*.mdx|*.html|*.yaml|*.yml) ;; *) exit 0 ;; esac; dir=$(dirname \"$f\"); root=$(cd \"$dir\" && git rev-parse --show-toplevel 2>/dev/null) || exit 0; [ -x \"$root/node_modules/.bin/prettier\" ] && \"$root/node_modules/.bin/prettier\" --write \"$f\"; case \"$f\" in *.ts|*.tsx) [ -x \"$root/node_modules/.bin/eslint\" ] && \"$root/node_modules/.bin/eslint\" --fix \"$f\" ;; esac; } 2>/dev/null || true",
+            "statusMessage": "Running prettier + eslint --fix"
+          }
+        ]
+      }
+    ]
+  }
 }
