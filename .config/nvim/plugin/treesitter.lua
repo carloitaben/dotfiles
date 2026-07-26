@@ -74,4 +74,4 @@ vim.api.nvim_create_autocmd("PackChanged", {
     end,
 })
 
-require("nvim-treesitter.install").ensure_installed(languages)
+require("nvim-treesitter").install(languages)
