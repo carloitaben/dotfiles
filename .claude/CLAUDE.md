@@ -18,10 +18,6 @@ You are not just writing code. You are shaping the future of this project. The p
 - Code that changes together should live together.
 - Start with the smallest useful vertical, usually a route, page, domain, or shared product area.
 
-## Nitpicks
-
-- After a round of feedback/corrections on code style or patterns, consider invoking the `nitpicks-save` skill to capture it for future sessions.
-
 ## GitHub
 
 - Your primary method for interacting with GitHub should be the GitHub CLI.

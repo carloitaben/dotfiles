@@ -55,8 +55,10 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 
-# zoxide
-if command -v zoxide >/dev/null 2>&1; then
+# zoxide (interactive only — non-interactive shells sourcing this file, e.g. tool
+# subprocesses, would otherwise trip zoxide's doctor check with a spurious warning:
+# https://github.com/ajeetdsouza/zoxide/issues/1208)
+if [[ -o interactive ]] && command -v zoxide >/dev/null 2>&1; then
   eval "$(zoxide init zsh)"
   alias cd='z'
 fi

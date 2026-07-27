@@ -1,7 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
-    "defaultMode": "auto",
     "allow": [
       "Bash(agent-browser:*)",
       "Bash(opensrc path *)",
@@ -11,12 +10,13 @@
       "Read(**/node_modules/**)",
       "mcp__figma-desktop__*",
       "mcp__ark-ui__*"
-    ]
+    ],
+    "defaultMode": "auto"
   },
   "theme": "dark-ansi",
   "editorMode": "vim",
-  "skipAutoPermissionPrompt": true,
   "remoteControlAtStartup": false,
+  "skipAutoPermissionPrompt": true,
   "hooks": {
     "PostToolUse": [
       {
