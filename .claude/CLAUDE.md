@@ -22,6 +22,20 @@ You are not just writing code. You are shaping the future of this project. The p
 
 - Your primary method for interacting with GitHub should be the GitHub CLI.
 
+## agent-browser
+
+When debugging or verifying anything that runs in a browser, use the agent-browser CLI. To view the available commands, run:
+
+- agent-browser --help
+
+For WebGL or any feature not available in headless mode, run agent-browser in headed mode.
+
+Once agent-browser has been used in the conversation, assume it should keep being used for further frontend-related changes without being asked again.
+
+When debugging React re-renders, use agent-browser's React DevTools-backed commands instead of manual console.log/profiling. Run `agent-browser --help` (and `agent-browser react --help` if available) to see the current `react ...` subcommands — don't assume a fixed list, the CLI evolves.
+
+If an agent-browser repro turns into repeated rechecking, pause and write a Playwright test instead when the project has Playwright installed.
+
 ## opensrc
 
 MANDATORY, NON-NEGOTIABLE: never consult a dependency's source in `node_modules/`.
