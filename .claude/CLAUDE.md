@@ -4,8 +4,11 @@ In all interaction and commit messages, be extremely concise and sacrifice gramm
 
 ## Code Quality
 
-- Make minimal, surgical changes
-- Abstractions: Consciously constrained, pragmatically parameterised, doggedly documented
+- Make minimal, surgical changes.
+- Abstractions: Consciously constrained, pragmatically parameterised, doggedly documented.
+- Make illegal states unrepresentable: model domain with ADTs/discriminated unions; parse inputs at boundaries into typed structures.
+- Every optional field is a question the rest of the codebase has to answer each time it's touched — be intentional before adding one.
+- Choose architecture over minimal diff; skip legacy/back-compat fallbacks unless explicitly told to keep them.
 
 This codebase will outlive you. Every shortcut you take becomes someone else's burden. Every hack compounds into technical debt that slows the whole team down.
 
@@ -17,6 +20,9 @@ You are not just writing code. You are shaping the future of this project. The p
 
 - Code that changes together should live together.
 - Start with the smallest useful vertical, usually a route, page, domain, or shared product area.
+- Prefer vertical/feature structure over grouping by technical type (`components`/`hooks`/`utils`/`types`).
+- Shared code must earn its place — a real shared vertical or the design system, not a generic `utils` dump.
+- Give each vertical a small public surface; default internals to private; avoid deep imports across verticals.
 
 ## GitHub
 
