@@ -7,63 +7,72 @@ Use this when defining service tags, module surfaces, layer implementations, run
 One opinionated application-module style uses file-local role names and one canonical ES module namespace projection. Follow the existing codebase's module style when it has one; this convention is not required by Effect.
 
 ```ts
-export type Shape = {
-  readonly get: (id: UserId) => Effect.Effect<User, NotFound | PersistenceError>
-}
+export type Interface = {
+  readonly get: (
+    id: UserId,
+  ) => Effect.Effect<User, NotFound | PersistenceError>;
+};
 
-export class Service extends Context.Service<Service, Shape>()(
+export class Service extends Context.Service<Service, Interface>()(
   "@app/UserRepo",
 ) {}
 
 export const layer = Layer.effect(
   Service,
   Effect.gen(function* () {
-    const sql = yield* SqlClient.SqlClient
+    const sql = yield* SqlClient.SqlClient;
 
     const get = Effect.fn("UserRepo.get")(function* (id: UserId) {
       // ...
-    })
+    });
 
-    return Service.of({ get })
+    return Service.of({ get });
   }),
-)
+);
 
 export class NotFound extends Schema.TaggedErrorClass<NotFound>()(
   "UserRepo.NotFound",
   { id: UserId },
 ) {}
+```
 
-export * as UserRepo from "./user-repo.js"
+When the service shape is simple, define it inline with `make` instead of a separate `Interface` type:
+
+```ts
+import { Context, Effect } from "effect";
+
+export class Service extends Context.Service<Service>()("@app/Logger", {
+  make: Effect.gen(function* () {
+    const config = yield* Config;
+    return {
+      log: (msg: string) => Effect.log(`[${config.prefix}] ${msg}`),
+    };
+  }),
+}) {}
 ```
 
 Consumers use the module namespace.
 
 ```ts
-import { UserRepo } from "./user-repo.js"
+import * as UserRepo from "./user-repo.js";
 
 const program = Effect.gen(function* () {
-  const repo = yield* UserRepo.Service
-  return yield* repo.get(id)
-})
+  const repo = yield* UserRepo.Service;
+  return yield* repo.get(id);
+});
 ```
 
-The self-export is deliberate. It lets the file remain the module while giving every consumer the same domain-first name, without a TypeScript `namespace`, wrapper object, or repeated consumer-side aliases.
+Each consumer owns the namespace via `import * as`, giving every consumer the same domain-first name without a TypeScript `namespace`, wrapper object, or repeated consumer-side aliases.
 
 ```ts
 // Sibling module: import the owning leaf directly.
-import { UserRepo } from "./user-repo.js"
-
-// Folder or package barrel: relay the identity established by the leaf.
-export { UserRepo } from "./user-repo.js"
+import * as UserRepo from "./user-repo.js";
 ```
 
 Guidance:
 
 - Do not name the tag class `UserRepo` inside `user-repo.ts`; the module namespace is the domain name.
-- In this module style, single-file modules self-export their canonical namespace at the bottom: `export * as UserRepo from "./user-repo.js"`.
-- Sibling modules import that namespace from the owning leaf; they do not import through their own aggregate barrel.
-- Folder and package barrels relay established leaf identities with `export { UserRepo } from "./user-repo.js"`.
-- The resulting `UserRepo.UserRepo === UserRepo` self-reference is unusual. Use this pattern only where the runtime and toolchain support it; otherwise use named exports or a separate barrel.
+- In this module style, consumers namespace a module's exports with `import * as UserRepo from "./user-repo.js"`. The module itself defines and exports everything inline with individual `export const`, `export type`, and `export class` declarations.
 - Export only intentional surface; keep local schemas, row codecs, helpers, and implementation details unexported.
 - Do not introduce TypeScript `namespace` declarations for organization.
 - Use a named service class such as `class UserRepo extends Context.Service...` when an external library or existing codebase does not use module namespace style.
@@ -73,9 +82,9 @@ Guidance:
 Choose the layer constructor that matches the thing produced.
 
 ```ts
-Layer.succeed(Service, impl)       // already-built service
-Layer.sync(Service, () => impl)    // lazy synchronous service
-Layer.effect(Service, makeEffect)  // effectful service acquisition
+Layer.succeed(Service, impl); // already-built service
+Layer.sync(Service, () => impl); // lazy synchronous service
+Layer.effect(Service, makeEffect); // effectful service acquisition
 ```
 
 Guidance:
@@ -93,14 +102,14 @@ A layer that starts a stream, listener, worker, subscription, or forever loop mu
 ```ts
 export const layer = Layer.effectDiscard(
   Effect.gen(function* () {
-    const events = yield* Events.Service
+    const events = yield* Events.Service;
 
     yield* events.stream.pipe(
       Stream.runForEach(handleEvent),
       Effect.forkScoped,
-    )
+    );
   }),
-)
+);
 ```
 
 Guidance:
@@ -125,13 +134,11 @@ Use extra `Effect.fn(...)` arguments for wrappers that apply to the whole functi
 ```ts
 const readAttachment = Effect.fn("Attachment.read")(
   function* (ref: AttachmentRef) {
-    return yield* api.read(ref)
+    return yield* api.read(ref);
   },
   (effect, ref) =>
-    effect.pipe(
-      attachmentError("Attachment.read", { attachmentId: ref.id }),
-    ),
-)
+    effect.pipe(attachmentError("Attachment.read", { attachmentId: ref.id })),
+);
 ```
 
 Good whole-function transforms:
@@ -158,11 +165,9 @@ Guidance:
 For boundary errors with operation labels, prefer a shared curried `mapError` helper over hand-writing wrappers in every module.
 
 ```ts
-const persistenceError = operationError(PersistenceError.make)
+const persistenceError = operationError(PersistenceError.make);
 
-const row = yield* query.pipe(
-  persistenceError("UserRepository.findById"),
-)
+const row = yield * query.pipe(persistenceError("UserRepository.findById"));
 ```
 
 Name the local helper after the error it produces, such as `persistenceError`, `projectionError`, or `processingError`. Use `Effect.fn(...)` and spans for observability in addition to payload labels, not instead of them.
