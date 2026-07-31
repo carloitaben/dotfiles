@@ -1,13 +1,12 @@
 # Isolating a group's changes onto its own branch
 
-Pick the simplest mechanic that fits the group; try them in this order.
+Branch creation and switching is handled by `gh stack init` / `gh stack add` (see [SKILL.md](SKILL.md) step 4) — by the time you get here, the group's target branch already exists and is checked out. These mechanics only cover getting the right diff onto that branch. Pick the simplest one that fits the group; try them in this order.
 
 ## A. Commits map 1:1 to the group
 
 If the group corresponds cleanly to one or more whole commits from the original branch:
 
 ```
-git checkout -b <group-branch> <base-or-parent-branch>
 git cherry-pick <commit1> <commit2> ...
 ```
 
@@ -16,7 +15,6 @@ Fastest and preserves original commit messages/authorship.
 ## B. Group owns whole files, but commits are tangled
 
 ```
-git checkout -b <group-branch> <base-or-parent-branch>
 git checkout <original-branch> -- <file1> <file2> ...
 git add <file1> <file2> ...
 git commit -m "<feature summary>"
@@ -42,22 +40,11 @@ git commit -m "<feature summary>"
 
 This is manual and error-prone — before doing it, tell the user which file is being hunk-split and which hunks go where, so they can catch a bad split before it's committed. If a file's hunks are genuinely inseparable (e.g. one hunk depends on another), fold them into the same group instead of forcing a split.
 
-## Stacking
+# Keeping PRs barebones under gh-stack
 
-A dependent group branches off its dependency's branch, not the shared base:
+`gh stack submit --auto` (step 6) derives each PR's title/body from that branch's commits, per its own rules:
 
-```
-git checkout -b <group-b-branch> <group-a-branch>
-```
+- Single commit on the branch → PR title = commit subject, PR body = commit body.
+- Multiple commits on the branch → PR title = humanized branch name, no generated body.
 
-Its eventual PR's base is `<group-a-branch>`, not the target branch — so the PR only shows group B's diff. Once group A merges, GitHub retargets group B's PR automatically (or the user retargets manually); this skill doesn't handle that follow-up.
-
-# Draft PR body template
-
-Keep it barebones — title and structure only, no generated prose:
-
-```
-Stacked on #<parent-pr-number> (branch: <parent-branch>)
-```
-
-Omit the "Stacked on" line entirely for independent groups. Never add a description, testing section, or ticket reference — those are left for the user to fill in.
+To keep PRs barebones, commit each group as a **single commit with a short subject and no body** — this yields a PR with just that subject as the title and an empty body, no generated prose, no test plan, no ticket content. Base-branch chaining and the "stacked on" relationship are handled natively by gh-stack's Stack linking (visible in the GitHub UI) — don't add a manual "Stacked on #N" note.

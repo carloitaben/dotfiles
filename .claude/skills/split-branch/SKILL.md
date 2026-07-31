@@ -32,13 +32,18 @@ main
 
 Show this tree via AskUserQuestion and iterate: let the user merge/split groups, reassign files, rename branches, or change dependency edges — redraw the tree each round. Loop until confirmed. **No git writes yet.**
 
-## 4. Build local branches
+## 4. Build local branches via gh-stack
 
-Topologically order groups by dependency. For each, in order:
+Use the [gh-stack](../gh-stack/SKILL.md) skill for all branch creation, switching, and stacking — never `git checkout -b` these branches by hand.
 
-- Branch off the **base** if independent, or off the **parent group's branch** if dependent (stacking).
-- Isolate that group's changes onto the new branch. See [REFERENCE.md](REFERENCE.md) for the cherry-pick vs. per-file vs. per-hunk mechanics — pick the simplest one that fits the group.
-- Commit with a message derived from the group's feature summary.
+gh-stack stacks are strictly linear (one parent, one child per branch). So first partition the step-3 tree into **chains**: each independent (top-level) group plus everything nested under it is one chain = one stack rooted at base. Sibling top-level groups become *separate* stacks, not branches of the same stack.
+
+For each chain, in dependency order:
+
+- First branch in the chain: `gh stack init --base <base> <branch-name>` (creates the stack, branches off base, checks it out). If starting a second/third chain, first `gh stack checkout <base>` (or `gh stack trunk` if already in a stack) so you're not sitting on a branch shared by another stack.
+- Each subsequent (dependent) branch in the same chain: `gh stack add <branch-name>` (must be run from the current top of that stack).
+- Once the branch is created and checked out, isolate that group's changes onto it. See [REFERENCE.md](REFERENCE.md) for the cherry-pick vs. per-file vs. per-hunk mechanics — pick the simplest one that fits the group.
+- `git add` the isolated files and `git commit` with a short message derived from the group's feature summary (subject line only — see the PR body note in [REFERENCE.md](REFERENCE.md)).
 
 Original branch is left untouched throughout.
 
@@ -48,16 +53,12 @@ Show the final plan as the same ASCII tree from step 3. Ask one explicit go/no-g
 
 ## 6. Push + draft PRs
 
-On approval, push branches in dependency order, then `gh pr create --draft` for each:
+On approval, for each chain/stack built in step 4: check it out (`gh stack checkout <top-branch>`) and run `gh stack submit --auto`. This pushes every branch in that stack and opens a draft PR per branch, base-chained correctly, and links them together as a GitHub Stack (so reviewers see the "stacked on #N" relationship natively — no manual note needed).
 
-- **Base**: the target branch for independent groups, or the parent group's branch for stacked ones.
-- **Title**: short, derived from the feature summary.
-- **Body**: barebones only — see the template in [REFERENCE.md](REFERENCE.md). No generated description, no test plan, no ticket/JIRA content.
-
-Report the created PR URLs.
+Report the created PR URLs (from `gh stack view --json` or the `submit` output).
 
 ## Out of scope
 
 - Conflict resolution / rebasing branches against the target: don't attempt it. If a group's isolated diff won't apply cleanly, stop and flag it to the user rather than guessing a resolution.
 - Build/lint/test validation per split branch.
-- PR description generation beyond the barebones template.
+- PR description generation: titles/bodies are whatever `gh stack submit --auto` derives from commit messages — keep commit subjects short and skip commit bodies to keep PRs barebones, per [REFERENCE.md](REFERENCE.md).

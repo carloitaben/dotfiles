@@ -13,10 +13,6 @@
     ],
     "defaultMode": "auto"
   },
-  "theme": "dark-ansi",
-  "editorMode": "vim",
-  "remoteControlAtStartup": false,
-  "skipAutoPermissionPrompt": true,
   "hooks": {
     "PostToolUse": [
       {
@@ -30,5 +26,10 @@
         ]
       }
     ]
-  }
+  },
+  "theme": "dark-ansi",
+  "editorMode": "vim",
+  "remoteControlAtStartup": false,
+  "skipAutoPermissionPrompt": true,
+  "skipWorkflowUsageWarning": true
 }
