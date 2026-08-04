@@ -40,6 +40,8 @@ Once agent-browser has been used in the conversation, assume it should keep bein
 
 When debugging React re-renders, use agent-browser's React DevTools-backed commands instead of manual console.log/profiling. Run `agent-browser --help` (and `agent-browser react --help` if available) to see the current `react ...` subcommands — don't assume a fixed list, the CLI evolves.
 
+STRICT: to tell a genuine remount (lost fiber/state) from a normal re-render, ONLY use `react renders start`, trigger the action, `react renders stop --json` — a row with `Mounts > 0, Re-renders: 0` is a real remount. NEVER compare fiber IDs across separate `react tree` snapshots as remount evidence — `react tree` reassigns fresh sequential IDs on every walk regardless of whether anything actually remounted, so an ID changing proves nothing. `react tree`/`react inspect` are fine for locating a fiber or reading its current props/hooks, never for mount-vs-rerender proof.
+
 If an agent-browser repro turns into repeated rechecking, pause and write a Playwright test instead when the project has Playwright installed.
 
 ## opensrc
