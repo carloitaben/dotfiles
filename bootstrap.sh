@@ -5,6 +5,14 @@ DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 
+# OpenCode owns this runtime directory. Remove links from an older dotfiles setup.
+for file in .gitignore bun.lock package-lock.json package.json; do
+  path="$HOME/.opencode/$file"
+  if [ -L "$path" ] && [ "$(readlink "$path")" = "../.dotfiles/.opencode/$file" ]; then
+    rm "$path"
+  fi
+done
+
 echo "🌀 Installing Homebrew packages"
 brew bundle --file="$DOTFILES_DIR/Brewfile"
 

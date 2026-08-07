@@ -29,7 +29,9 @@ else
 fi
 
 # pnpm tab completions (needs compdef, so comes after compinit)
-source ~/.oh-my-zsh/custom/plugins/pnpm-shell-completion/pnpm-shell-completion.plugin.zsh
+if [[ -f ~/.oh-my-zsh/custom/plugins/pnpm-shell-completion/pnpm-shell-completion.plugin.zsh ]]; then
+  source ~/.oh-my-zsh/custom/plugins/pnpm-shell-completion/pnpm-shell-completion.plugin.zsh
+fi
 
 # Syntax highlighting (must come before autosuggestions)
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
