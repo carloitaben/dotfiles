@@ -3,21 +3,23 @@
   "editorMode": "vim",
   "effortLevel": "medium",
   "hooks": {
-    "PostToolUse": [
+    "Stop": [
       {
         "hooks": [
           {
-            "command": "bash '/Users/carlo/.claude/hooks/post-edit-format.sh'",
+            "command": "bash '/Users/carlo/.claude/hooks/pre-stop-format.sh'",
             "statusMessage": "Running prettier + eslint --fix",
+            "timeout": 60,
             "type": "command"
           },
           {
-            "command": "bash '/Users/carlo/.claude/hooks/post-edit-tsc.sh'",
+            "command": "bash '/Users/carlo/.claude/hooks/pre-stop-tsc.sh'",
             "statusMessage": "Running tsc --noEmit",
+            "timeout": 120,
             "type": "command"
           }
         ],
-        "matcher": "Edit|Write|MultiEdit"
+        "matcher": "*"
       }
     ],
     "SessionStart": [
