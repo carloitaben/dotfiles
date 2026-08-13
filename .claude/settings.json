@@ -1,5 +1,38 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "editorMode": "vim",
+  "effortLevel": "medium",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "bash '/Users/carlo/.claude/hooks/post-edit-format.sh'",
+            "statusMessage": "Running prettier + eslint --fix",
+            "type": "command"
+          },
+          {
+            "command": "bash '/Users/carlo/.claude/hooks/post-edit-tsc.sh'",
+            "statusMessage": "Running tsc --noEmit",
+            "type": "command"
+          }
+        ],
+        "matcher": "Edit|Write|MultiEdit"
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "bash '/Users/carlo/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ]
+  },
   "permissions": {
     "allow": [
       "Bash(agent-browser:*)",
@@ -13,27 +46,12 @@
     ],
     "defaultMode": "auto"
   },
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "jq -r '.tool_input.file_path // .tool_response.filePath // empty' | { read -r f; [ -z \"$f\" ] && exit 0; case \"$f\" in *.js|*.jsx|*.ts|*.tsx|*.json|*.css|*.scss|*.md|*.mdx|*.html|*.yaml|*.yml) ;; *) exit 0 ;; esac; dir=$(dirname \"$f\"); root=$(cd \"$dir\" && git rev-parse --show-toplevel 2>/dev/null) || exit 0; [ -x \"$root/node_modules/.bin/prettier\" ] && \"$root/node_modules/.bin/prettier\" --write \"$f\"; case \"$f\" in *.ts|*.tsx) [ -x \"$root/node_modules/.bin/eslint\" ] && \"$root/node_modules/.bin/eslint\" --fix \"$f\" ;; esac; } 2>/dev/null || true",
-            "statusMessage": "Running prettier + eslint --fix"
-          }
-        ]
-      }
-    ]
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "bash ~/.claude/statusline-command.sh"
-  },
-  "theme": "dark-ansi",
-  "editorMode": "vim",
   "remoteControlAtStartup": false,
   "skipAutoPermissionPrompt": true,
-  "skipWorkflowUsageWarning": true
+  "skipWorkflowUsageWarning": true,
+  "statusLine": {
+    "command": "bash ~/.claude/statusline-command.sh",
+    "type": "command"
+  },
+  "theme": "dark-ansi"
 }

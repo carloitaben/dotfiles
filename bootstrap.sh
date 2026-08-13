@@ -25,4 +25,7 @@ npm install -g \
 
 corepack enable
 
+echo "🌀 Installing herdr plugins"
+herdr plugin install lmilojevicc/herdr-splits.nvim --yes
+
 echo "🎉"

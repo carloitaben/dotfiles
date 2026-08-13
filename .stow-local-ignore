@@ -6,3 +6,9 @@ README\.md
 \.stow-local-ignore
 \.opencode
 bootstrap\.sh
+\.config/herdr/session\.json
+\.config/herdr/plugins\.json
+\.config/herdr/plugins$
+\.config/herdr/\.plugins\.lock
+\.config/herdr/herdr-.*\.log
+\.config/herdr/herdr.*\.sock

@@ -12,6 +12,10 @@
       "rev": "31d6fb2d618bca1482b9f274751ead5f03461408",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
+    "herdr-splits.nvim": {
+      "rev": "c58bfdf01520845583e0033c11c56fc9d21a5424",
+      "src": "https://github.com/lmilojevicc/herdr-splits.nvim"
+    },
     "lualine.nvim": {
       "rev": "221ce6b2d999187044529f49da6554a92f740a96",
       "src": "https://github.com/nvim-lualine/lualine.nvim"
