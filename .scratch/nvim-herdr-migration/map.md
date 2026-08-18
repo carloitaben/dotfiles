@@ -33,15 +33,17 @@ selection).
 
 ## Decisions so far
 
+- [Task: herdr config baseline](issues/06-herdr-config-baseline.md) — `prefix=ctrl+b`, `zoom=["shift+esc","prefix+z"]` (Shift+Esc → herdr `zoomed` placement, confirmed working), agent sidebar rows showing state icon+text.
+- [Task: wire cmd-t / cmd-shift-o symbol keybinds](issues/05-wire-symbol-keybinds.md) — `cmd-t` → `lsp_workspace_symbols`, `cmd-shift-o` → `lsp_document_symbols` in telescope.lua, mirroring Zed.
+- [Task: remove nvim-tree](issues/04-remove-nvim-tree.md) — deleted `nvim-tree.lua` config + `vim.pack.del`'d the installed plugin (lockfile not hand-edited); oil.nvim already owns the file-explorer keybind.
+- [Task: disable Ghostty's native split/tab keybinds](issues/03-ghostty-disable-native-multiplexing.md) — already disabled via `keybind = clear`; added explanatory comment, validated with `ghostty +validate-config`.
 - [Research: nvim plugins for diff-as-buffer and search-as-buffer](issues/02-diff-search-as-buffer-plugins.md) — pick `dlyongemallo/diffview.nvim` (maintained fork) for diff-as-buffer, `grug-far.nvim` for search-as-buffer; both validated against the required feel.
 - [Research: herdr + git worktree community patterns](issues/01-herdr-worktree-patterns.md) — herdr has native `herdr worktree create/open/list/remove`; agent can just call it directly, with `herdr-plus`/custom-plugin/`herdr-worktrunk` as escalating options if more automation is wanted.
 
 ## Not yet specified
 
-- Exact mechanism for tying a git worktree to a herdr session/tab when an agent
-  is told "use a worktree for this" — depends on the herdr↔worktree research.
-- herdr config details once the above lands: prefix key, zoom keybind mapping,
-  sidebar row layout, session persistence/restore, notification sounds.
+- herdr session persistence/restore and notification sounds — left at defaults
+  in ticket 06; low priority, decide once the workflow is in daily use.
 - Ghostty config details beyond disabling native multiplexing (font/theme
   carryover from current terminal setup) — low priority, minor task once the
   rest is settled.

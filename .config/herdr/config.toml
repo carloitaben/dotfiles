@@ -4,6 +4,18 @@ onboarding = false
 name = "vesper"
 auto_switch = false
 
+[keys]
+# No tmux muscle memory to preserve; ctrl+b is herdr's documented default so
+# `prefix+?` help, docs, and community examples all line up. It also doesn't
+# collide with the vim-style ctrl+h/j/k/l pane-navigation chords below.
+prefix = "ctrl+b"
+# Zed's Shift+Esc full-pane zoom == herdr's native `zoomed` pane placement.
+zoom = ["shift+esc", "prefix+z"]
+
+[ui.sidebar.agents]
+# Show each agent's state (blocked/working/done/idle) as icon + text.
+rows = [["state_icon", "state_text", "agent"], ["workspace", "tab"]]
+
 [[keys.command]]
 key = "ctrl+h"
 type = "plugin_action"

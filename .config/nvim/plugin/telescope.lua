@@ -392,6 +392,8 @@ end
 vim.keymap.set('n', '<D-p>', find_files_reversed, { desc = 'Find files' })
 vim.keymap.set('n', '<D-S-p>', command_palette, { desc = 'Command palette' })
 vim.keymap.set('n', '<D-M-o>', open_recent_project, { desc = 'Open recent project' })
+vim.keymap.set('n', '<D-t>', builtin.lsp_workspace_symbols, { desc = 'Workspace symbols' })
+vim.keymap.set('n', '<D-S-o>', builtin.lsp_document_symbols, { desc = 'Document outline' })
 vim.keymap.set('n', '<leader>ff', find_files_reversed, { desc = 'Find files' })
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Find help' })
 vim.keymap.set('n', '<leader>fk', builtin.keymaps, { desc = 'Find keymaps' })
