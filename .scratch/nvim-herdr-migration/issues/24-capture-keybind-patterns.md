@@ -29,9 +29,24 @@ matches the `zed` bundle-id filter (privacy — never logs other apps).
   work + home captures can just accumulate (Ctrl+C to stop).
 - To capture across machines, copy the log files together for analysis.
 
-## Analysis (not yet done)
+## Analysis (in progress — capture ongoing)
 
 Cross-reference the log against `~/.config/zed/keymap.json` (merged with Zed's
 default keymap) to reconstruct which commands/keybinds were actually used.
 Feed the result into the "which muscle-memory keybinds to carry into nvim"
 decision. Reopen this ticket or file a follow-up once a capture exists.
+
+### First capture (work, one light day — 980 events)
+
+Thin sample ("didn't code much"); held keys collapsed. Not definitive.
+
+- Confirmed in use: `cmd+j` terminal toggle ×8 (ported), `ctrl+w` pane-nav ×7,
+  `cmd+p` file open ×4, `cmd+shift+e` project panel ×3, `cmd+shift+g` lazygit
+  ×3, `cmd+shift+p` palette ×1, `shift+esc` zoom ×1 (ported), `cmd+opt+o` ×1
+  (the binding Zed broke).
+- **Flag: `ctrl+w` + direction is the pane-nav muscle memory.** Zed uses
+  `ctrl-w h/j/k/l`; herdr-splits.nvim maps `ctrl-h/j/k/l` directly, so in
+  nvim `ctrl-w` hits nvim's internal window prefix instead. Needs a decision
+  once more data is in.
+- Excluded: `cmd+tab` ×11 (macOS app-switcher, not a Zed bind); `opt+\` held-key
+  bursts collapsed 15→2 (typing artifact).

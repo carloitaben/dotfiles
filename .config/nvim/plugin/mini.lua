@@ -53,6 +53,16 @@ vim.keymap.set({ "n", "v", "i" }, "<D-S-s>", "<cmd>:wa<CR>", { noremap = true, s
 vim.keymap.set({ "n", "v", "i" }, "<D-,>", ":e ~/.dotfiles<CR>",
     { noremap = true, silent = true, desc = "Open dotfiles" })
 
+-- ⌘+w to close the current tab (Zed's cmd+w); on the last tab falls back to
+-- :bd so it never errors with "Cannot close last tab page".
+vim.keymap.set("n", "<D-w>", function()
+    if vim.fn.tabpagenr("$") > 1 then
+        vim.cmd("tabclose")
+    else
+        vim.cmd("bd")
+    end
+end, { noremap = true, silent = true, desc = "Close tab" })
+
 -- Format
 vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, { noremap = true, silent = true, desc = "Format" })
 vim.keymap.set("x", "<leader>f", vim.lsp.buf.format, { noremap = true, silent = true, desc = "Format selection" })

@@ -6,39 +6,34 @@ auto_switch = false
 
 [keys]
 # No tmux muscle memory to preserve; ctrl+b is herdr's documented default so
-# `prefix+?` help, docs, and community examples all line up. It also doesn't
-# collide with the vim-style ctrl+h/j/k/l pane-navigation chords below.
+# `prefix+?` help, docs, and community examples all line up.
+# Pane navigation is herdr-native `prefix+h/j/k/l` (focus_pane_* defaults),
+# mirroring nvim's ctrl+w+h/j/k/l idiom — no direct ctrl+h/j/k/l binds.
 prefix = "ctrl+b"
 # Zed's Shift+Esc full-pane zoom == herdr's native `zoomed` pane placement.
 zoom = ["shift+esc", "prefix+z"]
+# Mirror vim's ctrl-w splits: prefix+v (vertical, default) and prefix+s
+# (horizontal). Settings moves off `s` to prefix+, (macOS cmd+, convention).
+split_horizontal = "prefix+s"
+settings = "prefix+,"
+# Mirror vim's ctrl-w close/new-tab: prefix+c close pane, prefix+t new tab.
+# rename_tab is secondary — moves to prefix+shift+m; prefix+shift+t becomes
+# move-pane-to-new-tab (see [[keys.command]] below).
+close_pane = "prefix+c"
+new_tab = "prefix+t"
+rename_tab = "prefix+shift+m"
+# Close tab = prefix+cmd+w (Zed cmd+w muscle memory). Distinct from prefix+w.
+close_tab = "prefix+cmd+w"
 
 [ui.sidebar.agents]
 # Show each agent's state (blocked/working/done/idle) as icon + text.
 rows = [["state_icon", "state_text", "agent"], ["workspace", "tab"]]
 
 [[keys.command]]
-key = "ctrl+h"
-type = "plugin_action"
-command = "herdr-splits.nav-left"
-description = "navigate left (vim/herdr)"
-
-[[keys.command]]
-key = "ctrl+j"
-type = "plugin_action"
-command = "herdr-splits.nav-down"
-description = "navigate down (vim/herdr)"
-
-[[keys.command]]
-key = "ctrl+k"
-type = "plugin_action"
-command = "herdr-splits.nav-up"
-description = "navigate up (vim/herdr)"
-
-[[keys.command]]
-key = "ctrl+l"
-type = "plugin_action"
-command = "herdr-splits.nav-right"
-description = "navigate right (vim/herdr)"
+key = "prefix+shift+t"
+type = "shell"
+command = "herdr pane zoom \"$HERDR_ACTIVE_PANE_ID\" --off >/dev/null 2>&1; herdr pane move \"$HERDR_ACTIVE_PANE_ID\" --new-tab --focus"
+description = "move pane to new tab (vim ctrl-w T)"
 
 [[keys.command]]
 key = "alt+h"
