@@ -27,5 +27,6 @@ corepack enable
 
 echo "🌀 Installing herdr plugins"
 herdr plugin install lmilojevicc/herdr-splits.nvim --yes
+herdr plugin link "$DOTFILES_DIR/.config/herdr/plugins/recent-projects"
 
 echo "🎉"

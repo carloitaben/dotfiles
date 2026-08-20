@@ -66,3 +66,6 @@ if [[ -o interactive ]] && command -v zoxide >/dev/null 2>&1; then
 fi
 
 export PATH="$HOME/.local/bin:$PATH"
+
+# bun completions
+[ -s "/Users/carloitaben/.bun/_bun" ] && source "/Users/carloitaben/.bun/_bun"

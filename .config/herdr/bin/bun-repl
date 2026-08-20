@@ -1,0 +1,63 @@
+#!/bin/sh
+# Keep one Bun REPL pane available for Neovim to send code to.
+
+set -eu
+
+state_dir="${XDG_STATE_HOME:-$HOME/.local/state}"
+state_file="$state_dir/herdr-bun-repl-pane"
+mkdir -p "$state_dir"
+
+case "${1:-open}" in
+  launch)
+    source_pane="${HERDR_ACTIVE_PANE_ID:-}"
+    [ -n "$source_pane" ] || exit 1
+
+    pane_id=""
+    if [ -f "$state_file" ]; then
+      pane_id=$(sed -n '1p' "$state_file")
+    fi
+
+    if [ -n "$pane_id" ] && herdr pane get "$pane_id" >/dev/null 2>&1; then
+      old_source=$(sed -n '2p' "$state_file")
+      if [ -n "$old_source" ] && herdr pane get "$old_source" >/dev/null 2>&1; then
+        herdr pane focus --pane "$old_source" --direction right
+      fi
+      exit 0
+    fi
+
+    split=$(herdr pane split --pane "$source_pane" --direction right --ratio 0.35 --cwd "${HERDR_ACTIVE_PANE_CWD:-$PWD}" --focus)
+    pane_id=$(printf '%s\n' "$split" | jq -r '.result.pane.pane_id')
+    printf '%s\n' "$pane_id" "$source_pane" > "$state_file"
+    herdr pane run "$pane_id" "~/.config/herdr/bin/bun-repl open"
+    ;;
+  open)
+    pane_id="${HERDR_PANE_ID:-}"
+    if [ -z "$pane_id" ]; then
+      printf '%s\n' 'bun-repl must be opened inside a herdr pane' >&2
+      exit 1
+    fi
+    source_pane=$(sed -n '2p' "$state_file")
+    printf '%s\n' "$pane_id" "$source_pane" > "$state_file"
+    exec ~/.config/herdr/bin/bun-repl-interactive
+    ;;
+  send)
+    [ -f "$state_file" ] || {
+      printf '%s\n' 'Open the Bun REPL first (cmd+shift+r in herdr).' >&2
+      exit 1
+    }
+    pane_id=$(tr -d '\n' < "$state_file")
+    herdr pane get "$pane_id" >/dev/null 2>&1 || {
+      rm -f "$state_file"
+      printf '%s\n' 'The Bun REPL pane is gone; open it again from herdr.' >&2
+      exit 1
+    }
+    code=$(tr -d '\0' || true)
+    [ -n "$code" ] || exit 0
+    herdr pane send-text "$pane_id" "$code"
+    herdr pane send-keys "$pane_id" enter
+    ;;
+  *)
+    printf 'usage: %s [open|send]\n' "$0" >&2
+    exit 2
+    ;;
+esac

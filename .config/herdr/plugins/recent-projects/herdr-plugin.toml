@@ -1,0 +1,10 @@
+id = "carloitaben.recent-projects"
+name = "Recent Projects"
+version = "0.1.0"
+min_herdr_version = "0.8.0"
+description = "Record every opened workspace's cwd into ~/.config/herdr/recent_projects"
+platforms = ["macos", "linux"]
+
+[[events]]
+on = "workspace.created"
+command = ["sh", "record.sh"]

@@ -12,7 +12,7 @@ selection).
 
 - Personal dotfiles effort, not a team handoff — tickets execute the config
   changes as well as decide them, no separate implementation handoff.
-- Repo: /Users/carlo/.dotfiles. nvim config at `.config/nvim/`, uses native
+- Repo: /Users/carloitaben/.dotfiles. nvim config at `.config/nvim/`, uses native
   `vim.pack.add` (no lazy.nvim). Zed config at `.config/zed/` stays on disk,
   untouched, unmaintained fallback — not deleted.
 - Standing decisions (apply to every ticket below):
@@ -37,6 +37,30 @@ selection).
   - Snippets are used heavily for React components (filename → PascalCase).
 - Consult `/grilling` + `/domain-modeling` for any HITL ticket; `/research` for
   research tickets; `/prototype` for prototype tickets.
+
+## Done interactively (not ticketed)
+
+Work done in-session, not yet a ticket — the "Decisions so far" list below only
+covers ticketed work. See `HANDOFF.md` for fuller context.
+
+- herdr upgraded to 0.8.2; prefix changed `ctrl+b` → `cmd+j` ("the terminal
+  layer" — Zed's terminal keybind repurposed). CapsLock=Cmd makes cmd ergonomic,
+  zsh ignores cmd, Ghostty forwards unbound cmd keys.
+- vim-ctrl-w → herdr-prefix keymap mirror wired in `.config/herdr/config.toml`:
+  focus `h/j/k/l`, split `v`/`s`, close `c`, new-tab `t`, close-tab `cmd+w`,
+  move-to-tab `shift+t`, settings `,`, rename-tab `shift+m`; `zoom =
+  ["shift+esc", "prefix+z"]`.
+- nvim cleanup: `terminal.lua` + `zoom.lua` deleted (herdr owns terminals+zoom).
+- nvim: `cmd+w` close-tab, `cmd+a` select-all, mini.clue `delay = 0`.
+- `open-recent-repo` (`.config/herdr/bin/`, tracked) — fzf picker over
+  `~/.config/herdr/recent_projects`, bound to `cmd+alt+o` as a direct herdr keybind.
+- `carloitaben.recent-projects` herdr plugin (`.config/herdr/plugins/recent-projects/`,
+  tracked; linked in bootstrap.sh) — subscribes to `workspace.created`, bumps the
+  new workspace's cwd to the front of `recent_projects`. Catches `workspace create` /
+  `worktree create` / agent-driven opens that the picker misses. (See `record.sh`.)
+- One-time Zed history import into `recent_projects` (done; 91 distinct paths, ordered
+  most-recent-first; `/Users/carlo` legacy paths kept as-is per user).
+- gitsigns re-enabled (inline blame + hunk/keymap set uncommented).
 
 ## Decisions so far
 

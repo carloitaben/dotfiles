@@ -31,7 +31,7 @@ miniclue.setup({
         config = {
             width = 'auto',
         },
-        delay = 300,
+        delay = 0,
     },
     triggers = {
         { mode = 'n', keys = '<Leader>' },
@@ -63,6 +63,9 @@ vim.keymap.set("n", "<D-w>", function()
     end
 end, { noremap = true, silent = true, desc = "Close tab" })
 
+-- ⌘+a to select the whole file (Zed's cmd+a; vim-native ggVG)
+vim.keymap.set("n", "<D-a>", "ggVG", { noremap = true, silent = true, desc = "Select all" })
+
 -- Format
 vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, { noremap = true, silent = true, desc = "Format" })
 vim.keymap.set("x", "<leader>f", vim.lsp.buf.format, { noremap = true, silent = true, desc = "Format selection" })
@@ -93,8 +96,3 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz", { noremap = true, silent = true })
 -- Keep the cursor centered when moving through jump history
 vim.keymap.set("n", "<C-o>", "<C-o>zz", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-i>", "<C-i>zz", { noremap = true, silent = true })
-
--- Exit terminal mode in the builtin terminal using a shortcut that is easier to
--- discover than <C-\><C-n>
--- NOTE: This won't work in all terminal emulators
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })

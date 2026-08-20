@@ -1,0 +1,44 @@
+#!/bin/sh
+# open-recent-repo — fzf over herdr's own recent-projects history, then open the
+# pick as a herdr workspace (focus it if already open). The history is a plain
+# newline list at ~/.config/herdr/recent_projects (most-recent first), bumped to
+# the front on every open. herdr-native — no Zed dependency.
+#
+# Display mimics Zed's two-line recent list: dirname on top (normal color), full
+# path below (dimmed). Entries are NUL-separated so each can carry an embedded
+# newline; fzf renders the two lines as one selectable unit. On accept fzf
+# returns "dirname\npath" (ANSI stripped), so the path is the last line.
+
+set -eu
+
+HIST="$HOME/.config/herdr/recent_projects"
+touch "$HIST"
+
+pick=$(
+  while IFS= read -r p; do
+    [ -n "$p" ] || continue
+    b=$(basename "$p")
+    printf '%s\n\033[2m%s\033[0m\0' "$b" "$p"
+  done < "$HIST" \
+  | fzf --read0 --ansi --layout=reverse --style=minimal --color=16 --info=inline \
+        --prompt='open repo > '
+)
+[ -n "$pick" ] || exit 0
+
+path=$(printf '%s\n' "$pick" | tail -n 1)
+[ -n "$path" ] || exit 0
+
+# Focus the workspace already at that path, else create one.
+ws=$(herdr pane list 2>/dev/null \
+    | jq -r --arg p "$path" '.result.panes[]? | select(.cwd == $p or .foreground_cwd == $p) | .workspace_id' \
+    | head -n1)
+
+if [ -n "$ws" ]; then
+    herdr workspace focus "$ws"
+else
+    herdr workspace create --cwd "$path" --focus
+fi
+
+# Bump the opened path to the front of the history.
+{ printf '%s\n' "$path"; grep -Fvx -- "$path" "$HIST" || true; } > "$HIST.tmp.$$"
+mv "$HIST.tmp.$$" "$HIST"

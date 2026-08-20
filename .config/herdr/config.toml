@@ -5,11 +5,12 @@ name = "vesper"
 auto_switch = false
 
 [keys]
-# No tmux muscle memory to preserve; ctrl+b is herdr's documented default so
-# `prefix+?` help, docs, and community examples all line up.
+# cmd+j is the prefix — Zed's terminal keybind repurposed as "the terminal
+# layer". CapsLock=Cmd makes cmd ergonomic, zsh ignores cmd, and Ghostty
+# forwards unbound cmd keys. cmd+j + <key> = herdr/terminal ops.
 # Pane navigation is herdr-native `prefix+h/j/k/l` (focus_pane_* defaults),
 # mirroring nvim's ctrl+w+h/j/k/l idiom — no direct ctrl+h/j/k/l binds.
-prefix = "ctrl+b"
+prefix = "cmd+j"
 # Zed's Shift+Esc full-pane zoom == herdr's native `zoomed` pane placement.
 zoom = ["shift+esc", "prefix+z"]
 # Mirror vim's ctrl-w splits: prefix+v (vertical, default) and prefix+s
@@ -66,3 +67,17 @@ command = "lazygit"
 description = "lazygit (floating)"
 width = "80%"
 height = "80%"
+
+[[keys.command]]
+key = "cmd+alt+o"
+type = "popup"
+command = "~/.config/herdr/bin/open-recent-repo"
+description = "open recent repo (fzf)"
+width = 90
+height = 40
+
+[[keys.command]]
+key = "cmd+shift+r"
+type = "shell"
+command = "~/.config/herdr/bin/bun-repl launch"
+description = "Bun REPL"
