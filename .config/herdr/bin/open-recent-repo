@@ -20,7 +20,7 @@ pick=$(
     b=$(basename "$p")
     printf '%s\n\033[2m%s\033[0m\0' "$b" "$p"
   done < "$HIST" \
-  | fzf --read0 --ansi --layout=reverse --style=minimal --color=16 --info=inline \
+  | fzf --read0 --ansi --layout=reverse --style=minimal --color=bw --info=inline \
         --prompt='open repo > '
 )
 [ -n "$pick" ] || exit 0
@@ -36,7 +36,7 @@ ws=$(herdr pane list 2>/dev/null \
 if [ -n "$ws" ]; then
     herdr workspace focus "$ws"
 else
-    herdr workspace create --cwd "$path" --focus
+    herdr workspace create --cwd "$path" --label "$(basename "$path")" --focus
 fi
 
 # Bump the opened path to the front of the history.

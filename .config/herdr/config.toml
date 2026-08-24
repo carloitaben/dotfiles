@@ -17,14 +17,24 @@ zoom = ["shift+esc", "prefix+z"]
 # (horizontal). Settings moves off `s` to prefix+, (macOS cmd+, convention).
 split_horizontal = "prefix+s"
 settings = "prefix+,"
-# Mirror vim's ctrl-w close/new-tab: prefix+c close pane, prefix+t new tab.
-# rename_tab is secondary — moves to prefix+shift+m; prefix+shift+t becomes
-# move-pane-to-new-tab (see [[keys.command]] below).
-close_pane = "prefix+c"
-new_tab = "prefix+t"
-rename_tab = "prefix+shift+m"
-# Close tab = prefix+cmd+w (Zed cmd+w muscle memory). Distinct from prefix+w.
-close_tab = "prefix+cmd+w"
+reload_config = "prefix+shift+,"
+workspace_picker = "prefix+cmd+shift+e"
+# Mirror vim's ctrl-w close/new-tab: prefix+w close pane, prefix+cmd+n new tab.
+# prefix+shift+t is move-pane-to-new-tab (see [[keys.command]] below).
+new_tab = "prefix+cmd+n"
+previous_tab = "prefix+shift+h"
+next_tab = "prefix+shift+l"
+previous_workspace = "prefix+shift+k"
+next_workspace = "prefix+shift+j"
+rename_tab = "prefix+shift+r"
+rename_workspace = "f2"
+# Prefix close bindings; avoid Ghostty's Cmd-W window close.
+close_pane = "prefix+w"
+close_tab = "prefix+shift+x"
+close_workspace = "prefix+shift+w"
+
+[ui]
+prompt_new_tab_name = false
 
 [ui.sidebar.agents]
 # Show each agent's state (blocked/working/done/idle) as icon + text.
@@ -65,8 +75,8 @@ key = "cmd+shift+g"
 type = "popup"
 command = "lazygit"
 description = "lazygit (floating)"
-width = "80%"
-height = "80%"
+width = "100%"
+height = "100%"
 
 [[keys.command]]
 key = "cmd+alt+o"
@@ -75,6 +85,12 @@ command = "~/.config/herdr/bin/open-recent-repo"
 description = "open recent repo (fzf)"
 width = 90
 height = 40
+
+[[keys.command]]
+key = "prefix+c"
+type = "shell"
+command = "herdr pane close \"$HERDR_ACTIVE_PANE_ID\""
+description = "close pane"
 
 [[keys.command]]
 key = "cmd+shift+r"
