@@ -81,6 +81,20 @@ customCommands:
     context: "files"
     description: "Reveal in Finder"
 
+  - key: "R"
+    context: "files"
+    command: "git checkout {{.Form.Branch}} -- {{.SelectedFile.Name}}"
+    description: "Restore file from another branch"
+    loadingText: "Restoring file..."
+    prompts:
+      - type: "menuFromCommand"
+        title: "Restore {{.SelectedFile.Name}} from which branch?"
+        key: "Branch"
+        command: "git branch --format='%(refname:short)'"
+        filter: "(?P<branch>.+)"
+        valueFormat: "{{.branch}}"
+        labelFormat: "{{.branch}}"
+
   - key: "x"
     command: "gh repo view --web --branch {{.SelectedLocalBranch.Name}}"
     context: "localBranches"
