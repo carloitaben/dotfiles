@@ -16,19 +16,5 @@
     "shell": {
       "program": "sh",
     },
-  },
-  {
-    "label": "agent",
-    "command": "test \"$USER\" = \"carlo\" && claude --permission-mode plan || opencode",
-    "hide": "on_success",
-    "env": {
-      "OPENCODE_EXPERIMENTAL_PLAN_MODE": "1",
-      "OPENCODE_EXPERIMENTAL_LSP_TOOL": "1",
-    },
-    "use_new_terminal": true,
-    "allow_concurrent_runs": true,
-    "shell": {
-      "program": "sh",
-    },
-  },
+  }
 ]

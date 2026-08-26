@@ -92,7 +92,6 @@
           },
         },
       },
-      "enable_lsp_tasks": true,
     },
     "tailwindcss-language-server": {
       "settings": {
