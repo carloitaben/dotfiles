@@ -1,7 +1,6 @@
 {
   "buffer_line_height": "standard",
   "cli_default_open_behavior": "new_window",
-  "auto_update": false,
   "outline_panel": {
     "dock": "left",
   },
