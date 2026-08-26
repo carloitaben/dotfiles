@@ -1,4 +1,10 @@
-# Skill: Next.js Bundle Analysis
+---
+name: analyze-nextjs-bundle
+description: Analyze Next.js build diagnostics to find client-side bundle size reduction opportunities.
+disable-model-invocation: true
+---
+
+# Next.js Bundle Analysis
 
 Analyze Next.js build diagnostics to find client-side bundle size reduction opportunities.
 

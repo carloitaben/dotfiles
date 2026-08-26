@@ -9,99 +9,16 @@ metadata:
 
 # Web quality audit
 
-Comprehensive quality review based on Google Lighthouse audits. Covers Performance, Accessibility, SEO, and Best Practices across 150+ checks.
+Comprehensive quality review based on Google Lighthouse's four pillars. Composes the dedicated skills for each pillar, then synthesizes their findings into one prioritized report.
 
 ## How it works
 
-1. Analyze the provided code/project for quality issues
-2. Categorize findings by severity (Critical, High, Medium, Low)
-3. Provide specific, actionable recommendations
-4. Include code examples for fixes
+1. Call the Skill tool for each pillar in turn: "performance", "core-web-vitals", "accessibility", "seo". Each returns findings for its area.
+2. Merge all findings, categorize by severity (Critical, High, Medium, Low) using the table below.
+3. Provide specific, actionable recommendations with code examples for fixes.
+4. Structure the combined output per the format below — don't just concatenate each skill's raw output.
 
-## Audit categories
-
-### Performance (40% of typical issues)
-
-**Core Web Vitals** — Must pass for good page experience:
-* **LCP (Largest Contentful Paint) < 2.5s.** The largest visible element must render quickly. Optimize images, fonts, and server response time.
-* **INP (Interaction to Next Paint) < 200ms.** User interactions must feel instant. Reduce JavaScript execution time and break up long tasks.
-* **CLS (Cumulative Layout Shift) < 0.1.** Content must not jump around. Set explicit dimensions on images, embeds, and ads.
-
-**Resource Optimization:**
-* **Compress images.** Use WebP/AVIF with fallbacks. Serve correctly sized images via `srcset`.
-* **Minimize JavaScript.** Remove unused code. Use code splitting. Defer non-critical scripts.
-* **Optimize CSS.** Extract critical CSS. Remove unused styles. Avoid `@import`.
-* **Efficient fonts.** Use `font-display: swap`. Preload critical fonts. Subset to needed characters.
-
-**Loading Strategy:**
-* **Preconnect to origins.** Add `<link rel="preconnect">` for third-party domains.
-* **Preload critical assets.** LCP images, fonts, and above-fold CSS.
-* **Lazy load below-fold content.** Images, iframes, and heavy components.
-* **Cache effectively.** Long cache TTLs for static assets. Immutable caching for hashed files.
-
-### Accessibility (30% of typical issues)
-
-**Perceivable:**
-* **Text alternatives.** Every `<img>` has meaningful `alt` text. Decorative images use `alt=""`.
-* **Color contrast.** Minimum 4.5:1 for normal text, 3:1 for large text (WCAG AA).
-* **Don't rely on color alone.** Use icons, patterns, or text alongside color indicators.
-* **Captions and transcripts.** Video has captions. Audio has transcripts.
-
-**Operable:**
-* **Keyboard accessible.** All functionality available via keyboard. No keyboard traps.
-* **Focus visible.** Clear focus indicators on all interactive elements.
-* **Skip links.** Provide "Skip to main content" for keyboard users.
-* **Sufficient time.** Users can extend time limits. No auto-advancing content without controls.
-
-**Understandable:**
-* **Page language.** Set `lang` attribute on `<html>`.
-* **Consistent navigation.** Same navigation structure across pages.
-* **Error identification.** Form errors clearly described and associated with fields.
-* **Labels and instructions.** All form inputs have associated labels.
-
-**Robust:**
-* **Valid HTML.** No duplicate IDs. Properly nested elements.
-* **ARIA used correctly.** Prefer native elements. ARIA roles match behavior.
-* **Name, role, value.** Interactive elements have accessible names and correct roles.
-
-### SEO (15% of typical issues)
-
-**Crawlability:**
-* **Valid robots.txt.** Doesn't block important resources.
-* **XML sitemap.** Lists all important pages. Submitted to Search Console.
-* **Canonical URLs.** Prevent duplicate content issues.
-* **No noindex on important pages.** Check meta robots and headers.
-
-**On-Page SEO:**
-* **Unique title tags.** 50-60 characters. Primary keyword included.
-* **Meta descriptions.** 150-160 characters. Compelling and unique.
-* **Heading hierarchy.** Single `<h1>`. Logical heading structure.
-* **Descriptive link text.** Not "click here" or "read more".
-
-**Technical SEO:**
-* **Mobile-friendly.** Responsive design. Tap targets ≥ 48px.
-* **HTTPS.** Secure connection required.
-* **Fast loading.** Performance directly impacts ranking.
-* **Structured data.** JSON-LD for rich snippets (Article, Product, FAQ, etc.).
-
-### Best practices (15% of typical issues)
-
-**Security:**
-* **HTTPS everywhere.** No mixed content. HSTS enabled.
-* **No vulnerable libraries.** Keep dependencies updated.
-* **CSP headers.** Content Security Policy to prevent XSS.
-* **No exposed source maps.** In production builds.
-
-**Modern Standards:**
-* **No deprecated APIs.** Replace `document.write`, synchronous XHR, etc.
-* **Valid doctype.** Use `<!DOCTYPE html>`.
-* **Charset declared.** `<meta charset="UTF-8">` as first element in `<head>`.
-* **No browser errors.** Clean console. No CORS issues.
-
-**UX Patterns:**
-* **No intrusive interstitials.** Especially on mobile.
-* **Clear permission requests.** Only ask when needed, with context.
-* **No misleading buttons.** Buttons do what they say.
+Rough weight when prioritizing: Performance ~40% of typical issues, Accessibility ~30%, SEO ~15%, other best practices (security, modern standards, UX patterns — not covered by the composed skills, assess directly) ~15%.
 
 ## Severity levels
 
@@ -160,11 +77,9 @@ When performing an audit, structure findings as:
 - [ ] Accessibility audit with real users
 - [ ] SEO keyword review
 
-## References
+## Composed skills
 
-For detailed guidelines on specific areas:
 - [Performance Optimization](../performance/SKILL.md)
 - [Core Web Vitals](../core-web-vitals/SKILL.md)
 - [Accessibility](../accessibility/SKILL.md)
 - [SEO](../seo/SKILL.md)
-- [Best Practices](../best-practices/SKILL.md)
