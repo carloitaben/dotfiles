@@ -1,0 +1,73 @@
+#!/usr/bin/env zsh
+# Discovers zsh completion generators for installed CLIs (from Brewfile) not yet
+# tracked in completions.zsh, appends the working ones there, then regenerates
+# the completion cache in ~/.zsh/completions for everything tracked.
+# Run manually after adding/installing a new tool.
+set -euo pipefail
+
+self_dir="${0:A:h}"
+data_file="$self_dir/completions.zsh"
+brewfile="$self_dir/../Brewfile"
+out="$HOME/.zsh/completions"
+
+source "$data_file"
+
+# invocation patterns to try per undiscovered tool, first one that looks like a
+# real zsh completion script (contains a #compdef/compdef marker) wins
+typeset -a patterns=(
+  'completion zsh'
+  'completions --shell zsh'
+  'completion -s zsh'
+  'completions zsh'
+  'completion --shell zsh'
+)
+
+typeset -a candidates
+while IFS= read -r line; do
+  [[ $line == brew\ \"*\" ]] || continue
+  name="${line#brew \"}"
+  name="${name%\"}"
+  candidates+=("$name")
+done < "$brewfile"
+
+typeset -a found_names found_cmds
+for name in $candidates; do
+  [[ -n ${COMPLETION_GENERATORS[$name]:-} ]] && continue   # already tracked
+  command -v "$name" >/dev/null 2>&1 || continue           # not on PATH (not installed, or formula name != binary name)
+
+  for p in $patterns; do
+    cmd="$name $p"
+    if out_probe=$(eval "$cmd" 2>/dev/null) && [[ $out_probe == *'#compdef'* || $out_probe == *'compdef '* ]]; then
+      found_names+=("$name")
+      found_cmds+=("$cmd")
+      echo "discovered: $name -> $cmd"
+      break
+    fi
+  done
+done
+
+if (( ${#found_names} > 0 )); then
+  for i in {1..${#found_names}}; do
+    COMPLETION_GENERATORS[${found_names[$i]}]="${found_cmds[$i]}"
+  done
+
+  {
+    echo '# Data file: known name -> command that prints a zsh completion script to stdout.'
+    echo '# Read (and appended to) by bin/sync-completions when it discovers new tools.'
+    echo 'typeset -gA COMPLETION_GENERATORS=('
+    for name in ${(ok)COMPLETION_GENERATORS}; do
+      printf '  %-8s "%s"\n' "$name" "${COMPLETION_GENERATORS[$name]}"
+    done
+    echo ')'
+  } > "$data_file"
+fi
+
+mkdir -p "$out"
+for name cmd in "${(@kv)COMPLETION_GENERATORS}"; do
+  if command -v "$name" >/dev/null 2>&1; then
+    eval "$cmd" > "$out/_$name"
+    echo "synced $name"
+  else
+    echo "skipped $name (not installed)"
+  fi
+done

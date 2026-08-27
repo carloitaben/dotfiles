@@ -1,6 +1,7 @@
 brew "agent-browser"
 brew "delta"
 brew "ffmpeg"
+brew "fnm"
 brew "fzf"
 brew "gh"
 brew "herdr"
