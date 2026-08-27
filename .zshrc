@@ -16,11 +16,14 @@ setopt HIST_IGNORE_ALL_DUPS # only keep the most recent occurrence of a duplicat
 setopt HIST_IGNORE_SPACE    # commands starting with space are not stored
 
 # Prefix history search — type a partial command, up/down cycles matches only
+zmodload zsh/terminfo
 autoload -Uz history-search-end
 zle -N history-beginning-search-backward-end history-search-end
 zle -N history-beginning-search-forward-end history-search-end
 bindkey "$terminfo[kcuu1]" history-beginning-search-backward-end
 bindkey "$terminfo[kcud1]" history-beginning-search-forward-end
+bindkey '^[[A' history-beginning-search-backward-end
+bindkey '^[[B' history-beginning-search-forward-end
 
 # fnm (node version manager) — auto-switches on cd, mirrors old zsh-nvm behavior
 eval "$(fnm env --use-on-cd --shell zsh)"
@@ -39,6 +42,7 @@ fi
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # Autosuggestions
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=244'
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # Editor
