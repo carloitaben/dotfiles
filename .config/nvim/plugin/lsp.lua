@@ -8,6 +8,7 @@ local servers = {
     "lua_ls",
     "bashls",
     "vtsls",
+    "tailwindcss",
 }
 
 vim.lsp.enable(servers)
@@ -16,7 +17,12 @@ require("mason").setup()
 
 require("mason-lspconfig").setup({
     automatic_enable = false,
-    ensure_installed = servers,
+    ensure_installed = {
+        "lua_ls",
+        "bashls",
+        "vtsls",
+        "tailwindcss-language-server",
+    },
 })
 
 vim.diagnostic.config({
@@ -50,6 +56,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
         -- [Zed] Hover aliases.
         if client:supports_method("textDocument/hover") then
             map("n", "gh", vim.lsp.buf.hover, "[Zed] Hover")
+            map("n", "<D-k><D-i>", vim.lsp.buf.hover, "[Zed] Hover")
         end
 
         -- [Zed] Code actions and symbol navigation aliases.
