@@ -74,6 +74,34 @@ fi
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.dotfiles/bin:$PATH"
 
+# Herdr panes share one persistent Neovim instance. Closing a visible client
+# only detaches it, so buffers, undo history, and LSP clients stay warm.
+nvim() {
+  if [[ ${HERDR_ENV:-} != 1 ]]; then
+    command nvim "$@"
+    return
+  fi
+
+  case "${1:-}" in
+    -h|--help|-v|--version|--headless|--clean|--listen|--server|--remote*|-l|-es|-Es)
+      command nvim "$@"
+      return
+      ;;
+  esac
+
+  local runtime_dir="${XDG_RUNTIME_DIR:-${TMPDIR%/}}"
+  local socket="$runtime_dir/nvim-herdr-${UID}.sock"
+
+  if ! command nvim --server "$socket" --remote-expr '1' >/dev/null 2>&1; then
+    nvim-herdr-start || return
+  fi
+
+  if (( $# )); then
+    command nvim --server "$socket" --remote "$@" || return
+  fi
+  command nvim --server "$socket" --remote-ui
+}
+
 # re-sync completions whenever brew installs/upgrades something
 brew() {
   command brew "$@"

@@ -29,5 +29,6 @@ echo "🌀 Installing herdr plugins"
 herdr plugin install lmilojevicc/herdr-splits.nvim --yes
 herdr plugin install usrivastava92/herdr-wakeup/plugin --ref v0.1.0 --yes
 herdr plugin link "$DOTFILES_DIR/.config/herdr/plugins/recent-projects"
+herdr plugin link "$DOTFILES_DIR/.config/herdr/plugins/nvim-server"
 
 echo "🎉"

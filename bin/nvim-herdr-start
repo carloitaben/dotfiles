@@ -1,0 +1,33 @@
+#!/bin/sh
+set -eu
+
+runtime_dir="${XDG_RUNTIME_DIR:-${TMPDIR%/}}"
+socket="$runtime_dir/nvim-herdr-${UID}.sock"
+log="$runtime_dir/nvim-herdr-${UID}.log"
+lock="$socket.lock"
+
+server_ready() {
+  nvim --server "$socket" --remote-expr '1' >/dev/null 2>&1
+}
+
+if server_ready; then
+  exit 0
+fi
+
+if mkdir "$lock" 2>/dev/null; then
+  trap 'rmdir "$lock" 2>/dev/null || true' EXIT
+  if ! server_ready; then
+    rm -f "$socket"
+    nohup nvim --headless --listen "$socket" </dev/null >>"$log" 2>&1 &
+  fi
+fi
+
+attempt=0
+until server_ready; do
+  attempt=$((attempt + 1))
+  if [ "$attempt" -eq 100 ]; then
+    printf '%s\n' "nvim: failed to start Herdr server; see $log" >&2
+    exit 1
+  fi
+  sleep 0.02
+done

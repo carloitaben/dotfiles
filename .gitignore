@@ -14,3 +14,4 @@ opensrc/
 .config/herdr/plugins/*
 !.config/herdr/plugins/recent-projects/
 !.config/herdr/plugins/worktree-sync/
+!.config/herdr/plugins/nvim-server/
