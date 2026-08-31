@@ -1,0 +1,12 @@
+id = "carloitaben.worktree-sync"
+name = "Worktree Sync"
+version = "0.2.0"
+min_herdr_version = "0.8.0"
+description = "Reconciliation logic for auto-open/closing herdr workspaces around git worktrees created or removed outside herdr (lazygit, agents, raw git). Invoked by ~/.config/herdr/bin/lazygit-with-sync, not run as a background daemon."
+platforms = ["macos", "linux"]
+
+[[actions]]
+id = "sync-now"
+title = "Sync worktree workspaces now"
+contexts = ["workspace"]
+command = ["sh", "sync.sh", "once"]
