@@ -79,6 +79,33 @@ type = "plugin_action"
 command = "herdr-splits.resize-right"
 description = "resize right (vim/herdr)"
 
+# Swap panes: mirrors vim ctrl-w H/J/K/L (move window in direction), here
+# implemented as swap-with-neighbor since herdr panes don't reflow like vim
+# windows. prefix+shift+h/j/k/l sits next to focus_pane_h/j/k/l (prefix+h/j/k/l).
+[[keys.command]]
+key = "prefix+shift+h"
+type = "shell"
+command = "herdr pane swap --direction left --current"
+description = "swap pane left (vim ctrl-w H)"
+
+[[keys.command]]
+key = "prefix+shift+j"
+type = "shell"
+command = "herdr pane swap --direction down --current"
+description = "swap pane down (vim ctrl-w J)"
+
+[[keys.command]]
+key = "prefix+shift+k"
+type = "shell"
+command = "herdr pane swap --direction up --current"
+description = "swap pane up (vim ctrl-w K)"
+
+[[keys.command]]
+key = "prefix+shift+l"
+type = "shell"
+command = "herdr pane swap --direction right --current"
+description = "swap pane right (vim ctrl-w L)"
+
 [[keys.command]]
 key = "cmd+shift+g"
 type = "popup"
@@ -100,3 +127,6 @@ key = "prefix+c"
 type = "shell"
 command = "herdr pane close \"$HERDR_ACTIVE_PANE_ID\""
 description = "close pane"
+
+[ui.toast]
+delivery = "herdr"
