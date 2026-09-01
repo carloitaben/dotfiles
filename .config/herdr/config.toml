@@ -34,6 +34,7 @@ close_workspace = "prefix+shift+w"
 
 [ui]
 prompt_new_tab_name = false
+pane_scrollbars = false
 
 agent_panel_sort = "spaces"
 [ui.sidebar.agents]
