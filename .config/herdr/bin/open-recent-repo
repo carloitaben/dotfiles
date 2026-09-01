@@ -1,8 +1,12 @@
 #!/bin/sh
-# open-recent-repo — fzf over herdr's own recent-projects history, then open the
-# pick as a herdr workspace (focus it if already open). The history is a plain
-# newline list at ~/.config/herdr/recent_projects (most-recent first), bumped to
-# the front on every open. herdr-native — no Zed dependency.
+# open-recent-repo — fzf over herdr's own recent-projects history plus project
+# dirs found under a fixed set of scan roots, then open the pick as a herdr
+# workspace (focus it if already open). The history is a plain newline list at
+# ~/.config/herdr/recent_projects (most-recent first), bumped to the front on
+# every open. herdr-native — no Zed dependency.
+#
+# Recent entries are listed first, then scan-root entries not already in the
+# history (deduped by path).
 #
 # Display mimics Zed's two-line recent list: dirname on top (normal color), full
 # path below (dimmed). Entries are NUL-separated so each can carry an embedded
@@ -14,12 +18,25 @@ set -eu
 HIST="$HOME/.config/herdr/recent_projects"
 touch "$HIST"
 
+SCAN_ROOTS="$HOME/Developer"
+
 pick=$(
-  while IFS= read -r p; do
-    [ -n "$p" ] || continue
+  {
+    while IFS= read -r p; do
+      [ -n "$p" ] || continue
+      printf '%s\n' "$p"
+    done < "$HIST"
+
+    for root in $SCAN_ROOTS; do
+      [ -d "$root" ] || continue
+      find "$root" -mindepth 1 -maxdepth 1 -type d
+    done
+  } \
+  | awk '!seen[$0]++' \
+  | while IFS= read -r p; do
     b=$(basename "$p")
     printf '%s\n\033[2m%s\033[0m\0' "$b" "$p"
-  done < "$HIST" \
+  done \
   | fzf --read0 --ansi --layout=reverse --style=minimal --color=bw --info=inline \
         --prompt='open repo > '
 )
