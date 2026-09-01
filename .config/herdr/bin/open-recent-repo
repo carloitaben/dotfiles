@@ -19,6 +19,7 @@ HIST="$HOME/.config/herdr/recent_projects"
 touch "$HIST"
 
 SCAN_ROOTS="$HOME/Developer"
+EXTRA_PATHS="$HOME/.dotfiles $HOME/.opensrc"
 
 pick=$(
   {
@@ -26,6 +27,11 @@ pick=$(
       [ -n "$p" ] || continue
       printf '%s\n' "$p"
     done < "$HIST"
+
+    for p in $EXTRA_PATHS; do
+      [ -d "$p" ] || continue
+      printf '%s\n' "$p"
+    done
 
     for root in $SCAN_ROOTS; do
       [ -d "$root" ] || continue
