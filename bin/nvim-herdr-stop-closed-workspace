@@ -1,0 +1,5 @@
+#!/bin/sh
+set -eu
+
+workspace_id=$(printf '%s' "$HERDR_PLUGIN_EVENT_JSON" | jq -r '.workspace_id')
+nvim-herdr-stop "$workspace_id"

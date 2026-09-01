@@ -2,8 +2,13 @@ id = "carloitaben.nvim-server"
 name = "Persistent Neovim"
 version = "0.1.0"
 min_herdr_version = "0.8.0"
-description = "Start the shared headless Neovim server when Herdr starts"
+description = "Warm each workspace's headless Neovim server on creation, stop it on close"
 platforms = ["macos", "linux"]
 
-[[startup]]
-command = ["sh", "-c", "$HERDR_PLUGIN_ROOT/../../../../bin/nvim-herdr-start"]
+[[events]]
+on = "workspace.created"
+command = ["sh", "-c", "$HERDR_PLUGIN_ROOT/../../../../bin/nvim-herdr-start-created-workspace"]
+
+[[events]]
+on = "workspace.closed"
+command = ["sh", "-c", "$HERDR_PLUGIN_ROOT/../../../../bin/nvim-herdr-stop-closed-workspace"]

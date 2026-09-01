@@ -74,8 +74,10 @@ fi
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.dotfiles/bin:$PATH"
 
-# Herdr panes share one persistent Neovim instance. Closing a visible client
-# only detaches it, so buffers, undo history, and LSP clients stay warm.
+# Each Herdr workspace shares one persistent Neovim instance across its own
+# panes. Closing a visible client only detaches it, so buffers, undo history,
+# and LSP clients stay warm within a workspace; the instance is torn down
+# when the workspace closes (see .config/herdr/plugins/nvim-server).
 nvim() {
   if [[ ${HERDR_ENV:-} != 1 ]]; then
     command nvim "$@"
@@ -90,16 +92,15 @@ nvim() {
   esac
 
   local runtime_dir="${XDG_RUNTIME_DIR:-${TMPDIR%/}}"
-  local socket="$runtime_dir/nvim-herdr-${UID}.sock"
+  local socket="$runtime_dir/nvim-herdr-${UID}-${HERDR_WORKSPACE_ID:?}.sock"
 
   if ! command nvim --headless --server "$socket" --remote-expr '1' >/dev/null 2>&1; then
-    nvim-herdr-start || return
+    nvim-herdr-start "$HERDR_WORKSPACE_ID" || return
   fi
 
   if (( $# )); then
-    # The server resolves relative paths against its own cwd, not ours
-    # (it's one shared process across every herdr workspace), so
-    # absolutize file args here before sending them over --remote.
+    # The server resolves relative paths against its own cwd, not ours,
+    # so absolutize file args here before sending them over --remote.
     local -a resolved=()
     local arg
     for arg in "$@"; do
@@ -121,13 +122,13 @@ nvim() {
     >/dev/null 2>&1
 }
 
-# Stop the shared Neovim server alongside `herdr server stop`, so it doesn't
-# linger as an orphaned process once herdr itself is gone.
+# Stop every per-workspace Neovim server alongside `herdr server stop`, so
+# none linger as orphaned processes once herdr itself is gone.
 herdr() {
   command herdr "$@"
   local exit_status=$?
   if [[ "$1" == "server" && "$2" == "stop" ]]; then
-    nvim-herdr-stop
+    nvim-herdr-stop-all
   fi
   return $exit_status
 }

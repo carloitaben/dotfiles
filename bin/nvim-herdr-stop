@@ -1,9 +1,11 @@
 #!/bin/sh
 set -eu
 
+workspace_id="${1:?usage: nvim-herdr-stop <workspace_id>}"
 runtime_dir="${XDG_RUNTIME_DIR:-${TMPDIR%/}}"
-socket="$runtime_dir/nvim-herdr-${UID}.sock"
+socket="$runtime_dir/nvim-herdr-${UID}-${workspace_id}.sock"
 
 if nvim --headless --server "$socket" --remote-expr '1' >/dev/null 2>&1; then
   nvim --headless --server "$socket" --remote-send '<C-\><C-N>:qa!<CR>' >/dev/null 2>&1 || true
 fi
+rm -f "$socket"

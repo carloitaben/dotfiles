@@ -1,0 +1,11 @@
+#!/bin/sh
+set -eu
+
+runtime_dir="${XDG_RUNTIME_DIR:-${TMPDIR%/}}"
+
+for socket in "$runtime_dir"/nvim-herdr-"${UID}"-*.sock; do
+  [ -e "$socket" ] || continue
+  base=$(basename "$socket" .sock)
+  workspace_id=${base#nvim-herdr-"${UID}"-}
+  nvim-herdr-stop "$workspace_id"
+done
