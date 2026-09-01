@@ -10,6 +10,5 @@ path="$(dirname "$repo_root")/$branch"
 git worktree add "$path" "$base" -b "$branch"
 
 if [ "${HERDR_ENV:-}" = "1" ]; then
-  parent=$(herdr worktree list | jq -r '.result.source.source_workspace_id')
-  herdr worktree open --workspace "$parent" --path "$path" --focus >/dev/null
+  lazygit-worktree-switch "$path"
 fi
