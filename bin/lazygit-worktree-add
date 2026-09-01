@@ -2,12 +2,11 @@
 set -eu
 
 branch="$1"
-base="$2"
 
 if [ "${HERDR_ENV:-}" = "1" ]; then
-  herdr worktree create --branch "$branch" --base "$base" --focus >/dev/null
+  herdr worktree create --branch "$branch" --focus >/dev/null
 else
   repo_root=$(git rev-parse --show-toplevel)
   path="$(dirname "$repo_root")/$branch"
-  git worktree add "$path" "$base" -b "$branch"
+  git worktree add "$path" "$branch"
 fi

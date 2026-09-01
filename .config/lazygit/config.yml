@@ -79,3 +79,13 @@ customCommands:
     command: "lazygit-worktree-new {{.Form.Name}} {{.CheckedOutBranch.Name}}"
     loadingText: "Creating worktree..."
     output: log
+
+  # Overrides lazygit's builtin "New worktree" on the branches panel so it
+  # opens in herdr when running inside herdr (see lazygit-worktree-add),
+  # plain `git worktree add` otherwise.
+  - key: "w"
+    context: "localBranches"
+    description: "New worktree for branch"
+    command: "lazygit-worktree-add {{.SelectedLocalBranch.Name}}"
+    loadingText: "Creating worktree..."
+    output: log
