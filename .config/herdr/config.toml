@@ -31,7 +31,7 @@ navigate_workspace_up = "ctrl+p"
 navigate_workspace_down = "ctrl+n"
 navigate_pane_left = ""
 navigate_pane_right = ""
-rename_tab = "prefix+shift+r"
+rename_tab = "prefix+r"
 rename_workspace = "f2"
 # Prefix close bindings; avoid Ghostty's Cmd-W window close.
 close_pane = "prefix+w"
