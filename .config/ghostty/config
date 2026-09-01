@@ -41,11 +41,5 @@ keybind = clear
 keybind = super+q=quit
 keybind = super+c=copy_to_clipboard
 keybind = super+v=paste_from_clipboard
-# cmd+k sends a literal ctrl+l (not clear_screen): Ghostty's clear_screen
-# clears its own host buffer, but herdr owns and redraws pane content, so the
-# clear gets painted over instantly. A bare cmd+k with no binding also does
-# NOT fall through to the pty on macOS (Cmd never gets sent as text like
-# ctrl/alt do), so it has to be sent explicitly as text bytes here.
-keybind = super+k=text:\x0c
 keybind = super+shift+n=new_window
 keybind = super+shift+w=close_window
