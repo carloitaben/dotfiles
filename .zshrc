@@ -49,7 +49,7 @@ source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
-  export EDITOR='zed --wait'
+  export EDITOR='nvim'
 fi
 
 export TERMINAL='ghostty'

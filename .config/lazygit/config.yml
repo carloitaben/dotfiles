@@ -11,7 +11,7 @@ gui:
 quitOnTopLevelReturn: true
 # Some of these requiore `gh repo set-default` to work with forks
 customCommands:
-  - key: "t"
+  - key: "D"
     context: "localBranches"
     description: "Trim local branches whose remotes are gone from upstream"
     command: >
@@ -73,4 +73,10 @@ customCommands:
     description: "New worktree for branch"
     command: "lazygit-worktree-add {{.SelectedLocalBranch.Name}}"
     loadingText: "Creating worktree..."
+    output: log
+  - key: "D"
+    context: "worktrees"
+    description: "Trim worktrees whose branches remotes are gone from upstream"
+    command: "lazygit-worktree-trim"
+    loadingText: "Trimming worktrees..."
     output: log

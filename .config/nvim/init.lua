@@ -81,3 +81,13 @@ vim.g.have_nerd_font = true
 
 -- Use a single-line border around floating windows.
 vim.o.winborder      = "single"
+
+-- Re-source init.lua to pick up config edits without restarting nvim.
+-- Splits/buffers are untouched since nothing quits. Note: this re-runs
+-- top-level init.lua only — plugin setup() calls in plugin/*.lua aren't
+-- re-executed, so changes there still need a real restart.
+-- Shift+comma = "<" on a US layout, mirroring herdr's prefix+shift+,.
+vim.keymap.set('n', '<leader><', function()
+  vim.cmd.source(vim.env.MYVIMRC)
+  vim.notify('Reloaded ' .. vim.env.MYVIMRC)
+end, { desc = 'Reload init.lua' })
