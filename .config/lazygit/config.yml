@@ -57,11 +57,6 @@ customCommands:
     command: "gh repo view --web --branch {{.SelectedRemoteBranch.Name}}"
     context: "remoteBranches"
     description: "Open branch in browser"
-
-  # Create worktree from current branch; opens it in herdr when running
-  # inside herdr (see lazygit-worktree-new), plain `git worktree add`
-  # otherwise. herdr.yml adds the switch/remove overrides on top of this,
-  # only merged in when lazygit is launched from inside herdr.
   - key: "n"
     context: "worktrees"
     description: "New worktree from current branch"
@@ -73,10 +68,6 @@ customCommands:
     command: "lazygit-worktree-new {{.Form.Name}} {{.CheckedOutBranch.Name}}"
     loadingText: "Creating worktree..."
     output: log
-
-  # Overrides lazygit's builtin "New worktree" on the branches panel so it
-  # opens in herdr when running inside herdr (see lazygit-worktree-add),
-  # plain `git worktree add` otherwise.
   - key: "w"
     context: "localBranches"
     description: "New worktree for branch"
