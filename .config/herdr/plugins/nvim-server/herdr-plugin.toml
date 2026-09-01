@@ -6,4 +6,4 @@ description = "Start the shared headless Neovim server when Herdr starts"
 platforms = ["macos", "linux"]
 
 [[startup]]
-command = ["sh", "../../../bin/nvim-herdr-start"]
+command = ["sh", "-c", "$HERDR_PLUGIN_ROOT/../../../../bin/nvim-herdr-start"]

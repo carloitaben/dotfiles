@@ -19,9 +19,8 @@ split_horizontal = "prefix+s"
 settings = "prefix+,"
 reload_config = "prefix+shift+,"
 workspace_picker = "prefix+cmd+shift+e"
-# Mirror vim's ctrl-w close/new-tab: prefix+w close pane, prefix+cmd+n new tab.
-# prefix+shift+t is move-pane-to-new-tab (see [[keys.command]] below).
-new_tab = "prefix+cmd+n"
+new_tab = "prefix+n"
+new_workspace = "prefix+shift+n"
 previous_tab = "prefix+shift+h"
 next_tab = "prefix+shift+l"
 previous_workspace = "prefix+shift+k"
@@ -36,6 +35,7 @@ close_workspace = "prefix+shift+w"
 [ui]
 prompt_new_tab_name = false
 
+agent_panel_sort = "spaces"
 [ui.sidebar.agents]
 # Show each agent's state (blocked/working/done/idle) as icon + text.
 rows = [["state_icon", "state_text", "agent"], ["workspace", "tab"]]

@@ -92,14 +92,32 @@ nvim() {
   local runtime_dir="${XDG_RUNTIME_DIR:-${TMPDIR%/}}"
   local socket="$runtime_dir/nvim-herdr-${UID}.sock"
 
-  if ! command nvim --server "$socket" --remote-expr '1' >/dev/null 2>&1; then
+  if ! command nvim --headless --server "$socket" --remote-expr '1' >/dev/null 2>&1; then
     nvim-herdr-start || return
   fi
 
   if (( $# )); then
-    command nvim --server "$socket" --remote "$@" || return
+    command nvim --headless --server "$socket" --remote "$@" || return
   fi
+
+  command nvim --headless --server "$socket" --remote-expr \
+    "luaeval(\"HerdrAgentState and HerdrAgentState.attach(...)\", '$HERDR_PANE_ID')" \
+    >/dev/null 2>&1
   command nvim --server "$socket" --remote-ui
+  command nvim --headless --server "$socket" --remote-expr \
+    "luaeval(\"HerdrAgentState and HerdrAgentState.detach()\")" \
+    >/dev/null 2>&1
+}
+
+# Stop the shared Neovim server alongside `herdr server stop`, so it doesn't
+# linger as an orphaned process once herdr itself is gone.
+herdr() {
+  command herdr "$@"
+  local exit_status=$?
+  if [[ "$1" == "server" && "$2" == "stop" ]]; then
+    nvim-herdr-stop
+  fi
+  return $exit_status
 }
 
 # re-sync completions whenever brew installs/upgrades something

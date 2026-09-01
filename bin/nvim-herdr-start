@@ -7,7 +7,7 @@ log="$runtime_dir/nvim-herdr-${UID}.log"
 lock="$socket.lock"
 
 server_ready() {
-  nvim --server "$socket" --remote-expr '1' >/dev/null 2>&1
+  nvim --headless --server "$socket" --remote-expr '1' >/dev/null 2>&1
 }
 
 if server_ready; then
@@ -18,7 +18,7 @@ if mkdir "$lock" 2>/dev/null; then
   trap 'rmdir "$lock" 2>/dev/null || true' EXIT
   if ! server_ready; then
     rm -f "$socket"
-    nohup nvim --headless --listen "$socket" </dev/null >>"$log" 2>&1 &
+    nohup env HERDR_NVIM_SERVER=1 nvim --headless --listen "$socket" </dev/null >>"$log" 2>&1 &
   fi
 fi
 

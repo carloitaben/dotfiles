@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+
+runtime_dir="${XDG_RUNTIME_DIR:-${TMPDIR%/}}"
+socket="$runtime_dir/nvim-herdr-${UID}.sock"
+
+if nvim --headless --server "$socket" --remote-expr '1' >/dev/null 2>&1; then
+  nvim --headless --server "$socket" --remote-send '<C-\><C-N>:qa!<CR>' >/dev/null 2>&1 || true
+fi
