@@ -14,18 +14,6 @@ gui:
     - [branches, remotes, tags]
     - [commits, reflog]
     - [stash]
-  spinner:
-    frames:
-      - "⠋"
-      - "⠙"
-      - "⠹"
-      - "⠸"
-      - "⠼"
-      - "⠴"
-      - "⠦"
-      - "⠧"
-      - "⠇"
-      - "⠏"
 quitOnTopLevelReturn: true
 # Some of these requiore `gh repo set-default` to work with forks
 customCommands:
