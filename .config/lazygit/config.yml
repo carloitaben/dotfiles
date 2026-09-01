@@ -8,12 +8,6 @@ gui:
   showFileIcons: false
   showFileTree: false
   tabWidth: 2
-  sidePanels:
-    - [status]
-    - [files, worktrees, submodules]
-    - [branches, remotes, tags]
-    - [commits, reflog]
-    - [stash]
 quitOnTopLevelReturn: true
 # Some of these requiore `gh repo set-default` to work with forks
 customCommands:
