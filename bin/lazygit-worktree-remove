@@ -1,0 +1,12 @@
+#!/bin/sh
+set -eu
+
+path="$1"
+
+id=$(herdr worktree list --cwd "$path" 2>/dev/null | jq -r --arg p "$path" '.result.worktrees[] | select(.path == $p) | .open_workspace_id // empty')
+
+if [ -n "$id" ]; then
+  herdr workspace close "$id" >/dev/null 2>&1 || true
+fi
+
+git worktree remove "$path"

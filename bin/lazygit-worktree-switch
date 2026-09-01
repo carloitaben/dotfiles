@@ -1,0 +1,7 @@
+#!/bin/sh
+set -eu
+
+path="$1"
+
+parent=$(herdr worktree list | jq -r '.result.source.source_workspace_id')
+herdr worktree open --workspace "$parent" --path "$path" --focus >/dev/null

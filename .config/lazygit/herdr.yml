@@ -1,0 +1,21 @@
+# Merged into config.yml only when lazygit is launched inside herdr (see
+# bin/lazygit). Overrides lazygit's builtin worktree switch/remove so they
+# operate on the herdr workspace instead of just the git checkout.
+customCommands:
+  - key: "<space>"
+    context: "worktrees"
+    description: "Switch to worktree (opens in herdr)"
+    command: "lazygit-worktree-switch {{.SelectedWorktree.Path}}"
+    loadingText: "Opening in herdr..."
+    output: log
+
+  - key: "d"
+    context: "worktrees"
+    description: "Remove worktree (closes herdr workspace if open)"
+    command: "lazygit-worktree-remove {{.SelectedWorktree.Path}}"
+    loadingText: "Removing worktree..."
+    output: log
+    prompts:
+      - type: "confirm"
+        title: "Remove worktree"
+        body: "Remove worktree at {{.SelectedWorktree.Path}}?"

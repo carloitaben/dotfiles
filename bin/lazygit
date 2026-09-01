@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+
+if [ "${HERDR_ENV:-}" = "1" ]; then
+  exec /opt/homebrew/bin/lazygit \
+    --use-config-file "$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/herdr.yml" \
+    "$@"
+fi
+
+exec /opt/homebrew/bin/lazygit "$@"
