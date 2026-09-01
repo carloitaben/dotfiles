@@ -97,7 +97,19 @@ nvim() {
   fi
 
   if (( $# )); then
-    command nvim --headless --server "$socket" --remote "$@" || return
+    # The server resolves relative paths against its own cwd, not ours
+    # (it's one shared process across every herdr workspace), so
+    # absolutize file args here before sending them over --remote.
+    local -a resolved=()
+    local arg
+    for arg in "$@"; do
+      if [[ $arg == -* ]]; then
+        resolved+=("$arg")
+      else
+        resolved+=("${arg:A}")
+      fi
+    done
+    command nvim --headless --server "$socket" --remote "${resolved[@]}" || return
   fi
 
   command nvim --headless --server "$socket" --remote-expr \

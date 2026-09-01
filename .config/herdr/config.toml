@@ -92,9 +92,3 @@ key = "prefix+c"
 type = "shell"
 command = "herdr pane close \"$HERDR_ACTIVE_PANE_ID\""
 description = "close pane"
-
-[[keys.command]]
-key = "cmd+shift+r"
-type = "shell"
-command = "~/.config/herdr/bin/bun-repl launch"
-description = "Bun REPL"
