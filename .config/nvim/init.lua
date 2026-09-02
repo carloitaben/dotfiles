@@ -39,6 +39,9 @@ vim.o.undofile        = true
 -- Animate scrolling a bit more smoothly.
 vim.o.smoothscroll    = true
 
+-- Yank/delete/paste also go through the system clipboard.
+vim.o.clipboard       = 'unnamedplus'
+
 -- Hide the command line when it is not needed.
 vim.o.cmdheight       = 0
 

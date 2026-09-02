@@ -1,3 +1,5 @@
+os:
+  open: "nvim {{filename}}"
 git:
   diffRenderers:
     - command: delta --paging=never --hunk-header-style=omit --file-style=omit --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
