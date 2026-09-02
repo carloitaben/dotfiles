@@ -94,3 +94,7 @@ vim.keymap.set('n', '<leader><', function()
   vim.cmd.source(vim.env.MYVIMRC)
   vim.notify('Reloaded ' .. vim.env.MYVIMRC)
 end, { desc = 'Reload init.lua' })
+
+-- H/L switch tabs in normal mode (prev/next), like gT/gt.
+vim.keymap.set('n', 'H', 'gT', { desc = 'Previous tab' })
+vim.keymap.set('n', 'L', 'gt', { desc = 'Next tab' })

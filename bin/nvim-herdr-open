@@ -1,0 +1,53 @@
+#!/bin/sh
+set -eu
+
+# lazygit's os.open ("o") runs this instead of a plain blocking `nvim`.
+# Desired behavior: if this herdr workspace already has a pane attached to
+# its nvim server, focus that pane and load the file there; otherwise open
+# a new pane running nvim. Either way this returns immediately — nvim has no
+# --remote-wait (unlike Vim), so there's no clean way to block until the
+# file is closed, and lazygit's "open" isn't meant to be a blocking editor
+# call anyway.
+
+file="${1:?usage: nvim-herdr-open <file>}"
+
+# Agent-integrated panes (e.g. this repo's Claude Code panes) get
+# $HERDR_WORKSPACE_ID/$HERDR_PANE_ID directly; plain panes running a
+# recognized tool integration (e.g. lazygit) instead get the
+# $HERDR_ACTIVE_* equivalents.
+workspace_id="${HERDR_WORKSPACE_ID:-${HERDR_ACTIVE_WORKSPACE_ID:-}}"
+pane_id="${HERDR_PANE_ID:-${HERDR_ACTIVE_PANE_ID:-}}"
+
+if [ "${HERDR_ENV:-}" != 1 ] || [ -z "$workspace_id" ] || [ -z "$pane_id" ]; then
+  exec nvim "$file"
+fi
+
+file="$(cd "$(dirname "$file")" && pwd)/$(basename "$file")"
+runtime_dir="${XDG_RUNTIME_DIR:-${TMPDIR%/}}"
+socket="$runtime_dir/nvim-herdr-${UID}-${workspace_id}.sock"
+
+rpc() {
+  printf '%s\n' "$1" | nc -U "$HERDR_SOCKET_PATH" -w 1
+}
+
+nvim_pane=""
+for pane_id in $(herdr pane list --workspace "$workspace_id" | jq -r '.result.panes[].pane_id'); do
+  if herdr pane process-info --pane "$pane_id" \
+    | jq -e '.result.process_info.foreground_processes[]? | select(.argv0 == "nvim")' >/dev/null 2>&1; then
+    nvim_pane="$pane_id"
+    break
+  fi
+done
+
+# Escape the file path for use inside single quotes in remote shell text.
+quoted_file="'$(printf '%s' "$file" | sed "s/'/'\\\\''/g")'"
+
+if [ -n "$nvim_pane" ]; then
+  nvim --headless --server "$socket" --remote "$file"
+else
+  new_pane="$(herdr pane split --pane "$pane_id" --direction right --focus | jq -r '.result.pane.pane_id')"
+  herdr pane run "$new_pane" "nvim $quoted_file"
+  nvim_pane="$new_pane"
+fi
+
+rpc "{\"id\":\"nvim-herdr-open\",\"method\":\"pane.focus\",\"params\":{\"pane_id\":\"$nvim_pane\"}}" >/dev/null
