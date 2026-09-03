@@ -6,6 +6,16 @@ require("mini.pairs").setup()
 require("mini.ai").setup()
 require("mini.surround").setup()
 require("mini.completion").setup()
+
+-- Tab accepts the selected completion item when the popup menu is open;
+-- otherwise it's a normal Tab. `noinsert` in completeopt keeps an item
+-- pre-selected, so <C-y> confirms it without having to arrow down first.
+vim.keymap.set("i", "<Tab>", function()
+    if vim.fn.pumvisible() == 1 then
+        return "<C-y>"
+    end
+    return "<Tab>"
+end, { expr = true, noremap = true, silent = true, desc = "Accept completion" })
 require("mini.move").setup({
     mappings = {
         -- Move visual selection in Visual mode

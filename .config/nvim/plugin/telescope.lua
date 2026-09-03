@@ -264,15 +264,15 @@ vim.keymap.set('n', '<D-p>', find_files_reversed, { desc = 'Find files' })
 vim.keymap.set('n', '<D-S-p>', command_palette, { desc = 'Command palette' })
 vim.keymap.set('n', '<D-t>', builtin.lsp_workspace_symbols, { desc = 'Workspace symbols' })
 vim.keymap.set('n', '<D-S-o>', builtin.lsp_document_symbols, { desc = 'Document outline' })
-vim.keymap.set('n', '<leader>ff', find_files_reversed, { desc = 'Find files' })
-vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Find help' })
-vim.keymap.set('n', '<leader>fk', builtin.keymaps, { desc = 'Find keymaps' })
-vim.keymap.set('n', '<leader>fs', builtin.builtin, { desc = 'Find Select Telescope' })
-vim.keymap.set('n', '<leader>fw', builtin.grep_string, { desc = 'Find current word' })
-vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Find by grep' })
-vim.keymap.set('n', '<leader>fd', builtin.diagnostics, { desc = 'Find diagnostics' })
-vim.keymap.set('n', '<leader>fr', builtin.resume, { desc = 'Find resume' })
-vim.keymap.set('n', '<leader>f.', builtin.oldfiles, { desc = 'Find recent files ("." for repeat)' })
+vim.keymap.set('n', '<leader>sf', find_files_reversed, { desc = 'Find files' })
+vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = 'Find help' })
+vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = 'Find keymaps' })
+vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = 'Find Select Telescope' })
+vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = 'Find current word' })
+vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = 'Find by grep' })
+vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = 'Find diagnostics' })
+vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = 'Find resume' })
+vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = 'Find recent files ("." for repeat)' })
 vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = 'Find existing buffers' })
 
 vim.keymap.set('n', '<leader>/', function()
@@ -282,11 +282,11 @@ vim.keymap.set('n', '<leader>/', function()
     })
 end, { desc = 'Fuzzily find in current buffer' })
 
-vim.keymap.set('n', '<leader>f/', function()
+vim.keymap.set('n', '<leader>s/', function()
     builtin.live_grep {
         grep_open_files = true,
         prompt_title = 'Live Grep in Open Files',
     }
 end, { desc = 'Find by grep in open files' })
 
-vim.keymap.set('n', '<leader>fu', telescope.extensions.undo.undo, { desc = 'Find undo history' })
+vim.keymap.set('n', '<leader>su', telescope.extensions.undo.undo, { desc = 'Find undo history' })

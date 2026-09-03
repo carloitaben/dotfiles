@@ -21,7 +21,7 @@ require("mason-lspconfig").setup({
         "lua_ls",
         "bashls",
         "vtsls",
-        "tailwindcss-language-server",
+        "tailwindcss",
     },
 })
 

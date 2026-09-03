@@ -7,8 +7,12 @@ set -eu
 # a new pane running nvim. Either way this returns immediately — nvim has no
 # --remote-wait (unlike Vim), so there's no clean way to block until the
 # file is closed, and lazygit's "open" isn't meant to be a blocking editor
-# call anyway. The lazygit pane is closed once nvim has focus, since it's
-# just in the way at that point.
+# call anyway. lazygit itself runs as a herdr popup (config.toml
+# type=popup), which is an overlay over the invoking pane rather than a
+# pane of its own — $HERDR_ACTIVE_PANE_ID here is that *underlying* pane,
+# not something identifying the popup. A popup only dismisses when its own
+# command process exits, so closing it means killing the lazygit process
+# (found by walking our own parent chain), not closing any pane.
 
 file="${1:?usage: nvim-herdr-open <file>}"
 
@@ -52,4 +56,18 @@ else
 fi
 
 rpc "{\"id\":\"nvim-herdr-open\",\"method\":\"pane.focus\",\"params\":{\"pane_id\":\"$nvim_pane\"}}" >/dev/null
-herdr pane close "$lazygit_pane_id" >/dev/null 2>&1 || true
+
+# Walk up from our own parent to find the lazygit process and kill it, so
+# its popup overlay dismisses. lazygit runs os.open via a shell, so it's
+# usually our grandparent rather than our direct parent.
+ancestor="$PPID"
+while [ -n "$ancestor" ] && [ "$ancestor" != "1" ]; do
+  comm="$(ps -o comm= -p "$ancestor" 2>/dev/null || true)"
+  case "$comm" in
+    */lazygit|lazygit)
+      kill -TERM "$ancestor" 2>/dev/null || true
+      break
+      ;;
+  esac
+  ancestor="$(ps -o ppid= -p "$ancestor" 2>/dev/null | tr -d ' ')"
+done

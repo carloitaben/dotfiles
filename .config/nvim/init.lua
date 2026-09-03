@@ -46,7 +46,10 @@ vim.o.clipboard       = 'unnamedplus'
 vim.o.cmdheight       = 0
 
 -- Preselect the first completion item without inserting it automatically.
-vim.o.completeopt     = 'noinsert,menuone,popup'
+-- `fuzzy` makes mini.completion's default filter/sort use matchfuzzy()
+-- (subsequence matching) instead of prefix-only, so e.g. "txt-b" matches
+-- "text-blue".
+vim.o.completeopt     = 'noinsert,menuone,popup,fuzzy'
 
 
 -- Limit the height of popups
