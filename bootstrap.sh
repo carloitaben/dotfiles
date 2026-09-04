@@ -16,6 +16,9 @@ done
 echo "🌀 Installing Homebrew packages"
 brew bundle --file="$DOTFILES_DIR/Brewfile"
 
+echo "🌀 Configuring global git hooks"
+git config --global core.hooksPath "$HOME/.config/git-hooks"
+
 echo "🌀 Installing npm global packages"
 npm install -g \
   @mariozechner/pi-coding-agent \

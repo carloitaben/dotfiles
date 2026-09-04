@@ -1,0 +1,5 @@
+#!/bin/sh
+# Global git hook (see core.hooksPath). Runs prek against a shared config
+# so every repo gets it without per-repo setup.
+command -v prek >/dev/null 2>&1 || exit 0
+exec prek run --config "$HOME/.config/prek/pre-commit-config.yaml" --hook-stage pre-commit
