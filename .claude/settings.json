@@ -3,19 +3,6 @@
   "editorMode": "vim",
   "effortLevel": "medium",
   "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "command": "bash '/Users/carlo/.claude/hooks/pre-stop-format.sh'",
-            "statusMessage": "Running prettier + eslint --fix",
-            "timeout": 60,
-            "type": "command"
-          }
-        ],
-        "matcher": "*"
-      }
-    ],
     "SessionStart": [
       {
         "hooks": [
