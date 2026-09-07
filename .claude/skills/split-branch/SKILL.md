@@ -19,7 +19,9 @@ Split the diff between the current branch and its target into multiple independe
 
 ## 3. Propose groupings
 
-Using both commit boundaries and diff content, propose named feature groups covering every changed file/hunk (no leftovers — anything not obviously part of a feature becomes its own group, never silently dropped). For each group note which files/hunks it owns, and whether it depends on another group's code being present (dependency = stacking edge, not just "related").
+Group by final logical ownership, not chronology. Use commit messages/boundaries only as a hint for spotting feature seams — never let *when* a file/hunk was introduced or last touched decide its group. If commit A adds `Foo` and commits F/G later gut it because infra built in between made that possible, it's still one group (`Foo`, final state) — not a "introduce Foo" PR stacked under a later "simplify Foo" PR. Reviewers read the diff, not the commit history; the split should reflect the shape of the final diff only.
+
+Propose named feature groups covering every changed file/hunk (no leftovers — anything not obviously part of a feature becomes its own group, never silently dropped). For each group note which files/hunks it owns, and whether it depends on another group's code being present (dependency = stacking edge, not just "related").
 
 Present the plan as an ASCII tree — base branch as root, independent groups as its children, dependent groups nested under their parent group (nesting = stacking order). Annotate each node with file/hunk count. Example:
 
@@ -43,8 +45,8 @@ For each chain, in dependency order:
 
 - First branch in the chain: `gh stack init --base <base> <branch-name>` (creates the stack, branches off base, checks it out). If starting a second/third chain, first `gh stack checkout <base>` (or `gh stack trunk` if already in a stack) so you're not sitting on a branch shared by another stack.
 - Each subsequent (dependent) branch in the same chain: `gh stack add <branch-name>` (must be run from the current top of that stack).
-- Once the branch is created and checked out, isolate that group's changes onto it. See [REFERENCE.md](REFERENCE.md) for the cherry-pick vs. per-file vs. per-hunk mechanics — pick the simplest one that fits the group.
-- `git add` the isolated files and `git commit` with a short message derived from the group's feature summary (subject line only — see the PR body note in [REFERENCE.md](REFERENCE.md)).
+- Once the branch is created and checked out, isolate that group's changes onto it. See [REFERENCE.md](REFERENCE.md) for the per-file vs. per-hunk mechanics — pick the simplest one that fits the group. Never cherry-pick original commits: always land the group's final-state diff as one fresh commit, regardless of how many original commits it came from.
+- `git add` the isolated files and `git commit` with a short message derived from the group's feature summary (subject line only — see the PR body note in [REFERENCE.md](REFERENCE.md)). Write this message fresh; don't reuse or adapt an original commit message.
 
 Original branch is left untouched throughout.
 
