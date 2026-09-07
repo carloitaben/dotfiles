@@ -104,7 +104,11 @@ vim.api.nvim_create_autocmd("User", {
 
         -- Default mappings only bind go_in/go_out to h/l/H/L; add the more
         -- conventional <CR>/<Space> as extra ways to open without losing h/l.
-        vim.keymap.set("n", "<CR>", MiniFiles.go_in, { buffer = buf_id, desc = "Open" })
+        -- <CR> closes the picker after opening a file (close_on_file); h/l/L
+        -- and <Space> stay open so browsing multiple files is still cheap.
+        vim.keymap.set("n", "<CR>", function()
+            MiniFiles.go_in({ close_on_file = true })
+        end, { buffer = buf_id, desc = "Open and close" })
         vim.keymap.set("n", "<Space>", MiniFiles.go_in, { buffer = buf_id, desc = "Open" })
     end,
 })
