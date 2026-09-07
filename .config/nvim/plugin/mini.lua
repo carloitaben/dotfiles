@@ -6,6 +6,55 @@ require("mini.pairs").setup()
 require("mini.ai").setup()
 require("mini.surround").setup()
 require("mini.completion").setup()
+require("mini.statusline").setup({ use_icons = false })
+require("mini.tabline").setup({ show_icons = false })
+
+local MiniFiles = require("mini.files")
+
+MiniFiles.setup({
+    options = {
+        permanent_delete = false,
+    },
+    mappings = {
+        close = "<Esc>",
+    },
+    windows = {
+        preview = true,
+        width_preview = 40,
+    },
+})
+
+vim.api.nvim_create_autocmd("User", {
+    pattern = "MiniFilesBufferCreate",
+    callback = function(args)
+        local buf_id = args.data.buf_id
+
+        vim.keymap.set("n", "yp", function()
+            local path = (MiniFiles.get_fs_entry() or {}).path
+            if path == nil then return end
+            vim.fn.setreg("+", path)
+            vim.notify("Copied path", vim.log.levels.INFO, { title = "mini.files" })
+        end, { buffer = buf_id, desc = "Copy file path to clipboard" })
+    end,
+})
+
+-- `snippets.ts-shared` is one file shared by both `typescript` and
+-- `typescriptreact` contexts, so snippets don't need to be duplicated per
+-- filetype the way VS Code/Zed's static snippet files force.
+-- `snippets.tsx-react` holds the React/Next.js-only snippets (`.tsx` alone).
+require("mini.snippets").setup({
+    snippets = {
+        require("mini.snippets").gen_loader.from_lang(),
+        function(ctx)
+            if ctx.lang ~= "typescript" and ctx.lang ~= "typescriptreact" then return {} end
+            return require("snippets.ts-shared")
+        end,
+        function(ctx)
+            if ctx.lang ~= "typescriptreact" then return {} end
+            return require("snippets.tsx-react")
+        end,
+    },
+})
 
 -- Tab accepts the selected completion item when the popup menu is open;
 -- otherwise it's a normal Tab. `noinsert` in completeopt keeps an item
@@ -16,6 +65,23 @@ vim.keymap.set("i", "<Tab>", function()
     end
     return "<Tab>"
 end, { expr = true, noremap = true, silent = true, desc = "Accept completion" })
+
+-- Enter accepts the selected completion item without also inserting a
+-- newline (same reasoning as Tab above: 'noinsert' means the highlighted
+-- item was never actually written into the buffer, so plain <CR> doesn't
+-- know to confirm it).
+vim.keymap.set("i", "<CR>", function()
+    if vim.fn.pumvisible() == 1 then
+        return "<C-y>"
+    end
+    return "<CR>"
+end, { expr = true, noremap = true, silent = true, desc = "Accept completion" })
+-- `gw` mirrors Zed's jump ([g]o [w]ord). Overrides the builtin `gw` (format
+-- keeping cursor position), which isn't used here.
+require("mini.jump2d").setup({
+    mappings = { start_jumping = "gw" },
+})
+
 require("mini.move").setup({
     mappings = {
         -- Move visual selection in Visual mode
@@ -77,9 +143,23 @@ end, { noremap = true, silent = true, desc = "Close tab" })
 -- ⌘+a to select the whole file (Zed's cmd+a; vim-native ggVG)
 vim.keymap.set("n", "<D-a>", "ggVG", { noremap = true, silent = true, desc = "Select all" })
 
--- Format
-vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, { noremap = true, silent = true, desc = "Format" })
-vim.keymap.set("x", "<leader>f", vim.lsp.buf.format, { noremap = true, silent = true, desc = "Format selection" })
+-- ⌘+shift+e to open the file explorer (Zed/VS Code convention)
+vim.keymap.set("n", "<D-S-e>", function()
+    MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
+end, { silent = true, noremap = true, desc = "Open file explorer" })
+
+-- Format, keeping cursor position (like the builtin `gw` operator does for
+-- `gq`-style formatting).
+vim.keymap.set("n", "<leader>f", function()
+    local view = vim.fn.winsaveview()
+    vim.lsp.buf.format()
+    vim.fn.winrestview(view)
+end, { noremap = true, silent = true, desc = "Format (keep cursor)" })
+vim.keymap.set("x", "<leader>f", function()
+    local view = vim.fn.winsaveview()
+    vim.lsp.buf.format()
+    vim.fn.winrestview(view)
+end, { noremap = true, silent = true, desc = "Format selection (keep cursor)" })
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
