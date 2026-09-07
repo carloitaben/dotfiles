@@ -35,8 +35,14 @@ vim.api.nvim_create_autocmd("User", {
             vim.fn.setreg("+", path)
             vim.notify("Copied path", vim.log.levels.INFO, { title = "mini.files" })
         end, { buffer = buf_id, desc = "Copy file path to clipboard" })
+
+        -- Default mappings only bind go_in/go_out to h/l/H/L; add the more
+        -- conventional <CR>/<Space> as extra ways to open without losing h/l.
+        vim.keymap.set("n", "<CR>", MiniFiles.go_in, { buffer = buf_id, desc = "Open" })
+        vim.keymap.set("n", "<Space>", MiniFiles.go_in, { buffer = buf_id, desc = "Open" })
     end,
 })
+
 
 -- `snippets.ts-shared` is one file shared by both `typescript` and
 -- `typescriptreact` contexts, so snippets don't need to be duplicated per
