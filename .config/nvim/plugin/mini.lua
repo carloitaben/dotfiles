@@ -6,7 +6,73 @@ require("mini.pairs").setup()
 require("mini.ai").setup()
 require("mini.surround").setup()
 require("mini.completion").setup()
-require("mini.statusline").setup({ use_icons = false })
+-- Minimal statusline: mode, branch, filename, diagnostics, fileinfo,
+-- location. Drops mini.statusline's default diff/LSP-attached indicators
+-- (noisy, low-signal), "Git" text label, file size, and line/col totals.
+-- Diagnostic counts are colored via the builtin Diagnostic* highlight
+-- groups instead of carrying a letter/symbol prefix -- color alone conveys
+-- severity, since the groups are always shown in the same error/warn/hint
+-- order.
+local MiniStatusline = require("mini.statusline")
+
+local DIAGNOSTIC_SPECS = {
+    { severity = vim.diagnostic.severity.ERROR, hl = "DiagnosticError" },
+    { severity = vim.diagnostic.severity.WARN,  hl = "DiagnosticWarn" },
+    { severity = vim.diagnostic.severity.HINT,  hl = "DiagnosticHint" },
+}
+
+local function diagnostic_groups()
+    local groups = {}
+    for _, spec in ipairs(DIAGNOSTIC_SPECS) do
+        local n = #vim.diagnostic.get(0, { severity = spec.severity })
+        if n > 0 then
+            table.insert(groups, { hl = spec.hl, strings = { tostring(n) } })
+        end
+    end
+    return groups
+end
+
+-- mini.statusline's own section_git prepends a "Git"/"" icon label; we just
+-- want the branch name.
+local function git_branch()
+    local summary = vim.b.minigit_summary_string or vim.b.gitsigns_head
+    if summary == nil then return "" end
+    return summary == "" and "-" or summary
+end
+
+-- Same "encoding :: fileformat :: filetype" shape as fileinfo, minus the
+-- file size mini.statusline's own section_fileinfo tacks on.
+local function fileinfo_string()
+    local filetype = vim.bo.filetype
+    if filetype == "" then return "" end
+    local encoding = vim.bo.fileencoding
+    if encoding == "" then encoding = vim.o.encoding end
+    return string.format("%s :: %s :: %s", encoding, vim.bo.fileformat, filetype)
+end
+
+MiniStatusline.setup({
+    use_icons = false,
+    content = {
+        active = function()
+            local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
+            local filename = MiniStatusline.section_filename({ trunc_width = 140 })
+
+            local groups = {
+                { hl = mode_hl,                    strings = { mode } },
+                { hl = "MiniStatuslineDevinfo",     strings = { git_branch() } },
+            }
+            vim.list_extend(groups, diagnostic_groups())
+            vim.list_extend(groups, {
+                "%<",
+                { hl = "MiniStatuslineFilename", strings = { filename } },
+                "%=",
+                { hl = "MiniStatuslineFileinfo", strings = { fileinfo_string() } },
+                { hl = mode_hl,                  strings = { "%l:%2v" } },
+            })
+            return MiniStatusline.combine_groups(groups)
+        end,
+    },
+})
 require("mini.tabline").setup({ show_icons = false })
 
 local MiniFiles = require("mini.files")
@@ -40,6 +106,66 @@ vim.api.nvim_create_autocmd("User", {
         -- conventional <CR>/<Space> as extra ways to open without losing h/l.
         vim.keymap.set("n", "<CR>", MiniFiles.go_in, { buffer = buf_id, desc = "Open" })
         vim.keymap.set("n", "<Space>", MiniFiles.go_in, { buffer = buf_id, desc = "Open" })
+    end,
+})
+
+-- mini.files renders its preview into a disposable scratch buffer (readfile
+-- + treesitter, thrown away on cursor move), so previewing a file does
+-- nothing for the *real* buffer nvim creates when you actually open it --
+-- that one still pays a fresh read + first-parse cost. Prewarm the real
+-- buffer in the background as soon as it's previewed, same trick as the
+-- telescope previewer override in telescope.lua: by the time `go_in` runs,
+-- `vim.fn.bufadd` + `nvim_win_set_buf` (what mini.files' `H.edit` does) finds
+-- an already-loaded, already-highlighted buffer instead of a cold one.
+local sync_highlight = require("ts_sync_highlight").sync_highlight
+
+-- Match mini.files' own cutoff for whether its scratch preview bothers
+-- highlighting at all (`H.buffer_should_highlight`), so we never do a full
+-- read+parse of a file mini.files itself would consider too big to preview.
+local PREWARM_MAX_BYTES = 1000000
+
+-- Throttled, not debounced: drilling straight down into a directory tree to
+-- a known file lands on it once and gets opened right away, so that first
+-- landing needs to warm immediately, not after a delay it'll beat anyway.
+-- Only when the cursor keeps moving (browsing several files) do we throttle,
+-- so a fast scroll through many entries only warms the one it settles on.
+local prewarm_timer = vim.uv.new_timer()
+local last_leading_path = nil
+
+local function prewarm(path)
+    local stat = vim.uv.fs_stat(path)
+    if stat == nil or stat.size > PREWARM_MAX_BYTES then return end
+
+    local buf_id = vim.fn.bufadd(path)
+    -- Already loaded means either we prewarmed it before, or it's the real
+    -- buffer from an actual open (which ran its own sync_highlight via the
+    -- FileType autocmd in treesitter.lua). Either way its treesitter state
+    -- is already whatever it is; re-driving sync_highlight's internal,
+    -- non-reentrant parse stepper on it can race nvim's own async
+    -- highlighter for that buffer and silently corrupt its parse state,
+    -- leaving it stuck unhighlighted.
+    if vim.api.nvim_buf_is_loaded(buf_id) then return end
+
+    vim.fn.bufload(buf_id)
+    sync_highlight(buf_id)
+end
+
+vim.api.nvim_create_autocmd("User", {
+    pattern = "MiniFilesBufferUpdate",
+    callback = function()
+        local entry = MiniFiles.get_fs_entry()
+        if entry == nil or entry.fs_type ~= "file" then return end
+        local path = entry.path
+
+        if not prewarm_timer:is_active() then
+            last_leading_path = path
+            prewarm(path)
+        end
+
+        prewarm_timer:stop()
+        prewarm_timer:start(60, 0, vim.schedule_wrap(function()
+            if path ~= last_leading_path then prewarm(path) end
+        end))
     end,
 })
 
@@ -170,8 +296,12 @@ end, { noremap = true, silent = true, desc = "Format selection (keep cursor)" })
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
--- Clear search highlights when pressing Esc in normal mode
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+-- Clear search highlights when pressing Esc in normal mode, and collapse an
+-- expanded gitsigns "rescue" hunk (see plugin/gitsigns.lua) if one is open.
+vim.keymap.set('n', '<Esc>', function()
+    require('gitsigns_rescue').collapse_current()
+    vim.cmd.nohlsearch()
+end)
 
 -- Highlight when yanking text
 vim.api.nvim_create_autocmd('TextYankPost', {

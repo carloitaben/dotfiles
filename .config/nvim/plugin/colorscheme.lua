@@ -35,11 +35,26 @@ local function set_diagnostic_line_highlights()
     vim.api.nvim_set_hl(0, "DiagnosticLineHint", { bg = blend(colors.hint, colors.bg, 0.10) })
 end
 
+-- vesper's own Diff* groups set an explicit fg, which stomps syntax
+-- highlighting in diff mode. Drop the fg and use a translucent bg wash
+-- instead, so text keeps its normal syntax colors (like Zed's diff view).
+local function set_diff_highlights()
+    local colors = require("vesper.palette").colors
+    vim.api.nvim_set_hl(0, "DiffAdd", { bg = blend(colors.added, colors.bg, 0.15) })
+    vim.api.nvim_set_hl(0, "DiffDelete", { bg = blend(colors.deleted, colors.bg, 0.15) })
+    vim.api.nvim_set_hl(0, "DiffChange", { bg = blend(colors.changed, colors.bg, 0.15) })
+    vim.api.nvim_set_hl(0, "DiffText", { bg = blend(colors.changed, colors.bg, 0.30) })
+end
+
 vim.cmd("colorscheme vesper")
 
 vim.api.nvim_create_autocmd("ColorScheme", {
     pattern = "vesper",
-    callback = set_diagnostic_line_highlights,
+    callback = function()
+        set_diagnostic_line_highlights()
+        set_diff_highlights()
+    end,
 })
 
 set_diagnostic_line_highlights()
+set_diff_highlights()
