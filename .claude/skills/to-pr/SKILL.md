@@ -1,6 +1,6 @@
 ---
-name: split-branch
-description: Interactively split a git branch/PR into multiple smaller feature branches, auto-detecting dependencies between them and stacking accordingly, then pushing and opening barebones draft PRs after a single confirmation. Use when the user wants to split a branch or PR, break a large diff into smaller PRs, or mentions "split this branch/PR".
+name: to-pr
+description: Interactively split a changes into multiple smaller draft PRs.
 disable-model-invocation: true
 ---
 
