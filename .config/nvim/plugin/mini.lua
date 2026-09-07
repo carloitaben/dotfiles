@@ -110,6 +110,12 @@ vim.api.nvim_create_autocmd("User", {
             MiniFiles.go_in({ close_on_file = true })
         end, { buffer = buf_id, desc = "Open and close" })
         vim.keymap.set("n", "<Space>", MiniFiles.go_in, { buffer = buf_id, desc = "Open" })
+
+        -- The explorer buffer isn't a real file, so the global <D-s> -> :w
+        -- keymap errors ("cannot be saved"). Renames/creates/deletes staged
+        -- in the buffer are applied via synchronize(), not :w.
+        vim.keymap.set("n", "<D-s>", MiniFiles.synchronize,
+            { buffer = buf_id, desc = "Apply changes" })
     end,
 })
 
