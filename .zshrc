@@ -77,6 +77,7 @@ fi
 
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.dotfiles/bin:$PATH"
+export PATH="$HOME/.config/emacs/bin:$PATH"
 
 # Each Herdr workspace shares one persistent Neovim instance across its own
 # panes. Closing a visible client only detaches it, so buffers, undo history,
