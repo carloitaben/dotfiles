@@ -287,7 +287,8 @@ vim.keymap.set("n", "<D-a>", "ggVG", { noremap = true, silent = true, desc = "Se
 
 -- ⌘+shift+e to open the file explorer (Zed/VS Code convention)
 vim.keymap.set("n", "<D-S-e>", function()
-    MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
+    local name = vim.api.nvim_buf_get_name(0)
+    MiniFiles.open(name ~= "" and name or vim.fn.getcwd(), false)
 end, { silent = true, noremap = true, desc = "Open file explorer" })
 
 -- Format, keeping cursor position (like the builtin `gw` operator does for
