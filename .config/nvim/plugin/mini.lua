@@ -2,6 +2,12 @@ vim.pack.add({
     { src = "https://github.com/echasnovski/mini.nvim" },
 })
 
+-- netrw's directory listing is the "picker" that pops up when nvim opens on
+-- a directory (`nvim .`, `nvim ~/proj`). Disable it in favor of mini.files
+-- below, which we already use everywhere else.
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 require("mini.pairs").setup()
 require("mini.ai").setup()
 require("mini.surround").setup()
@@ -80,6 +86,9 @@ local MiniFiles = require("mini.files")
 MiniFiles.setup({
     options = {
         permanent_delete = false,
+        -- Don't hijack `nvim <dir>` / `:e <dir>` (mini.files' default,
+        -- replacing netrw) -- only open it via the explicit keymap below.
+        use_as_default_explorer = false,
     },
     mappings = {
         close = "<Esc>",
@@ -87,6 +96,22 @@ MiniFiles.setup({
     windows = {
         preview = true,
         width_preview = 40,
+    },
+})
+
+-- Mega minimal dashboard for bare `nvim` (no file/dir args): just actions,
+-- no ASCII art or padding sections.
+require("mini.starter").setup({
+    header = "",
+    footer = "",
+    items = {
+        { name = "Find file",    action = "Telescope find_files", section = "" },
+        { name = "Recent files", action = "Telescope oldfiles",   section = "" },
+        { name = "Explorer",     action = function() MiniFiles.open(vim.fn.getcwd(), false) end, section = "" },
+        { name = "Quit",         action = "qa",                   section = "" },
+    },
+    content_hooks = {
+        require("mini.starter").gen_hook.aligning("center", "center"),
     },
 })
 
