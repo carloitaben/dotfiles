@@ -9,6 +9,7 @@ local servers = {
     "bashls",
     "vtsls",
     "tailwindcss",
+    "rust_analyzer",
 }
 
 vim.lsp.enable(servers)
@@ -22,6 +23,7 @@ require("mason-lspconfig").setup({
         "bashls",
         "vtsls",
         "tailwindcss",
+        "rust_analyzer",
     },
 })
 

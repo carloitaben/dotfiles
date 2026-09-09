@@ -7,6 +7,7 @@ vim.pack.add({
 
 local languages = {
     "astro",
+    "bash",
     "c",
     "comment",
     "css",
@@ -30,6 +31,7 @@ local languages = {
     "markdown_inline",
     "query",
     "regex",
+    "rust",
     "scss",
     "sql",
     "tsx",
