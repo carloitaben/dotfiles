@@ -4,7 +4,7 @@ description: Interactively split a changes into multiple smaller draft PRs.
 disable-model-invocation: true
 ---
 
-Split the diff between the current branch and its target into multiple independent (or stacked) branches + draft PRs. Never push or open a PR without the single confirmation in step 5 — everything before that is local and reversible.
+Split the diff between the current branch and its target into multiple independent (or stacked) branches + draft PRs. Never push or open a PR without the single confirmation in step 5. Everything before that is local and reversible.
 
 ## 1. Determine base
 
@@ -13,15 +13,15 @@ Split the diff between the current branch and its target into multiple independe
 
 ## 2. Gather signal
 
-- `git log <merge-base>..HEAD --stat` for commit boundaries and messages.
-- Full `git diff <merge-base>..HEAD` for content.
-- Don't rely on file paths alone — a single package can contain two unrelated features, and one feature can span packages.
+- Full `git diff <merge-base>..HEAD` for content. This is the only source of truth. Read the final-state diff, not the commit history.
+- Don't consult `git log`, commit messages, or commit boundaries for grouping. Commits don't tell you anything about feature shape. Group from the diff alone.
+- Don't rely on file paths alone. A single package can contain two unrelated features, and one feature can span packages.
 
 ## 3. Propose groupings
 
-Group by final logical ownership, not chronology. Use commit messages/boundaries only as a hint for spotting feature seams — never let *when* a file/hunk was introduced or last touched decide its group. If commit A adds `Foo` and commits F/G later gut it because infra built in between made that possible, it's still one group (`Foo`, final state) — not a "introduce Foo" PR stacked under a later "simplify Foo" PR. Reviewers read the diff, not the commit history; the split should reflect the shape of the final diff only.
+Group by final logical ownership, not chronology. Ignore commit boundaries and messages entirely. Never let *when* a file/hunk was introduced or last touched decide its group. If an early hunk adds `Foo` and a later one guts it because infra built in between made that possible, it's still one group (`Foo`, final state), not an "introduce Foo" PR stacked under a later "simplify Foo" PR. Reviewers read the diff, not the commit history; the split should reflect the shape of the final diff only.
 
-Propose named feature groups covering every changed file/hunk (no leftovers — anything not obviously part of a feature becomes its own group, never silently dropped). For each group note which files/hunks it owns, and whether it depends on another group's code being present (dependency = stacking edge, not just "related").
+Propose named feature groups covering every changed file/hunk. No leftovers: anything not obviously part of a feature becomes its own group, never silently dropped. For each group note which files/hunks it owns, and whether it depends on another group's code being present (dependency = stacking edge, not just "related").
 
 Present the plan as an ASCII tree — base branch as root, independent groups as its children, dependent groups nested under their parent group (nesting = stacking order). Annotate each node with file/hunk count. Example:
 
@@ -33,11 +33,11 @@ main
     └── ui-cleanup-tests (3 files)
 ```
 
-Show this tree via AskUserQuestion and iterate: let the user merge/split groups, reassign files, rename branches, or change dependency edges — redraw the tree each round. Loop until confirmed. **No git writes yet.**
+Show this tree, ask for confirmation via AskUserQuestion and iterate: let the user merge/split groups, reassign files, rename branches, or change dependency edges — redraw the tree each round. Loop until confirmed. **No git writes yet.**
 
 ## 4. Build local branches via gh-stack
 
-Use the [gh-stack](../gh-stack/SKILL.md) skill for all branch creation, switching, and stacking — never `git checkout -b` these branches by hand.
+Use the [gh-stack](../gh-stack/SKILL.md) skill for all branch creation, switching, and stacking. Never `git checkout -b` these branches by hand.
 
 gh-stack stacks are strictly linear (one parent, one child per branch). So first partition the step-3 tree into **chains**: each independent (top-level) group plus everything nested under it is one chain = one stack rooted at base. Sibling top-level groups become *separate* stacks, not branches of the same stack.
 
@@ -52,7 +52,7 @@ Original branch is left untouched throughout.
 
 ## 5. Single confirmation gate
 
-Show the final plan as the same ASCII tree from step 3. Ask one explicit go/no-go for the **whole batch** — not per branch. Do not push or touch GitHub before this.
+Show the final plan as the same ASCII tree from step 3. Ask one explicit go/no-go for the **whole batch**, not per branch. Do not push or touch GitHub before this.
 
 ## 6. Push + draft PRs
 

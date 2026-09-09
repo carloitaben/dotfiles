@@ -1,6 +1,6 @@
 # Isolating a group's changes onto its own branch
 
-Branch creation and switching is handled by `gh stack init` / `gh stack add` (see [SKILL.md](SKILL.md) step 4) — by the time you get here, the group's target branch already exists and is checked out. These mechanics only cover getting the right diff onto that branch, always as a single fresh commit — never cherry-pick original commits onto it, even when a group happens to map 1:1 to one. Cherry-picking preserves the original commit (message, authorship, and its place in the old chronology), which is exactly what we're avoiding: the split reflects final-state ownership, not history. Pick the simplest one that fits the group; try them in this order.
+Branch creation and switching is handled by `gh stack init` / `gh stack add` (see [SKILL.md](SKILL.md) step 4). By the time you get here, the group's target branch already exists and is checked out. These mechanics only cover getting the right diff onto that branch, always as a single fresh commit. Never cherry-pick original commits onto it, even when a group happens to map 1:1 to one: cherry-picking preserves the original commit's message, authorship, and place in the old chronology, which is exactly what we're avoiding. The split reflects final-state ownership, not history. Pick the simplest one that fits the group; try them in this order.
 
 ## A. Group owns whole files
 
@@ -37,4 +37,4 @@ This is manual and error-prone — before doing it, tell the user which file is 
 - Single commit on the branch → PR title = commit subject, PR body = commit body.
 - Multiple commits on the branch → PR title = humanized branch name, no generated body.
 
-To keep PRs barebones, commit each group as a **single commit with a short subject and no body** — this yields a PR with just that subject as the title and an empty body, no generated prose, no test plan, no ticket content. Base-branch chaining and the "stacked on" relationship are handled natively by gh-stack's Stack linking (visible in the GitHub UI) — don't add a manual "Stacked on #N" note.
+To keep PRs barebones, commit each group as a **single commit with a short subject and no body**. This yields a PR with just that subject as the title and an empty body: no generated prose, no test plan, no ticket content. Base-branch chaining and the "stacked on" relationship are handled natively by gh-stack's Stack linking (visible in the GitHub UI); don't add a manual "Stacked on #N" note.
