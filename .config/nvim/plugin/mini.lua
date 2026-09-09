@@ -204,6 +204,91 @@ vim.api.nvim_create_autocmd("User", {
     end,
 })
 
+-- mini.pick: same prewarm() as above, applied to the fuzzy file picker, in
+-- pursuit of the Zed/Helix cmd-p feel -- the file is already highlighted and
+-- LSP-attached by the time <CR> lands, instead of opening onto a flash of
+-- plain text.
+--
+-- MiniPick has no "selection changed" event -- `MiniPickMatch` only fires
+-- when the query re-matches, not when you move the cursor between existing
+-- matches -- so a light poll of the current match stands in for that hook.
+-- Throttled the same way as the mini.files case above: whichever match is on
+-- top the moment it's noticed gets prewarmed immediately (only the ~20ms
+-- poll tick stands between a match appearing and its buffer warming), and
+-- only a fast run of *further* changes within the window -- e.g. several
+-- keystrokes landing before the poll can react to each -- gets coalesced
+-- into one trailing prewarm instead of one per keystroke.
+local MiniPick = require("mini.pick")
+
+MiniPick.setup({
+    window = {
+        -- Centered floating window (the docs' own recipe for this), instead
+        -- of the default docked-to-top layout.
+        config = function()
+            local height = math.floor(0.618 * vim.o.lines)
+            local width = math.floor(0.618 * vim.o.columns)
+            return {
+                anchor = "NW",
+                height = height,
+                width = width,
+                row = math.floor(0.5 * (vim.o.lines - height)),
+                col = math.floor(0.5 * (vim.o.columns - width)),
+            }
+        end,
+    },
+})
+
+local PICK_PREWARM_THROTTLE_MS = 35
+
+local pick_poll_timer = vim.uv.new_timer()
+local pick_throttle_timer = vim.uv.new_timer()
+local pick_last_path = nil
+local pick_last_leading_path = nil
+
+-- Scoped to file pickers only (`source.name` is "Files (rg|fd|git|...)", see
+-- MiniPick.builtin.files): grep/buffers/help items aren't bare paths, and
+-- blindly treating their `current` string as one would prewarm garbage.
+local function pick_poll()
+    local opts = MiniPick.get_picker_opts()
+    if opts == nil or not tostring(opts.source.name):match("^Files") then return end
+
+    local matches = MiniPick.get_picker_matches()
+    local item = matches and matches.current
+    if type(item) ~= "string" then return end
+
+    local path = vim.fs.joinpath(opts.source.cwd, item)
+    if path == pick_last_path then return end
+    pick_last_path = path
+
+    if not pick_throttle_timer:is_active() then
+        pick_last_leading_path = path
+        prewarm(path)
+    end
+
+    pick_throttle_timer:stop()
+    pick_throttle_timer:start(PICK_PREWARM_THROTTLE_MS, 0, vim.schedule_wrap(function()
+        if path ~= pick_last_leading_path then prewarm(path) end
+    end))
+end
+
+vim.api.nvim_create_autocmd("User", {
+    pattern = "MiniPickStart",
+    callback = function()
+        pick_last_path = nil
+        pick_poll_timer:start(20, 20, vim.schedule_wrap(pick_poll))
+    end,
+})
+
+vim.api.nvim_create_autocmd("User", {
+    pattern = "MiniPickStop",
+    callback = function()
+        pick_poll_timer:stop()
+        pick_throttle_timer:stop()
+    end,
+})
+
+vim.keymap.set("n", "<leader>sp", MiniPick.builtin.files, { desc = "Find files (mini.pick, prewarmed)" })
+
 
 -- `snippets.ts-shared` is one file shared by both `typescript` and
 -- `typescriptreact` contexts, so snippets don't need to be duplicated per
