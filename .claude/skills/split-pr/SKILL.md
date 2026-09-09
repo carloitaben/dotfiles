@@ -1,5 +1,5 @@
 ---
-name: to-pr
+name: split-pr
 description: Interactively split a changes into multiple smaller draft PRs.
 disable-model-invocation: true
 ---
