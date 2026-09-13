@@ -77,8 +77,7 @@
     "context": "Editor && vim_mode == normal && !VimWaiting && !menu",
     "bindings": {
       "space": null,
-      "space f": "editor::Format",
-      "space w": "vim::HelixJumpToWord",
+      "gj": "vim::HelixJumpToWord",
     },
   },
   {
