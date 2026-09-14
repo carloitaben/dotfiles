@@ -287,7 +287,7 @@ vim.api.nvim_create_autocmd("User", {
     end,
 })
 
-vim.keymap.set("n", "<leader>fp", MiniPick.builtin.files, { desc = "Find files (mini.pick, prewarmed)" })
+vim.keymap.set("n", "<leader>sp", MiniPick.builtin.files, { desc = "Search files (mini.pick, prewarmed)" })
 
 
 -- `snippets.ts-shared` is one file shared by both `typescript` and
@@ -328,6 +328,20 @@ vim.keymap.set("i", "<CR>", function()
     end
     return "<CR>"
 end, { expr = true, noremap = true, silent = true, desc = "Accept completion" })
+
+-- Format, keeping cursor position (like the builtin `gw` operator does for
+-- `gq`-style formatting).
+vim.keymap.set("n", "<leader>f", function()
+    local view = vim.fn.winsaveview()
+    vim.lsp.buf.format()
+    vim.fn.winrestview(view)
+end, { noremap = true, silent = true, desc = "Format (keep cursor)" })
+vim.keymap.set("x", "<leader>f", function()
+    local view = vim.fn.winsaveview()
+    vim.lsp.buf.format()
+    vim.fn.winrestview(view)
+end, { noremap = true, silent = true, desc = "Format selection (keep cursor)" })
+
 -- `gj` mirrors Zed's jump ([g]o [j]ump).
 require("mini.jump2d").setup({
     mappings = { start_jumping = "gj" },
