@@ -238,6 +238,70 @@ MiniPick.setup({
     },
 })
 
+-- Side preview pane, Telescope-style. mini.pick's own preview
+-- (`source.preview`, `<Tab>`) only ever replaces the match list in the same
+-- window -- there's no built-in side-by-side pane -- so build one: a
+-- non-focusable float docked to the right of the picker window, kept in sync
+-- via the same "poll the current match" trick as prewarm() above (no
+-- selection-changed event to hook). When the item's real buffer is already
+-- prewarmed/loaded, show that buffer directly -- already fully
+-- treesitter-highlighted, no separate scratch read needed.
+local PICK_PREVIEW_LIST_RATIO = 0.4
+
+local pick_preview_win, pick_preview_buf
+
+local function pick_preview_close()
+    if pick_preview_win ~= nil and vim.api.nvim_win_is_valid(pick_preview_win) then
+        vim.api.nvim_win_close(pick_preview_win, true)
+    end
+    if pick_preview_buf ~= nil and vim.api.nvim_buf_is_valid(pick_preview_buf) then
+        vim.api.nvim_buf_delete(pick_preview_buf, { force = true })
+    end
+    pick_preview_win, pick_preview_buf = nil, nil
+end
+
+local function pick_preview_open(main_win)
+    local cfg = vim.api.nvim_win_get_config(main_win)
+    local list_width = math.floor(cfg.width * PICK_PREVIEW_LIST_RATIO)
+    local preview_width = cfg.width - list_width - 1
+
+    vim.api.nvim_win_set_config(main_win, {
+        relative = "editor",
+        row = cfg.row,
+        col = cfg.col,
+        width = list_width,
+        height = cfg.height,
+    })
+
+    pick_preview_buf = vim.api.nvim_create_buf(false, true)
+    pick_preview_win = vim.api.nvim_open_win(pick_preview_buf, false, {
+        relative = "editor",
+        row = cfg.row,
+        col = cfg.col + list_width + 1,
+        width = preview_width,
+        height = cfg.height,
+        style = "minimal",
+        border = cfg.border,
+        focusable = false,
+    })
+    vim.wo[pick_preview_win].wrap = false
+    vim.wo[pick_preview_win].winhighlight = "NormalFloat:MiniPickNormal,FloatBorder:MiniPickBorder"
+end
+
+local function pick_preview_update(path)
+    if pick_preview_win == nil or not vim.api.nvim_win_is_valid(pick_preview_win) then return end
+
+    local buf_id = vim.fn.bufadd(path)
+    if vim.api.nvim_buf_is_loaded(buf_id) then
+        -- Prewarmed (or already open elsewhere) -- reuse the real, already
+        -- highlighted buffer instead of re-reading/re-highlighting a scratch one.
+        vim.api.nvim_win_set_buf(pick_preview_win, buf_id)
+    else
+        MiniPick.default_preview(pick_preview_buf, path)
+        vim.api.nvim_win_set_buf(pick_preview_win, pick_preview_buf)
+    end
+end
+
 local PICK_PREWARM_THROTTLE_MS = 35
 
 local pick_poll_timer = vim.uv.new_timer()
@@ -263,11 +327,15 @@ local function pick_poll()
     if not pick_throttle_timer:is_active() then
         pick_last_leading_path = path
         prewarm(path)
+        pick_preview_update(path)
     end
 
     pick_throttle_timer:stop()
     pick_throttle_timer:start(PICK_PREWARM_THROTTLE_MS, 0, vim.schedule_wrap(function()
-        if path ~= pick_last_leading_path then prewarm(path) end
+        if path ~= pick_last_leading_path then
+            prewarm(path)
+            pick_preview_update(path)
+        end
     end))
 end
 
@@ -276,6 +344,11 @@ vim.api.nvim_create_autocmd("User", {
     callback = function()
         pick_last_path = nil
         pick_poll_timer:start(20, 20, vim.schedule_wrap(pick_poll))
+
+        local opts = MiniPick.get_picker_opts()
+        if opts ~= nil and tostring(opts.source.name):match("^Files") then
+            pick_preview_open(MiniPick.get_picker_state().windows.main)
+        end
     end,
 })
 
@@ -284,6 +357,7 @@ vim.api.nvim_create_autocmd("User", {
     callback = function()
         pick_poll_timer:stop()
         pick_throttle_timer:stop()
+        pick_preview_close()
     end,
 })
 

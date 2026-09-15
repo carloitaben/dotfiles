@@ -78,7 +78,7 @@
     "bindings": {
       "space": null,
       "space f": "editor::Format",
-      "gj": "vim::HelixJumpToWord",
+      "g j": "vim::HelixJumpToWord",
     },
   },
   {
