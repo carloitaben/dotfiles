@@ -4,6 +4,22 @@ vim.o.number          = true
 vim.o.relativenumber  = true
 -- Always reserve space for signs like diagnostics and git markers.
 vim.o.signcolumn      = "yes"
+
+-- Default hybrid number+relativenumber rendering left-aligns the current
+-- (absolute) line number while every other (relative) line number is
+-- right-aligned -- that mismatch is the "offset" wobble. Zero-pad every
+-- number to the same width instead: it's naturally right-aligned (fixed
+-- width) and gives the Zed-style "01" look, current line included.
+function _G.dotfiles_statuscolumn()
+    local width = math.max(2, #tostring(vim.api.nvim_buf_line_count(0)))
+    if vim.v.virtnum ~= 0 then return "%s" .. string.rep(" ", width) .. " " end
+
+    local is_current = vim.v.relnum == 0
+    local num = string.format("%0" .. width .. "d", is_current and vim.v.lnum or vim.v.relnum)
+    local hl = is_current and "CursorLineNr" or "LineNr"
+    return "%s%#" .. hl .. "#" .. num .. " %*"
+end
+vim.o.statuscolumn = "%!v:lua.dotfiles_statuscolumn()"
 -- Keep long lines on a single row instead of wrapping them.
 vim.o.wrap            = false
 -- Use 2 spaces when pressing Tab while editing.
