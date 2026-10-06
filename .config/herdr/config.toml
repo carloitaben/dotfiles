@@ -37,8 +37,8 @@ rename_workspace = ""
 close_pane = "prefix+w"
 close_tab = "prefix+shift+x"
 close_workspace = "prefix+shift+w"
-# Worktree creation/switching/deletion is handled through lazygit instead.
-new_worktree = ""
+# Herdr-native worktree UI (create/open); lazygit worktrees stay vanilla.
+new_worktree = "ctrl+cmd+w"
 
 [ui]
 prompt_new_tab_name = false

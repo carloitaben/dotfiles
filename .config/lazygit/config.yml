@@ -59,26 +59,3 @@ customCommands:
     command: "gh repo view --web --branch {{.SelectedRemoteBranch.Name}}"
     context: "remoteBranches"
     description: "Open branch in browser"
-  - key: "n"
-    context: "worktrees"
-    description: "New worktree from current branch"
-    prompts:
-      - type: "input"
-        title: "Create a new worktree from {{ .CheckedOutBranch.Name }} with what name?"
-        key: "Name"
-        initialValue: ""
-    command: "lazygit-worktree-new {{.Form.Name}} {{.CheckedOutBranch.Name}}"
-    loadingText: "Creating worktree..."
-    output: log
-  - key: "w"
-    context: "localBranches"
-    description: "New worktree for branch"
-    command: "lazygit-worktree-add {{.SelectedLocalBranch.Name}}"
-    loadingText: "Creating worktree..."
-    output: log
-  - key: "D"
-    context: "worktrees"
-    description: "Trim worktrees whose branches remotes are gone from upstream"
-    command: "lazygit-worktree-trim"
-    loadingText: "Trimming worktrees..."
-    output: log
