@@ -51,5 +51,3 @@ alter table orders set (
 -- Check autovacuum status
 select * from pg_stat_progress_vacuum;
 ```
-
-Reference: [VACUUM](https://supabase.com/docs/guides/database/database-size#vacuum-operations)

@@ -41,5 +41,3 @@ Key things to look for:
 -- Nested Loop with high loops = consider different join strategy
 -- Sort Method: external merge = work_mem too low
 ```
-
-Reference: [EXPLAIN](https://supabase.com/docs/guides/database/inspect)

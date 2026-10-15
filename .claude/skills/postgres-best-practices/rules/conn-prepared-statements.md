@@ -42,5 +42,3 @@ Check your driver settings:
 -- Node.js pg: { prepare: false } to disable
 -- JDBC: prepareThreshold=0 to disable
 ```
-
-Reference: [Prepared Statements with Pooling](https://supabase.com/docs/guides/database/connecting-to-postgres#connection-pool-modes)

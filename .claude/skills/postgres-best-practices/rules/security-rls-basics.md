@@ -46,5 +46,3 @@ create policy orders_user_policy on orders
   to authenticated
   using (user_id = auth.uid());
 ```
-
-Reference: [Row Level Security](https://supabase.com/docs/guides/database/postgres/row-level-security)

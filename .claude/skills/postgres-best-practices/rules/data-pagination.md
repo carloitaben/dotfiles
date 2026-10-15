@@ -46,5 +46,3 @@ where (created_at, id) > ('2024-01-15 10:00:00', 12345)
 order by created_at, id
 limit 20;
 ```
-
-Reference: [Pagination](https://supabase.com/docs/guides/database/pagination)

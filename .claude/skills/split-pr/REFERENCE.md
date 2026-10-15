@@ -30,6 +30,16 @@ git commit -m "<feature summary>"
 
 This is manual and error-prone — before doing it, tell the user which file is being hunk-split and which hunks go where, so they can catch a bad split before it's committed. If a file's hunks are genuinely inseparable (e.g. one hunk depends on another), fold them into the same group instead of forcing a split.
 
+## C. Conceptual slice (hand-authored intermediate state)
+
+When a feature group is one concept spread across files that other groups also touch (e.g. a shell component that hosts features A, B and C), a pure diff slice isn't coherent. Instead, start from the previous branch's state and edit the files by hand to the state this group should leave behind: add only this group's code, leave later groups' code out. Each later branch adds its slice on top, so the last branch in the chain ends byte-identical to the original file.
+
+Rules:
+- Every intermediate state should typecheck and make sense on its own where practical.
+- Prerequisite hunks that also live in a parallel PR (config entry, shared type, shared prop) are copied verbatim, so they vanish from the diff once the parallel PR merges.
+- Tell the user which files are being hand-authored before committing.
+- The step 4 losslessness check is mandatory after this option.
+
 # Keeping PRs barebones under gh-stack
 
 `gh stack submit --auto` (step 6) derives each PR's title/body from that branch's commits, per its own rules:

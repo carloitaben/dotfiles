@@ -39,5 +39,3 @@ select c.name, o.total
 from customers c
 join orders o on o.customer_id = c.id;
 ```
-
-Reference: [Query Optimization](https://supabase.com/docs/guides/database/query-optimization)

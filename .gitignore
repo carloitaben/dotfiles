@@ -5,6 +5,8 @@ opencode-notifier-state.json
 package-lock.json
 opensrc/
 .claude/*/work-*
+.claude/*/.trash/
+.claude/*/synced/
 
 # herdr runtime state — ignore everything, keep only config.toml + tracked sources
 .config/herdr/*

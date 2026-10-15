@@ -51,5 +51,3 @@ to_tsquery('postgresql | mysql')
 -- Prefix matching
 to_tsquery('post:*')
 ```
-
-Reference: [Full Text Search](https://supabase.com/docs/guides/database/full-text-search)

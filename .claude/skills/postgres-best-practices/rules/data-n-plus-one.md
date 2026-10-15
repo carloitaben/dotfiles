@@ -49,5 +49,3 @@ Application pattern:
 select * from orders where user_id = any($1::bigint[]);
 -- Application passes: [1, 2, 3, 4, 5, ...]
 ```
-
-Reference: [N+1 Query Problem](https://supabase.com/docs/guides/database/query-optimization)

@@ -1,7 +1,6 @@
 # Postgres Best Practices
 
 **Version 1.0.0**
-Supabase
 January 2026
 
 > This document is optimized for AI agents and LLMs. Rules are prioritized by performance impact.
@@ -10,7 +9,7 @@ January 2026
 
 ## Abstract
 
-Comprehensive Postgres performance optimization guide for developers using Supabase and Postgres. Contains performance rules across 8 categories, prioritized by impact from critical (query performance, connection management) to incremental (advanced features). Each rule includes detailed explanations, incorrect vs. correct SQL examples, query plan analysis, and specific performance metrics to guide automated optimization and code generation.
+Comprehensive Postgres performance optimization guide for developers using Postgres. Contains performance rules across 8 categories, prioritized by impact from critical (query performance, connection management) to incremental (advanced features). Each rule includes detailed explanations, incorrect vs. correct SQL examples, query plan analysis, and specific performance metrics to guide automated optimization and code generation.
 
 ---
 
@@ -104,7 +103,6 @@ join orders o on o.customer_id = c.id;
 
 For JOIN columns, always index the foreign key side:
 
-Reference: https://supabase.com/docs/guides/database/query-optimization
 
 ---
 
@@ -344,7 +342,6 @@ select count(*), state from pg_stat_activity group by state;
 
 Monitor connection usage:
 
-Reference: https://supabase.com/docs/guides/platform/performance#connection-management
 
 ---
 
@@ -382,7 +379,6 @@ Pool modes:
 - **Transaction mode**: connection returned after each transaction (best for most apps)
 - **Session mode**: connection held for entire session (needed for prepared statements, temp tables)
 
-Reference: https://supabase.com/docs/guides/database/connecting-to-postgres#connection-pooler
 
 ---
 
@@ -423,7 +419,6 @@ deallocate get_user;
 
 Check your driver settings:
 
-Reference: https://supabase.com/docs/guides/database/connecting-to-postgres#connection-pool-modes
 
 ---
 
@@ -478,7 +473,6 @@ revoke all on all tables in schema public from public;
 
 Revoke public defaults:
 
-Reference: https://supabase.com/blog/postgres-roles-and-privileges
 
 ---
 
@@ -523,7 +517,6 @@ create policy orders_user_policy on orders
 
 Policy for authenticated role:
 
-Reference: https://supabase.com/docs/guides/database/postgres/row-level-security
 
 ---
 
@@ -571,7 +564,6 @@ create index orders_user_id_idx on orders (user_id);
 Use security definer functions for complex checks:
 Always add indexes on columns used in RLS policies:
 
-Reference: https://supabase.com/docs/guides/database/postgres/row-level-security#rls-performance-recommendations
 
 ---
 
@@ -1141,7 +1133,6 @@ select * from orders where user_id = any($1::bigint[]);
 
 Application pattern:
 
-Reference: https://supabase.com/docs/guides/database/query-optimization
 
 ---
 
@@ -1186,7 +1177,6 @@ limit 20;
 
 For multi-column sorting:
 
-Reference: https://supabase.com/docs/guides/database/pagination
 
 ---
 
@@ -1287,7 +1277,6 @@ order by mean_exec_time desc;
 
 Key metrics to monitor:
 
-Reference: https://supabase.com/docs/guides/database/extensions/pg_stat_statements
 
 ---
 
@@ -1337,7 +1326,6 @@ select * from pg_stat_progress_vacuum;
 
 Autovacuum tuning for busy tables:
 
-Reference: https://supabase.com/docs/guides/database/database-size#vacuum-operations
 
 ---
 
@@ -1377,7 +1365,6 @@ select * from orders where customer_id = 123 and status = 'pending';
 
 Key things to look for:
 
-Reference: https://supabase.com/docs/guides/database/inspect
 
 ---
 
@@ -1477,14 +1464,10 @@ to_tsquery('post:*')
 
 Search multiple terms:
 
-Reference: https://supabase.com/docs/guides/database/full-text-search
 
 ---
 
 ## References
 
 - https://www.postgresql.org/docs/current/
-- https://supabase.com/docs
 - https://wiki.postgresql.org/wiki/Performance_Optimization
-- https://supabase.com/docs/guides/database/overview
-- https://supabase.com/docs/guides/auth/row-level-security
