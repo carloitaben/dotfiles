@@ -3,7 +3,6 @@
 node_modules/
 opencode-notifier-state.json
 package-lock.json
-opensrc/
 .claude/*/work-*
 .claude/*/.trash/
 .claude/*/synced/
