@@ -29,7 +29,7 @@ customCommands:
         title: "Which PR do you want to check out?"
         key: "PullRequestNumber"
         command: |-
-          gh pr list --json number,title,headRefName --template '{{`{{range .}}{{printf "#%v: %s - %s" .number .title .headRefName}}
+          gh pr list --limit 200 --json number,title,headRefName --template '{{`{{range .}}{{printf "#%v: %s - %s" .number .title .headRefName}}
           {{end}}`}}'
         filter: "#(?P<number>[0-9]+): (?P<title>.+) - (?P<ref_name>[^ ]+)"
         valueFormat: "{{.number}}"
