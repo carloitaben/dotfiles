@@ -29,6 +29,10 @@ Fight entropy. Leave the codebase better than you found it.
 
 - Your primary method for interacting with GitHub should be the GitHub CLI.
 
+## Explaining
+
+- When explaining code, flow, architecture, or refactors: load `show-me` skill, prefer visuals over prose.
+
 ## Skills
 
 - Browser debugging/verification (including React re-renders): load `agent-browser` skill.
