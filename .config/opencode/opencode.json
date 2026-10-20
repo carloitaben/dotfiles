@@ -1,20 +1,32 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "autoupdate": true,
-  "permission": {
-    "external_directory": {
-      "/opt/homebrew/Cellar/neovim/*/share/nvim/runtime/doc": "allow",
-      "/opt/homebrew/Cellar/neovim/*/share/nvim/runtime/doc/**": "allow",
-      "~/.opensrc": "allow",
-      "~/.opensrc/**": "allow"
+  "update": "auto",
+  "permissions": [
+    {
+      "action": "external_directory",
+      "resource": "*",
+      "effect": "ask"
     },
-    "git *": "ask"
-  },
-  "provider": {
+    {
+      "action": "external_directory",
+      "resource": "/opt/homebrew/Cellar/neovim/*/share/nvim/runtime/doc/*",
+      "effect": "allow"
+    },
+    {
+      "action": "external_directory",
+      "resource": "~/.opensrc/*",
+      "effect": "allow"
+    },
+    {
+      "action": "shell",
+      "resource": "git *",
+      "effect": "ask"
+    }
+  ],
+  "providers": {
     "ollama": {
-      "npm": "@ai-sdk/openai-compatible",
       "name": "Ollama (local)",
-      "options": {
+      "settings": {
         "baseURL": "http://192.168.0.15:11434/v1"
       },
       "models": {
@@ -24,24 +36,28 @@
       }
     }
   },
-  "plugin": ["@mohak34/opencode-notifier@latest"],
   "mcp": {
-    "agentation": {
-      "type": "local",
-      "enabled": true,
-      "command": ["npx", "agentation-mcp", "server", "--port", "4747"]
-    },
-    "figma": {
-      "type": "local",
-      "enabled": true,
-      "command": [
-        "node",
-        "{env:HOME}/Developer/github/figma-mcp-free/packages/mcp-server/dist/index.js"
-      ],
-      "environment": {
-        "FIGMA_TOKEN": "{env:FIGMA_TOKEN}"
+    "servers": {
+      "agentation": {
+        "type": "local",
+        "disabled": false,
+        "command": ["npx", "agentation-mcp", "server", "--port", "4747"]
       },
-      "timeout": 30000
+      "figma": {
+        "type": "local",
+        "disabled": false,
+        "command": [
+          "node",
+          "{env:HOME}/Developer/github/figma-mcp-free/packages/mcp-server/dist/index.js"
+        ],
+        "environment": {
+          "FIGMA_TOKEN": "{env:FIGMA_TOKEN}"
+        },
+        "timeout": {
+          "catalog": 30000,
+          "execution": 30000
+        }
+      }
     }
   }
 }

@@ -1,7 +1,7 @@
 ---
 description: Use the Figma MCP to implement a Figma design as a React component
 agent: build
-subtask: true
+subagent: true
 ---
 
 You are implementing a Figma design as a React component.
