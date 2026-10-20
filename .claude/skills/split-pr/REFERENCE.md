@@ -34,6 +34,8 @@ This is manual and error-prone — before doing it, tell the user which file is 
 
 When a feature group is one concept spread across files that other groups also touch (e.g. a shell component that hosts features A, B and C), a pure diff slice isn't coherent. Instead, start from the previous branch's state and edit the files by hand to the state this group should leave behind: add only this group's code, leave later groups' code out. Each later branch adds its slice on top, so the last branch in the chain ends byte-identical to the original file.
 
+How to author a state reliably: start from the final file's text and apply `replace` operations that assert each anchor occurs exactly once, removing later groups' code (imports, helpers, JSX, props). A missing anchor then fails loudly instead of silently producing the wrong file. Barrel files (`index.ts`) usually need one state per group, each exporting only what exists so far.
+
 Rules:
 - Every intermediate state should typecheck and make sense on its own where practical.
 - Prerequisite hunks that also live in a parallel PR (config entry, shared type, shared prop) are copied verbatim, so they vanish from the diff once the parallel PR merges.

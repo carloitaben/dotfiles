@@ -14,4 +14,3 @@ package-lock.json
 !.config/herdr/plugins/
 .config/herdr/plugins/*
 !.config/herdr/plugins/recent-projects/
-!.config/herdr/plugins/nvim-server/

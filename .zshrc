@@ -79,65 +79,6 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.dotfiles/bin:$PATH"
 export PATH="$HOME/.config/emacs/bin:$PATH"
 
-# Each Herdr workspace shares one persistent Neovim instance across its own
-# panes. Closing a visible client only detaches it, so buffers, undo history,
-# and LSP clients stay warm within a workspace; the instance is torn down
-# when the workspace closes (see .config/herdr/plugins/nvim-server).
-nvim() {
-  if [[ ${HERDR_ENV:-} != 1 ]]; then
-    command nvim "$@"
-    return
-  fi
-
-  case "${1:-}" in
-    -h|--help|-v|--version|--headless|--clean|--listen|--server|--remote*|-l|-es|-Es)
-      command nvim "$@"
-      return
-      ;;
-  esac
-
-  local runtime_dir="${XDG_RUNTIME_DIR:-${TMPDIR%/}}"
-  local socket="$runtime_dir/nvim-herdr-${UID}-${HERDR_WORKSPACE_ID:?}.sock"
-
-  if ! command nvim --headless --server "$socket" --remote-expr '1' >/dev/null 2>&1; then
-    nvim-herdr-start "$HERDR_WORKSPACE_ID" || return
-  fi
-
-  if (( $# )); then
-    # The server resolves relative paths against its own cwd, not ours,
-    # so absolutize file args here before sending them over --remote.
-    local -a resolved=()
-    local arg
-    for arg in "$@"; do
-      if [[ $arg == -* ]]; then
-        resolved+=("$arg")
-      else
-        resolved+=("${arg:A}")
-      fi
-    done
-    command nvim --headless --server "$socket" --remote "${resolved[@]}" || return
-  fi
-
-  command nvim --headless --server "$socket" --remote-expr \
-    "luaeval(\"HerdrAgentState and HerdrAgentState.attach(...)\", '$HERDR_PANE_ID')" \
-    >/dev/null 2>&1
-  command nvim --server "$socket" --remote-ui
-  command nvim --headless --server "$socket" --remote-expr \
-    "luaeval(\"HerdrAgentState and HerdrAgentState.detach()\")" \
-    >/dev/null 2>&1
-}
-
-# Stop every per-workspace Neovim server alongside `herdr server stop`, so
-# none linger as orphaned processes once herdr itself is gone.
-herdr() {
-  command herdr "$@"
-  local exit_status=$?
-  if [[ "$1" == "server" && "$2" == "stop" ]]; then
-    nvim-herdr-stop-all
-  fi
-  return $exit_status
-}
-
 # re-sync completions whenever brew installs/upgrades something
 brew() {
   command brew "$@"
