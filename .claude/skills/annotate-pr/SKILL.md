@@ -29,19 +29,22 @@ Per PR: diff against its base (`git diff origin/<base>...<head>`), skip generate
 
 Keep a decision only if it maps to a line the PR adds or changes, and a reviewer would otherwise question or miss it. Drop anything the PR body already says, and anything that just describes visible code. Fewer, sharper comments. No match, no comment.
 
-Use only reasons stated in the session. Inferred rationale becomes a `Question:`.
+Use only reasons stated in the session. Inferred rationale becomes a `[!TIP]` question.
 
 ## 4. Draft and confirm
 
-One point per comment, anchored to one added line. Prefix:
+One point per comment, anchored to one added line. Open the body with a GitHub alert, then the text on the following `>` lines:
 
-- `Note:` fact
-- `Decision:` choice a reviewer could push back on
-- `Question:` open point
+- `> [!NOTE]` fact
+- `> [!IMPORTANT]` decision a reviewer could push back on
+- `> [!TIP]` open question
+- `> [!WARNING]` gotcha: breaks if changed
+
+Example body: `> [!NOTE]\n> The outline is on the row, not the control.`
 
 Short, plain, no first person, no emoji, backticks for identifiers.
 
-Show a table: PR, `file:line`, prefix, text. Ask where unsure, esp. inferred rationale and gotchas that belong in a code comment instead (review comments vanish after merge). **Post nothing until approved.**
+Show a table: PR, `file:line`, alert type, text. Ask where unsure, esp. inferred rationale and gotchas that belong in a code comment instead (review comments vanish after merge). **Post nothing until approved.**
 
 ## 5. Post
 
