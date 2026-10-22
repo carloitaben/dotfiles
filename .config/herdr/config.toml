@@ -18,19 +18,10 @@ zoom = ["shift+esc", "prefix+z"]
 split_horizontal = "prefix+s"
 settings = "prefix+,"
 reload_config = "prefix+shift+,"
-workspace_picker = "prefix+cmd+shift+e"
 new_tab = "prefix+n"
 new_workspace = "prefix+shift+n"
 previous_tab = "prefix+["
 next_tab = "prefix+]"
-previous_workspace = "prefix+ctrl+p"
-next_workspace = "prefix+ctrl+n"
-# Navigate-mode only; independent of focus_pane_h/j/k/l. hjkl left unbound
-# here so it's free / stays default; workspace switching moved to ctrl+p/n.
-navigate_workspace_up = "ctrl+p"
-navigate_workspace_down = "ctrl+n"
-navigate_pane_left = ""
-navigate_pane_right = ""
 rename_tab = "prefix+f2"
 rename_workspace = ""
 # Prefix close bindings; avoid Ghostty's Cmd-W window close.
@@ -54,30 +45,6 @@ key = "prefix+shift+t"
 type = "shell"
 command = "herdr pane zoom \"$HERDR_ACTIVE_PANE_ID\" --off >/dev/null 2>&1; herdr pane move \"$HERDR_ACTIVE_PANE_ID\" --new-tab --focus"
 description = "move pane to new tab (vim ctrl-w T)"
-
-[[keys.command]]
-key = "alt+h"
-type = "plugin_action"
-command = "herdr-splits.resize-left"
-description = "resize left (vim/herdr)"
-
-[[keys.command]]
-key = "alt+j"
-type = "plugin_action"
-command = "herdr-splits.resize-down"
-description = "resize down (vim/herdr)"
-
-[[keys.command]]
-key = "alt+k"
-type = "plugin_action"
-command = "herdr-splits.resize-up"
-description = "resize up (vim/herdr)"
-
-[[keys.command]]
-key = "alt+l"
-type = "plugin_action"
-command = "herdr-splits.resize-right"
-description = "resize right (vim/herdr)"
 
 # Swap panes: mirrors vim ctrl-w H/J/K/L (move window in direction), here
 # implemented as swap-with-neighbor since herdr panes don't reflow like vim
@@ -121,12 +88,6 @@ command = "~/.config/herdr/bin/open-recent-repo"
 description = "open recent repo (fzf)"
 width = 90
 height = 40
-
-[[keys.command]]
-key = "prefix+c"
-type = "shell"
-command = "herdr pane close \"$HERDR_ACTIVE_PANE_ID\""
-description = "close pane"
 
 [ui.toast]
 delivery = "herdr"

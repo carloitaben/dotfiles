@@ -1,0 +1,30 @@
+#!/bin/sh
+set -eu
+
+# lazygit `o`: open file in this workspace's warm nvim (socket from
+# .config/nvim/plugin/herdr.lua) and focus its pane; cold-start a split if
+# none is running. lazygit runs as a herdr popup: dismiss it manually.
+
+file="${1:?usage: nvim-herdr-open <file>}"
+workspace_id="${HERDR_WORKSPACE_ID:-${HERDR_ACTIVE_WORKSPACE_ID:-}}"
+
+if [ "${HERDR_ENV:-}" != 1 ] || [ -z "$workspace_id" ]; then
+  exec nvim "$file"
+fi
+
+file="$(cd "$(dirname "$file")" && pwd)/$(basename "$file")"
+runtime_dir="${XDG_RUNTIME_DIR:-${TMPDIR%/}}"
+socket="$runtime_dir/nvim-herdr-$(id -u)-$workspace_id.sock"
+
+focus() {
+  printf '{"id":"nvim-herdr-open","method":"pane.focus","params":{"pane_id":"%s"}}\n' "$1" \
+    | nc -U "$HERDR_SOCKET_PATH" -w 1 >/dev/null
+}
+
+if pane_id="$(nvim --headless --server "$socket" --remote-expr 'getenv("HERDR_PANE_ID")' 2>/dev/null)" && [ -n "$pane_id" ]; then
+  nvim --headless --server "$socket" --remote "$file"
+  focus "$pane_id"
+else
+  new_pane="$(herdr pane split --pane "${HERDR_PANE_ID:-$HERDR_ACTIVE_PANE_ID}" --direction right --focus | jq -r '.result.pane.pane_id')"
+  herdr pane run "$new_pane" "nvim '$file'"
+fi
