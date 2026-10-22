@@ -1,8 +1,8 @@
 ## Communication Style
 
-Speak simply and clearly.
-
-In all interaction and commit messages, be extremely concise and sacrifice grammar for the sake of concision.
+- Speak simply and clearly.
+- In all interaction and commit messages, be extremely concise and sacrifice grammar for the sake of concision.
+- When asked to reply, post, or rewrite, just do it. Don't walk through the reasoning first unless asked.
 
 ## Code Quality
 
@@ -10,6 +10,7 @@ In all interaction and commit messages, be extremely concise and sacrifice gramm
 - Make illegal states unrepresentable: model domain with ADTs/discriminated unions; parse inputs at boundaries into typed structures.
 - Every optional field is a question the rest of the codebase has to answer each time it's touched. Be intentional before adding one.
 - Choose architecture over minimal diff. Skip legacy/back-compat fallbacks unless explicitly told to keep them.
+- Prefer browser verification over adding new tests for UI bugs unless tests are requested.
 
 This codebase will outlive you. Every shortcut you take becomes someone else's burden. Every hack compounds into technical debt that slows the whole team down.
 
@@ -28,6 +29,7 @@ Fight entropy. Leave the codebase better than you found it.
 ## GitHub
 
 - Your primary method for interacting with GitHub should be the GitHub CLI.
+- NEVER escape backticks in PR bodies, PR comments, or review replies. Write the body to a temp file with a quoted heredoc (cat <<'EOF' > /tmp/body.md) and pass it with `--body-file`.
 
 ## Explaining
 
@@ -37,3 +39,8 @@ Fight entropy. Leave the codebase better than you found it.
 
 - Browser debugging/verification (including React re-renders): load `agent-browser` skill.
 - Dependency source: MANDATORY, NON-NEGOTIABLE: never read `node_modules/` to understand a package. Load `opensrc` skill, source lives only at `~/.opensrc/`.
+
+## Shell environment
+
+- This is macOS (BSD sed, zsh). Use `sed -i ''`, not `sed -i`, or prefer the Edit tool for file changes.
+- Quote globs and special characters for zsh.
