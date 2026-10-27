@@ -9,6 +9,15 @@
     },
   },
   {
+    "label": "revdiff",
+    "command": "revdiff -o \"$(git rev-parse --git-path revdiff-review.md)\"",
+    "hide": "on_success",
+    "show_command": false,
+    "shell": {
+      "program": "sh",
+    },
+  },
+  {
     "label": "ghui",
     "command": "ghui",
     "hide": "on_success",

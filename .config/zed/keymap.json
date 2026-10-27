@@ -38,6 +38,10 @@
         "task::Spawn",
         { "task_name": "ghui", "reveal_target": "center" },
       ],
+      "cmd-shift-r": [
+        "task::Spawn",
+        { "task_name": "revdiff", "reveal_target": "center" },
+      ],
     },
   },
   {
