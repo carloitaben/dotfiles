@@ -1,0 +1,15 @@
+#!/bin/sh
+set -eu
+
+# revdiff, then copy its annotations to the clipboard on quit. `Q` (discard)
+# leaves no output, so nothing is copied. revdiff also auto-saves to
+# ~/.config/revdiff/history regardless.
+
+out="$(mktemp)"
+trap 'rm -f "$out"' EXIT
+
+revdiff --output="$out" "$@"
+
+if [ -s "$out" ]; then
+  pbcopy <"$out"
+fi

@@ -3,6 +3,7 @@
 - Speak simply and clearly.
 - In all interaction and commit messages, be extremely concise and sacrifice grammar for the sake of concision.
 - When asked to reply, post, or rewrite, just do it. Don't walk through the reasoning first unless asked.
+- When explaining code, flow, architecture, or refactors: load `show-me` skill, prefer visuals over prose.
 
 ## Code Quality
 
@@ -29,16 +30,20 @@ Fight entropy. Leave the codebase better than you found it.
 ## GitHub
 
 - Your primary method for interacting with GitHub should be the GitHub CLI.
-- NEVER escape backticks in PR bodies, PR comments, or review replies. Write the body to a temp file with a quoted heredoc (cat <<'EOF' > /tmp/body.md) and pass it with `--body-file`.
-
-## Explaining
-
-- When explaining code, flow, architecture, or refactors: load `show-me` skill, prefer visuals over prose.
+- Never escape backticks in PR bodies, PR comments, or review replies. Write the body to a temp file with a quoted heredoc (cat <<'EOF' > /tmp/body.md) and pass it with `--body-file`.
 
 ## Skills
 
 - Browser debugging/verification (including React re-renders): load `agent-browser` skill.
 - Dependency source: MANDATORY, NON-NEGOTIABLE: never read `node_modules/` to understand a package. Load `opensrc` skill, source lives only at `~/.opensrc/`.
+
+## Annotations
+
+- A message can contain `## path:LINE (+|-)` blocks. These are pasted `revdiff` annotations. Surrounding text is my own context/instructions, not annotation content. A trailing `---` line ends the last annotation's body.
+- Format: `## path:LINE (+|-)` header (`+` added, `-` removed line; `path:A-B` range; `path (file-level)`), comment body below.
+- Question (`??`, or starts "explain"/"what is"): answer in chat, no edit.
+- Anything else: code-change directive. List planned changes, then apply.
+- Never read `~/.config/revdiff/history/` unless asked.
 
 ## Shell environment
 

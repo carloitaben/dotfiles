@@ -1,3 +1,5 @@
+tap "umputun/apps"
+
 brew "agent-browser"
 brew "delta"
 brew "ffmpeg"
@@ -12,6 +14,7 @@ brew "neovim"
 brew "node"
 brew "prek"
 brew "railway"
+brew "umputun/apps/revdiff"
 brew "ripgrep"
 brew "stow"
 brew "tmux"

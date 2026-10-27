@@ -62,5 +62,5 @@ customCommands:
   - key: "R"
     context: "files"
     description: "Review worktree"
-    command: 'revdiff -o "$(git rev-parse --git-path revdiff-review.md)"'
+    command: "revdiff-copy"
     output: terminal

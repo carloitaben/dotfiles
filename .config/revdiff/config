@@ -1,0 +1,166 @@
+[Application Options]
+; show staged changes
+; staged = false
+
+; show untracked files in the tree
+; untracked = true
+
+; file tree panel width in units (1-10, default 2 of 10)
+; tree-width = 2
+
+; number of spaces per tab character
+; tab-width = 2
+
+; disable all colors including syntax highlighting
+; no-colors = false
+
+; hide the status bar
+; no-status-bar = false
+
+; skip confirmation prompt when discarding annotations with Q
+; no-confirm-discard = false
+
+; skip confirmation prompt when dropping annotations on reload with R
+; no-confirm-reload = false
+
+; disable mouse support (scroll wheel, click)
+; no-mouse = false
+
+; hide the file tree pane
+; no-tree = false
+
+; enable line wrapping in diff view
+; wrap = false
+
+; indent wrap continuation rows by N columns so they hang under the first row's content (helps when reviewing markdown lists where unindented continuation can be misread as a new bullet)
+; wrap-indent = 0
+
+; keep N lines from the previous screen when paging the diff
+; page-overlap = 0
+
+; start in collapsed diff mode
+; collapsed = false
+
+; start in compact diff mode (small context around changes)
+; compact = false
+
+; number of context lines around changes when in compact mode
+; compact-context = 5
+
+; allow [ and ] to jump across file boundaries
+cross-file-hunks = true
+
+; position the cursor on the first changed line
+; start-at-change = false
+
+; show line numbers in diff gutter
+; line-numbers = false
+
+; show blame gutter
+; blame = false
+
+; highlight intra-line word-level changes in paired add/remove lines
+; word-diff = false
+
+; prefix shown before annotation lines
+; annotation-marker = 💬
+
+; exit 10 when annotations are produced
+; exit-code-on-annotations = false
+
+; enable vim-style motion preset (counts, gg, G, zz/zt/zb, ZZ/ZQ)
+vim-motion = true
+
+; chroma style for syntax highlighting
+; chroma-style = catppuccin-macchiato
+
+; exclude files matching prefix (may be repeated)
+; exclude =
+
+; include only files matching prefix (may be repeated)
+; include =
+
+; directory for review history auto-saves
+; history-dir =
+
+; run command after a successful O flush
+; post-flush-command =
+
+; load theme from themes directory
+; theme = basic
+
+; theme to use for dark terminal backgrounds when --theme=auto
+; auto-theme-dark = revdiff
+
+; theme to use for light terminal backgrounds when --theme=auto
+; auto-theme-light = catppuccin-latte
+
+[color options]
+; active pane borders and directory names
+color-accent = #99FFE4
+
+; inactive pane borders
+color-border = #505050
+
+; file entries and context lines
+color-normal = #A0A0A0
+
+; line numbers and status bar
+color-muted = #6E6E6E
+
+; selected file text color
+color-selected-fg = #99FFE4
+
+; selected file background color
+color-selected-bg = #232323
+
+; annotation text and markers
+color-annotation = #FFC799
+
+; diff cursor indicator color
+color-cursor-fg = #99FFE4
+
+; diff cursor indicator background
+color-cursor-bg = #232323
+
+; added line text color
+color-add-fg = #99FFE4
+
+; added line background color
+color-add-bg = #0F2B26
+
+; removed line text color
+color-remove-fg = #FF8080
+
+; removed line background color
+color-remove-bg = #3A1A1A
+
+; intra-line word-diff add background (auto-derived if empty)
+; color-word-add-bg =
+
+; intra-line word-diff remove background (auto-derived if empty)
+; color-word-remove-bg =
+
+; modified line text color (collapsed mode)
+color-modify-fg = #FFC799
+
+; modified line background color (collapsed mode)
+color-modify-bg = #33271A
+
+; file tree pane background
+; color-tree-bg =
+
+; diff pane background
+; color-diff-bg =
+
+; status bar foreground
+color-status-fg = #A0A0A0
+
+; status bar background
+color-status-bg = #232323
+
+; search match foreground
+color-search-fg = #000000
+
+; search match background
+color-search-bg = #FFC799

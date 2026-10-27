@@ -10,7 +10,7 @@
   },
   {
     "label": "revdiff",
-    "command": "revdiff -o \"$(git rev-parse --git-path revdiff-review.md)\"",
+    "command": "revdiff-copy",
     "hide": "on_success",
     "show_command": false,
     "shell": {
