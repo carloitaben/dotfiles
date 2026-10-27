@@ -59,6 +59,16 @@ customCommands:
     command: "gh repo view --web --branch {{.SelectedRemoteBranch.Name}}"
     context: "remoteBranches"
     description: "Open branch in browser"
+  - key: "D"
+    context: "worktrees"
+    description: "Delete all worktrees except main"
+    loadingText: "Removing worktrees..."
+    prompts:
+      - type: "confirm"
+        title: "Delete all worktrees?"
+        body: "Removes every worktree except the main one."
+    command: >
+      git worktree list --porcelain | awk '/^worktree /{n++; if (n>1) print substr($0,10)}' | while IFS= read -r wt; do git worktree remove --force "$wt"; done
   - key: "R"
     context: "files"
     description: "Review worktree"
