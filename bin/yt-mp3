@@ -1,0 +1,24 @@
+#!/bin/sh
+
+set -eu
+
+if [ "$#" -gt 1 ]; then
+  echo "Usage: yt-mp3 [youtube-url]" >&2
+  exit 1
+fi
+
+url=${1:-$(pbpaste)}
+if [ -z "$url" ]; then
+  echo "Pass a YouTube URL or copy one to your clipboard first." >&2
+  exit 1
+fi
+
+for dependency in yt-dlp ffmpeg; do
+  if ! command -v "$dependency" >/dev/null 2>&1; then
+    echo "$dependency is required. Install it with: brew install $dependency" >&2
+    exit 1
+  fi
+done
+
+exec yt-dlp --no-playlist -x --audio-format mp3 --audio-quality 0 \
+  -o "$HOME/Downloads/%(title)s [%(id)s].%(ext)s" -- "$url"
