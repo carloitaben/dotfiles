@@ -1,6 +1,11 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "update": "auto",
+  "agents": {
+    "explore": {
+      "model": "opencode-go/deepseek-v4.1-flash"
+    }
+  },
   "permissions": [
     {
       "action": "external_directory",
