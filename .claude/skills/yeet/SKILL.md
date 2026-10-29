@@ -31,7 +31,7 @@ Echo one line, don't wait: `dispatching: <goal>, base <base>`.
 4. `gh pr create --draft --base <base> --body-file <tmp>`. Body quoted-heredoc, barebone: short WHY prose, then `## Decisions` for any call made without asking. No diff recap.
 5. No mid-flight questions. Make the call, record it under Decisions.
 6. Failure (push rejected, checks broken, can't resolve) → keep worktree, report `failed` with reason and path. Never plain `--force`.
-7. Success → delete worktree. Report `{url, branch, status}`.
+7. Success → keep worktree. Report `{url, branch, status}`.
 
 ## 4. Report
 

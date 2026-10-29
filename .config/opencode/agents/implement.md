@@ -1,6 +1,6 @@
 ---
-description: Implements a settled, self-contained task. Use for execution once the plan is decided.
-mode: all
+description: Implements a settled, self-contained task. 
+mode: subagent
 model: opencode-go/deepseek-v4.1-flash
 color: "#f5a742"
 ---

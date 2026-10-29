@@ -40,9 +40,3 @@ disable-model-invocation: true
 ```
 
 Actions: `pause`, `click`, `hover`, `moveTo`, `type`, `key` (`cmd+a`), `scroll`, `drag`, `select`, `wait`, `navigate`, `screenshot`. Targets are `text` or `selector`, optionally `within`. `output` can end in `.mp4`, `.gif` or `.webm`. Several videos can share one config, and `include` prepends shared steps.
-
-## Limits (checked)
-
-- Static pages collapse: frames are captured only when the page repaints, so `pause` on a still page adds almost no time (a static Storybook story came out 0.9s long; a page that kept updating came out the full 7s). Choose flows with motion (navigation, typing, transitions, spinners) or accept a short clip.
-- One page, no tabs, no JS step, no captions, no file-upload action.
-- Its own Chrome has no login and no storage from your browser. Log in with `type` steps, or demo something that needs no auth (Storybook, a public page).
