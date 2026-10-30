@@ -29,6 +29,10 @@ Start every subagent with a fresh context window and a self-contained brief: the
 
 Use background agents for independent work so you stay in active dialogue with the user. Divide responsibility along real seams, not rigid file whitelists; sequence dependent edits and co-ordinate shared files yourself. After parallel work settles, send a subagent to rerun integration checks.
 
+## Stop conditions
+
+Give each implementer the stop conditions its task actually has: a genuine blocker, a choice only the user can settle, or a fix that would widen the agreed scope or trade away a guarantee. Name the trigger concretely enough to recognise in the moment, and have the subagent stop and report rather than silently working around it. A task with no such trigger gets none; routine choices stay the subagent's to make and record.
+
 ## Discussion gate
 
 When continuing work, check existing decisions and carry settled choices forward as constraints. Discuss only the unresolved choices needed for the next step.
