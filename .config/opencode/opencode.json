@@ -42,42 +42,5 @@
       "resource": "opensrc *",
       "effect": "allow"
     }
-  ],
-  "providers": {
-    "ollama": {
-      "name": "Ollama (local)",
-      "settings": {
-        "baseURL": "http://192.168.0.15:11434/v1"
-      },
-      "models": {
-        "ornith:9b": {
-          "name": "Ornith 9B"
-        }
-      }
-    }
-  },
-  "mcp": {
-    "servers": {
-      "agentation": {
-        "type": "local",
-        "disabled": false,
-        "command": ["npx", "agentation-mcp", "server", "--port", "4747"]
-      },
-      "figma": {
-        "type": "local",
-        "disabled": false,
-        "command": [
-          "node",
-          "{env:HOME}/Developer/github/figma-mcp-free/packages/mcp-server/dist/index.js"
-        ],
-        "environment": {
-          "FIGMA_TOKEN": "{env:FIGMA_TOKEN}"
-        },
-        "timeout": {
-          "catalog": 30000,
-          "execution": 30000
-        }
-      }
-    }
-  }
+  ]
 }
