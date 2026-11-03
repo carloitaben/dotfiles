@@ -35,6 +35,7 @@ Fight entropy. Leave the codebase better than you found it.
 ## Skills
 
 - Browser debugging/verification (including React re-renders): load `agent-browser` skill.
+- Operate desktop apps: Use `agent-desktop` to see and operate desktop apps. Before the first use, run `agent-desktop skills get desktop` and `agent-desktop skills get platform`, and follow them.
 - Dependency source: MANDATORY, NON-NEGOTIABLE: never read `node_modules/` to understand a package. Load `opensrc` skill, source lives only at `~/.opensrc/`.
 
 ## Annotations
