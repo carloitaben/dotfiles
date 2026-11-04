@@ -28,8 +28,4 @@ npm install -g \
 
 corepack enable
 
-echo "🌀 Installing herdr plugins"
-herdr plugin install usrivastava92/herdr-wakeup/plugin --ref v0.1.0 --yes
-herdr plugin link "$DOTFILES_DIR/.config/herdr/plugins/recent-projects"
-
 echo "🎉"

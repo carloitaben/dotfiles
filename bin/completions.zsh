@@ -4,7 +4,6 @@
 typeset -gA COMPLETION_GENERATORS=(
   fnm      "fnm completions --shell zsh"
   gh       "gh completion -s zsh"
-  herdr    "herdr completion zsh"
   lazygit  "lazygit completion zsh"
   luarocks "luarocks completion zsh"
   pnpm     "pnpm completion zsh"

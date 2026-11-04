@@ -82,23 +82,22 @@ export PATH="$HOME/.config/emacs/bin:$PATH"
 # re-sync completions whenever brew installs/upgrades something
 brew() {
   command brew "$@"
-  local status=$?
+  local rc=$?
   case "$1" in
     install|reinstall|upgrade|bundle) sync-completions ;;
   esac
-  return $status
+  return $rc
 }
+
+# /opt/homebrew is owned by one account; other accounts run brew as the owner
+brew_owner=$(stat -f %Su /opt/homebrew)
+if [[ $brew_owner != $USER ]]; then
+  alias brewc="sudo -H -u $brew_owner /opt/homebrew/bin/brew"
+fi
+unset brew_owner
 
 # fzf key bindings (ctrl-r fuzzy history, ctrl-t fuzzy file search)
 [ -s /opt/homebrew/opt/fzf/shell/key-bindings.zsh ] && source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
 
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
-
-# pnpm
-export PNPM_HOME="/Users/carlo/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end

@@ -6,11 +6,3 @@ package-lock.json
 .claude/*/work-*
 .claude/*/.trash/
 .claude/*/synced/
-
-# herdr runtime state — ignore everything, keep only config.toml + tracked sources
-.config/herdr/*
-!.config/herdr/config.toml
-!.config/herdr/bin/
-!.config/herdr/plugins/
-.config/herdr/plugins/*
-!.config/herdr/plugins/recent-projects/

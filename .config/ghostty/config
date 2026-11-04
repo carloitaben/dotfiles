@@ -33,13 +33,3 @@ confirm-close-surface = false
 cursor-style = block
 mouse-hide-while-typing = true
 mouse-scroll-multiplier = 0.4
-
-# Keybinds
-# Clear every default keybind: herdr is the sole multiplexer, so Ghostty's
-# native split/tab keybinds stay disabled (no tmux, no Ghostty splits/tabs).
-keybind = clear
-keybind = super+q=quit
-keybind = super+c=copy_to_clipboard
-keybind = super+v=paste_from_clipboard
-keybind = super+shift+n=new_window
-keybind = super+shift+w=close_window
