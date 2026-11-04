@@ -48,7 +48,7 @@ Give each implementer the stop conditions its task actually has: a genuine block
 
 When continuing work, check existing decisions and carry settled choices forward as constraints. Discuss only the unresolved choices needed for the next step.
 
-When the problem or the design is unsettled, hold all edits: investigate through subagents, present options and a recommendation, and wait for the user to proceed before any implementation. For consequential unresolved choices, suggest `grilling` when it would help; use it when requested.
+When the problem or the design is unsettled, load the `discuss` skill and follow its edit hold: investigate through subagents, present options and a recommendation, and wait for the user to proceed before any implementation. For consequential unresolved choices, suggest `grilling` when it would help; use it when requested.
 
 ## Verification and review
 

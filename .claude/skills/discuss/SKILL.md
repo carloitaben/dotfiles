@@ -1,12 +1,11 @@
 ---
 name: discuss
-description: Talk through a request conversationally without making any code changes. Use when the user says "/discuss", "let's discuss", "discuss first", "don't code yet, let's think through this", or otherwise asks to think/talk something through before touching code.
-disable-model-invocation: true
+description: Talk through a request conversationally without making any code changes. Use when the user says "let's discuss", "discuss first", "don't code yet, let's think through this", or otherwise asks to think/talk something through before touching code.
 ---
 
 # Discuss
 
-A lightweight "think first" mode. Lighter than Plan Mode: no formal plan document, no ExitPlanMode approval gate — just a hold on edits until the user says go.
+A lightweight "think first" mode. No formal plan document. Just a hold on edits until the user says go.
 
 ## Rule
 
