@@ -11,6 +11,9 @@
     "session.half.page.up": "ctrl+u",
     "session.half.page.down": "ctrl+d"
   },
+  "session": {
+    "permissions": "autoaccept"
+  },
   "plugins": [
     "opencode-plugin-usage"
   ]
