@@ -1,7 +1,7 @@
 ---
 description: Reviews changes for correctness, regressions, and missing tests.
 mode: subagent
-model: openai/gpt-6.1-sol
+model: openai/gpt-6.1-terra
 permissions:
   - action: edit
     resource: "*"

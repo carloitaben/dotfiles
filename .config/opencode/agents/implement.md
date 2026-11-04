@@ -1,7 +1,6 @@
 ---
 description: Implements a settled, self-contained task. 
 mode: subagent
-model: opencode-go/deepseek-v4.1-flash
 color: "#f5a742"
 ---
 
