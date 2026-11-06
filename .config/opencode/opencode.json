@@ -1,6 +1,10 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "update": "auto",
+  "plugins": ["opencode-awake"],
+  "experimental": {
+    "subagent_depth": 4
+  },
   "agents": {
     "plan": {
       "disabled": true
