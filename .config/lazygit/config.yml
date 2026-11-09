@@ -69,8 +69,3 @@ customCommands:
         body: "Removes every worktree except the main one."
     command: >
       git worktree list --porcelain | awk '/^worktree /{n++; if (n>1) print substr($0,10)}' | while IFS= read -r wt; do git worktree remove --force "$wt"; done
-  - key: "R"
-    context: "files"
-    description: "Review worktree"
-    command: "revdiff-copy"
-    output: terminal

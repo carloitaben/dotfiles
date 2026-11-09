@@ -9,15 +9,6 @@
     },
   },
   {
-    "label": "revdiff",
-    "command": "revdiff-copy",
-    "hide": "on_success",
-    "show_command": false,
-    "shell": {
-      "program": "sh",
-    },
-  },
-  {
     "label": "ghui",
     "command": "ghui",
     "hide": "on_success",

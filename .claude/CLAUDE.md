@@ -38,14 +38,6 @@ Fight entropy. Leave the codebase better than you found it.
 - Operate desktop apps: Use `agent-desktop` to see and operate desktop apps. Before the first use, run `agent-desktop skills get desktop` and `agent-desktop skills get platform`, and follow them.
 - Dependency source: MANDATORY, NON-NEGOTIABLE: never read `node_modules/` to understand a package. Load `opensrc` skill, source lives only at `~/.opensrc/`.
 
-## Annotations
-
-- A message can contain `## path:LINE (+|-)` blocks. These are pasted `revdiff` annotations. Surrounding text is my own context/instructions, not annotation content. A trailing `---` line ends the last annotation's body.
-- Format: `## path:LINE (+|-)` header (`+` added, `-` removed line; `path:A-B` range; `path (file-level)`), comment body below.
-- Question (`??`, or starts "explain"/"what is"): answer in chat, no edit.
-- Anything else: code-change directive. List planned changes, then apply.
-- Never read `~/.config/revdiff/history/` unless asked.
-
 ## Shell environment
 
 - This is macOS (BSD sed, zsh). Use `sed -i ''`, not `sed -i`, or prefer the Edit tool for file changes.
