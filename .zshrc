@@ -15,6 +15,12 @@ setopt SHARE_HISTORY        # new sessions see commands from currently-open sess
 setopt HIST_IGNORE_ALL_DUPS # only keep the most recent occurrence of a duplicate
 setopt HIST_IGNORE_SPACE    # commands starting with space are not stored
 
+# Bare `..` / dir name cds (otherwise zsh tries to exec it: "permission denied")
+setopt AUTO_CD
+alias ...='builtin cd ../..'
+alias ....='builtin cd ../../..'
+alias .....='builtin cd ../../../..'
+
 # Force emacs keymap. Zsh auto-picks vi keymap when $EDITOR contains "vi" (nvim
 # matches), which silently drops ^P/^N history bindings — force emacs explicitly.
 bindkey -e
