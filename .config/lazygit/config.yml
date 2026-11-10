@@ -23,7 +23,7 @@ customCommands:
     context: "localBranches"
     command: "gh pr checkout {{.Form.PullRequestNumber}}"
     description: "Select GitHub PR for Checkout"
-    loadingText: "Checking out GitHub Pull Request..."
+    loadingText: "Checking out GitHub Pull Request"
     prompts:
       - type: "menuFromCommand"
         title: "Which PR do you want to check out?"
@@ -42,7 +42,7 @@ customCommands:
     context: "files"
     command: "git checkout {{.Form.Branch}} -- {{.SelectedFile.Name}}"
     description: "Restore file from another branch"
-    loadingText: "Restoring file..."
+    loadingText: "Restoring file"
     prompts:
       - type: "menuFromCommand"
         title: "Restore {{.SelectedFile.Name}} from which branch?"
@@ -59,13 +59,45 @@ customCommands:
     command: "gh repo view --web --branch {{.SelectedRemoteBranch.Name}}"
     context: "remoteBranches"
     description: "Open branch in browser"
+  # Mirrors native worktree remove (menu, main/current guard) but moves to Trash
+  - key: "d"
+    context: "worktrees"
+    description: "Remove worktree (to Trash)"
+    loadingText: "Removing worktree"
+    prompts:
+      - type: "menu"
+        title: "Remove worktree '{{.SelectedWorktree.Name}}'?"
+        key: "Mode"
+        options:
+          - name: "Remove worktree"
+            key: "w"
+            value: "worktree"
+          - name: "Remove worktree and delete branch"
+            key: "b"
+            value: "branch"
+          - name: "Remove worktree and delete local and remote branch"
+            key: "r"
+            value: "both"
+    command: >
+      if [ "{{.SelectedWorktree.IsMain}}" = true ]; then echo "You cannot remove the main worktree!" >&2; exit 1; fi;
+      if [ "{{.SelectedWorktree.IsCurrent}}" = true ]; then echo "You cannot remove the current worktree!" >&2; exit 1; fi;
+      branch='{{.SelectedWorktree.Branch}}'; mode='{{.Form.Mode}}';
+      if [ "$mode" != worktree ] && [ -z "$branch" ]; then echo "Worktree is not checked out on a branch" >&2; exit 1; fi;
+      remote=$(git config "branch.$branch.remote");
+      if [ "$mode" = both ] && [ -z "$remote" ]; then echo "Branch has no upstream" >&2; exit 1; fi;
+      mv '{{.SelectedWorktree.Path}}' "$HOME/.Trash/$(basename '{{.SelectedWorktree.Path}}')-$(date +%s)" &&
+      git worktree prune &&
+      if [ "$mode" != worktree ]; then git branch -d "$branch"; fi &&
+      if [ "$mode" = both ]; then git push "$remote" --delete "$branch"; fi
   - key: "D"
     context: "worktrees"
-    description: "Delete all worktrees except main"
-    loadingText: "Removing worktrees..."
+    description: "Remove all worktrees except main (to Trash)"
+    loadingText: "Removing worktrees"
     prompts:
       - type: "confirm"
-        title: "Delete all worktrees?"
-        body: "Removes every worktree except the main one."
+        title: "Remove all worktrees?"
+        body: "Moves every worktree except the main one to the Trash."
     command: >
-      git worktree list --porcelain | awk '/^worktree /{n++; if (n>1) print substr($0,10)}' | while IFS= read -r wt; do git worktree remove --force "$wt"; done
+      i=0; stamp=$(date +%s);
+      git worktree list --porcelain | awk '/^worktree /{n++; if (n>1) print substr($0,10)}' | while IFS= read -r wt; do i=$((i+1)); mv "$wt" "$HOME/.Trash/$(basename "$wt")-$stamp-$i"; done;
+      git worktree prune
