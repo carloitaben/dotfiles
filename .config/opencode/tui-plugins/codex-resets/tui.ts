@@ -416,12 +416,7 @@ interface Line {
 }
 
 function buildLines(state: ResetState, config: Config, theme: Context["theme"], now: number): Line[] {
-  const header: Line = {
-    parts: [{ text: "Codex resets", fg: theme.text.base, bold: true }],
-    ...(config.expiryPrompt.enabled
-      ? { right: [{ text: `prompt ${config.expiryPrompt.withinMinutes}m`, fg: theme.text.muted }] }
-      : {}),
-  }
+  const header: Line = { parts: [{ text: "Codex resets", fg: theme.text.base, bold: true }] }
   const lines: Line[] = [header]
   const count = state.credits.length
 
