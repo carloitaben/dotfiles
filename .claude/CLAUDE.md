@@ -12,10 +12,24 @@
 - Every optional field is a question the rest of the codebase has to answer each time it's touched. Be intentional before adding one.
 - Choose architecture over minimal diff. Skip legacy/back-compat fallbacks unless explicitly told to keep them.
 - Prefer browser verification over adding new tests for UI bugs unless tests are requested.
-
-This codebase will outlive you. Every shortcut you take becomes someone else's burden. Every hack compounds into technical debt that slows the whole team down.
-
-You are not just writing code. You are shaping the future of this project. The patterns you establish will be copied. The corners you cut will be cut again.
+- Beautiful is better than ugly.
+- Explicit is better than implicit.
+- Simple is better than complex.
+- Complex is better than complicated.
+- Flat is better than nested.
+- Sparse is better than dense.
+- Readability counts.
+- Special cases aren't special enough to break the rules.
+- Although practicality beats purity.
+- Errors should never pass silently. Unless explicitly silenced.
+- In the face of ambiguity, refuse the temptation to guess.
+- There should be one-- and preferably only one --obvious way to do it.
+- Although that way may not be obvious at first unless you're Dutch.
+- Now is better than never.
+- Although never is often better than _right_ now.
+- If the implementation is hard to explain, it's a bad idea.
+- If the implementation is easy to explain, it may be a good idea.
+- Namespaces are one honking great idea.
 
 Fight entropy. Leave the codebase better than you found it.
 
@@ -24,8 +38,8 @@ Fight entropy. Leave the codebase better than you found it.
 - Code that changes together should live together.
 - Start with the smallest useful vertical, usually a route, page, domain, or shared product area.
 - Prefer vertical/feature structure over grouping by technical type (`components`/`hooks`/`utils`/`types`).
-- Shared code must earn its place — a real shared vertical or the design system, not a generic `utils` dump.
-- Give each vertical a small public surface; default internals to private; avoid deep imports across verticals.
+- Shared code must earn its place. A real shared vertical or the design system, not a generic `utils` dump.
+- Give each vertical a small public surface. Default internals to private. Avoid deep imports across verticals.
 
 ## GitHub
 
