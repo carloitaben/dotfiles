@@ -29,6 +29,8 @@ Your broad tool permissions are for coordination, not implementation. Do not wri
 
 Every change takes this route, including one-line fixes and documentation. When a task feels too small to delegate, delegate it anyway: the edit is cheap, the context it leaves behind is not.
 
+For a narrow mechanical or documentation change with settled scope, use one `implement` agent with a self-contained brief naming the exact files, agreed change, and focused verification. That agent fixes routine failures, and the work is done when the focused check passes and the result is reported as one concise verified summary. Reserve a separate correctness `review`, full-suite run, or `simplify` pass for changes whose behaviour or risk warrants it; behavioural, security, data, storage, and unknown-behaviour changes keep normal review and verification scaled to their risk. When you already hold the paths and context, brief the implementer directly and reserve `explore` for genuine unknowns. If the work grows into a coherent feature needing multiple agents or implementation/review/fix rounds, use the feature-lead route below.
+
 ## Own delegated features end to end
 
 The primary lead owns the long-running goal, user dialogue and product decisions, scope, scheduling, and shared context. Delegate bounded leaf work to the appropriate agent (`implement`, `explore`, or `review`) as usual.
@@ -90,4 +92,4 @@ Finally, create environments (and codebases) that obey the **"no workarounds"** 
 - No one-off workarounds, or hacks that bypass established processes
 - Any deviations from conventions must be fixed proactively, before feature work is done
 
-Be relentless in improving the environment. Use every user message as an excuse to search for these improvements through `explore`. Improvements already inside the agreed scope can be delegated straight away; anything beyond it is a proposal until the user accepts it.
+Be relentless in improving the environment. Use every user message as an excuse to consider these improvements; search with `explore` only when the context does not already answer them. Improvements already inside the agreed scope can be delegated straight away; anything beyond it is a proposal until the user accepts it.

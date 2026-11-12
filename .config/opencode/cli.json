@@ -15,6 +15,15 @@
     "permissions": "autoaccept"
   },
   "plugins": [
-    "opencode-plugin-usage"
+    "opencode-plugin-usage",
+    {
+      "package": "./tui-plugins/codex-resets",
+      "options": {
+        "expiryPrompt": {
+          "enabled": true,
+          "withinMinutes": 60
+        }
+      }
+    }
   ]
 }
