@@ -79,8 +79,13 @@
       "space": null,
       "space f": "editor::Format",
       "g j": "vim::HelixJumpToWord",
-      "g <": "pane::SwapItemLeft",
-      "g >": "pane::SwapItemRight",
+    },
+  },
+  {
+    "context": "Pane",
+    "bindings": {
+      "alt-cmd-shift-left": "pane::SwapItemLeft",
+      "alt-cmd-shift-right": "pane::SwapItemRight",
     },
   },
   {
@@ -89,8 +94,6 @@
       "ctrl-w v": "pane::SplitVertical",
       "ctrl-w s": "pane::SplitHorizontal",
       "ctrl-w c": ["pane::CloseActiveItem", { "close_pinned": false }],
-      "ctrl-w <": "pane::SwapItemLeft",
-      "ctrl-w >": "pane::SwapItemRight",
     },
   },
   {
