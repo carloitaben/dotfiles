@@ -11,7 +11,7 @@ gui:
   showFileTree: false
   tabWidth: 2
 quitOnTopLevelReturn: true
-# Some of these requiore `gh repo set-default` to work with forks
+# Some of these require `gh repo set-default` to work with forks
 customCommands:
   - key: "D"
     context: "localBranches"
