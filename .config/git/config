@@ -3,7 +3,7 @@
     name = Carlo Domínguez
 
 [core]
-    editor = nvim
+    editor = vim
     whitespace = error
     pager = delta
 
