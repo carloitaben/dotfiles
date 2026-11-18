@@ -27,36 +27,6 @@
   "remoteControlAtStartup": false,
   "skipAutoPermissionPrompt": true,
   "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.dotfiles/.claude/hooks/session-state.sh start"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.dotfiles/.claude/hooks/session-state.sh touch"
-          }
-        ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.dotfiles/.claude/hooks/session-state.sh end"
-          }
-        ]
-      }
-    ],
     "PostToolUse": [
       {
         "matcher": "Skill",

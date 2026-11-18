@@ -29,9 +29,11 @@ python3 -I ~/.dotfiles/.claude/skills/pr-shots/update-body.py paths
 python3 -I ~/.dotfiles/.claude/skills/pr-shots/upload.py <pr-url> <image>... > <scratchpad>/urls.json
 ```
 
-All images in one call. It prints JSON `{image path: url}` and clears the comment box it used.
+All images in one call. It prints JSON `{image path: url}` and clears the comment box it used. It runs in agent-browser's own headless browser, so the user can keep working.
 
-It drives the real keyboard and mouse. Tell the user to keep hands off until it returns. Never click Comment or submit anything by other means.
+Needs the `gh` agent-browser session signed in to GitHub (profile `~/.agent-browser/profiles/gh`). The script exits at once with the setup command when it is not. One-time setup: run that command, sign in, close the window.
+
+Never click Comment or submit anything by other means.
 
 Failure: report the error; the user may need to clear the PR's comment box by hand.
 
