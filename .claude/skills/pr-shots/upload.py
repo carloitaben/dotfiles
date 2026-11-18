@@ -27,17 +27,17 @@ TARGET = None
 
 
 def log(msg):
-    print(f"[pr-proof] {msg}", file=sys.stderr)
+    print(f"[pr-shots] {msg}", file=sys.stderr)
 
 
 def fail(msg):
-    sys.exit(f"[pr-proof] {msg}")
+    sys.exit(f"[pr-shots] {msg}")
 
 
 def desktop(*args, check=True):
     t0 = time.time()
     out = subprocess.run(["agent-desktop", *args], capture_output=True, text=True)
-    if os.environ.get("PR_PROOF_TIMING"):
+    if os.environ.get("PR_SHOTS_TIMING"):
         log(f"{time.time() - t0:5.2f}s agent-desktop {' '.join(args)[:70]}")
     try:
         result = json.loads(out.stdout)

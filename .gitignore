@@ -1,8 +1,9 @@
 .DS_Store
-.opencode/*
-node_modules/
-opencode-notifier-state.json
-package-lock.json
-.claude/*/work-*
 .claude/*/.trash/
 .claude/*/synced/
+.claude/*/work-*
+.claude/skill-toil/
+.opencode/*
+__pycache__/
+node_modules/
+package-lock.json

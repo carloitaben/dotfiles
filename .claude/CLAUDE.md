@@ -51,6 +51,7 @@ Fight entropy. Leave the codebase better than you found it.
 - Browser debugging/verification (including React re-renders): load `agent-browser` skill.
 - Operate desktop apps: Use `agent-desktop` to see and operate desktop apps. Before the first use, run `agent-desktop skills get desktop` and `agent-desktop skills get platform`, and follow them.
 - Dependency source: MANDATORY, NON-NEGOTIABLE: never read `node_modules/` to understand a package. Load `opensrc` skill, source lives only at `~/.opensrc/`.
+- Skill toil: after a skill run, name its toil (mechanical steps you did by hand that a script could do, steps you had to improvise) and propose one fix to the skill, with evidence. Edit the skill only after I agree. Subagents a skill dispatches end their report with a `toil` list.
 
 ## Shell environment
 
