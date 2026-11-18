@@ -66,7 +66,7 @@ Stacks are strictly linear. Partition the tree into **chains**: each top-level g
 
 Per chain, in dependency order:
 
-- First branch: `gh stack init --base <base> <branch-name>`. For a second/later chain, first `gh stack checkout <base>` (or `gh stack trunk` if in a stack) so you don't sit on another stack's branch.
+- First branch: `gh stack init --base <base> <branch-name>`, where `<base>` is a plain branch name (`develop`), never `origin/develop`: the remote-prefixed form makes `submit` fail to create the bottom PR. For a second/later chain, first `gh stack checkout <base>` (or `gh stack trunk` if in a stack) so you don't sit on another stack's branch.
 - Later branches: `gh stack add <branch-name>` from the stack's current top.
 - Land the group's state per [REFERENCE.md](REFERENCE.md), as one fresh commit. Never cherry-pick original commits.
 - **Commit message: short subject, no body, written fresh.** `gh stack submit --auto` makes the PR title/body from commits: a single commit gives title = subject, body = commit body; several commits give a humanized branch name and no body. One bodiless commit = barebones PR (no generated prose, test plan or ticket content). Stack linking already shows "stacked on #N"; add no manual note.
@@ -84,3 +84,5 @@ Show the final tree again. One go/no-go for the whole batch, not per branch.
 ## 6. Push + draft PRs
 
 Per chain: `gh stack checkout <top-branch>`, then `gh stack submit --auto` (pushes every branch, opens chained draft PRs, links them as a GitHub Stack). Report PR URLs (`gh stack view --json` or `submit` output).
+
+If `submit` skips a PR, create it by hand (`gh pr create --draft --base <base>`), re-init the local stack with `--base <base>` and the branches bottom to top, then `submit --auto` again to link it. Never use `gh stack link` for a non-default base: it resets the bottom PR's base to the default branch. A parallel (non-stacked) PR is created with `gh pr create --draft`; push its branch first.
