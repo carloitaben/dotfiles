@@ -29,8 +29,7 @@ customCommands:
         title: "Which PR do you want to check out?"
         key: "PullRequestNumber"
         command: |-
-          gh pr list --limit 200 --json number,title,headRefName --template '{{`{{range .}}{{printf "#%v: %s - %s" .number .title .headRefName}}
-          {{end}}`}}'
+          jq -r --arg repo "$(git rev-parse --show-toplevel)" '.[$repo] // [] | .[] | select(.state == "OPEN" or .state == "DRAFT") | "#\(.number): \(.title) - \(.headRefName)"' ~/.config/lazygit/github_pull_requests.json
         filter: "#(?P<number>[0-9]+): (?P<title>.+) - (?P<ref_name>[^ ]+)"
         valueFormat: "{{.number}}"
         labelFormat: '{{"#" | black | bold}}{{.number | white | bold}} {{.title | yellow | bold}}{{" [" | black | bold}}{{.ref_name | green}}{{"]" | black | bold}}'
