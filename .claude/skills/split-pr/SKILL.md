@@ -56,7 +56,7 @@ main
 
 **Count before presenting.** Any chain over 8 PRs, or any group under ~100 LOC, merge adjacent groups until each earns its PR.
 
-Confirm via `AskUserQuestion`. The user may merge/split groups, reassign files, rename, change edges. Redraw each round until confirmed. No git writes yet.
+Print the tree as its own chat message, with no tool call in that turn: a tool dialog opened in the same turn (`AskUserQuestion`) hides it. End the message asking the user to confirm in plain text. The user may merge/split groups, reassign files, rename, change edges. Redraw each round until confirmed. No git writes yet.
 
 ## 4. Build local branches via gh-stack
 
