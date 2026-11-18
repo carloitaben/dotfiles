@@ -56,7 +56,7 @@ main
 
 **Count before presenting.** Any chain over 8 PRs, or any group under ~100 LOC, merge adjacent groups until each earns its PR.
 
-Print the tree as its own chat message, with no tool call in that turn: a tool dialog opened in the same turn (`AskUserQuestion`) hides it. End the message asking the user to confirm in plain text. The user may merge/split groups, reassign files, rename, change edges. Redraw each round until confirmed. No git writes yet.
+Send the tree alone as a chat message (an `AskUserQuestion` dialog in the same turn covers it), then ask in plain text whether to go ahead. Merging/splitting groups, reassigning files, renaming or changing edges redraws the tree; repeat until confirmed. No git writes yet.
 
 ## 4. Build local branches via gh-stack
 
@@ -66,14 +66,14 @@ Stacks are strictly linear. Partition the tree into **chains**: each top-level g
 
 Per chain, in dependency order:
 
-- First branch: `gh stack init --base <base> <branch-name>`, where `<base>` is a plain branch name (`develop`), never `origin/develop`: the remote-prefixed form makes `submit` fail to create the bottom PR. For a second/later chain, first `gh stack checkout <base>` (or `gh stack trunk` if in a stack) so you don't sit on another stack's branch.
+- First branch: `gh stack init --base <base> <branch-name>`, with `<base>` a bare branch name (`develop`): `submit` opens the bottom PR only against a bare name, so `origin/develop` fails. For a second/later chain, first `gh stack checkout <base>` (or `gh stack trunk` if in a stack) so you don't sit on another stack's branch.
 - Later branches: `gh stack add <branch-name>` from the stack's current top.
 - Land the group's state per [REFERENCE.md](REFERENCE.md), as one fresh commit. Never cherry-pick original commits.
 - **Commit message: short subject, no body, written fresh.** `gh stack submit --auto` makes the PR title/body from commits: a single commit gives title = subject, body = commit body; several commits give a humanized branch name and no body. One bodiless commit = barebones PR (no generated prose, test plan or ticket content). Stack linking already shows "stacked on #N"; add no manual note.
 
 **Verify hand-authored states.** A fresh worktree has no installed deps: copy each hand-authored file into a checkout that has them, typecheck/lint/format-check, restore. Report any state you couldn't check.
 
-**Verify losslessness.** Overlay every new branch tip (parallel branches + top of each chain) onto base in a scratch worktree or via `git read-tree`; `git diff <original-branch> <combined-tree>` must be empty. A difference means a dropped, wrongly duplicated or hand-edited hunk: fix before step 5. Duplicated prerequisite hunks must match byte for byte. Declare any expected difference up front (e.g. a file made identical to another open PR's) and require the diff to equal exactly that.
+**Verify losslessness.** Run `scripts/verify.sh <base> refs/split/snap <branch>[@<parent>] ...`, bottom to top; `@<parent>` names the branch below, parallel branches omit it. It prints files and `+added −removed` per branch (the LOC budget numbers) and overlays every tip onto base. The overlay equals the snapshot tree, or a hunk was dropped, wrongly duplicated or hand-edited: fix before step 5. Prerequisite hunks duplicated across parallel branches match byte for byte; the script warns otherwise. Declare any expected difference up front (e.g. a file made identical to another open PR's) and require the diff to equal exactly that.
 
 If a group's diff won't apply cleanly, stop and flag it; never guess a resolution. The original branch stays untouched.
 
@@ -85,4 +85,4 @@ Show the final tree again. One go/no-go for the whole batch, not per branch.
 
 Per chain: `gh stack checkout <top-branch>`, then `gh stack submit --auto` (pushes every branch, opens chained draft PRs, links them as a GitHub Stack). Report PR URLs (`gh stack view --json` or `submit` output).
 
-If `submit` skips a PR, create it by hand (`gh pr create --draft --base <base>`), re-init the local stack with `--base <base>` and the branches bottom to top, then `submit --auto` again to link it. Never use `gh stack link` for a non-default base: it resets the bottom PR's base to the default branch. A parallel (non-stacked) PR is created with `gh pr create --draft`; push its branch first.
+If `submit` skips a PR, open it with `gh pr create --draft --base <base>`, re-init the local stack with `--base <base>` and the branches bottom to top, then `submit --auto` to link it. Link PRs through `submit`: `gh stack link` resets the bottom PR's base to the default branch. A parallel PR is a plain draft: push its branch, then `gh pr create --draft`.
