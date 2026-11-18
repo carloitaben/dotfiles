@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
 """Screenshot one element and record it in the session's shots manifest.
 
-Usage: shoot.py <shot|before|after> <name> <url> <selector> [--viewport 1280x800] [--note TEXT]
+Usage: shoot.py <shot|before|after> <name> <url> <selector> [--viewport 1280x800] [--note TEXT] [--bare] [--pad 24]
+
+<selector> names the subject. The screenshot is of the subject's first ancestor that does
+not sit flush with it (the subject plus its surroundings); --bare shoots the subject alone.
+The target is cropped to the width of its visible content (text, images, and anything with a
+background, border or shadow), then wrapped in --pad pixels of the page's background colour on
+every side, so no edge of the image is flush with it; --pad 0 leaves a tight crop.
 
 Writes ~/.claude/shots/$CLAUDE_CODE_SESSION_ID/<name>/<phase>.png and upserts the
 entry for <name> in manifest.json next to it. Needs agent-browser on PATH.
@@ -16,18 +22,64 @@ import subprocess
 import sys
 from pathlib import Path
 
-# Hide every sibling of the target and of its ancestors: the target moves to the top
+# Pick the target (the subject, or its first ancestor that does not sit flush with it),
+# crop it to its visible content and wrap it in padding, then hide every sibling of the target and of its ancestors: the target moves to the top
 # of the page, and fixed overlays (cookie banners, toolbars) go with them.
 ISOLATE = """
 (() => {
-  const target = document.querySelector(%s);
-  if (!target) return "missing";
-  for (let n = target; n && n !== document.body; n = n.parentElement)
+  const subject = document.querySelector(%s);
+  if (!subject) return "missing";
+  const flush = (a, b) => {
+    const x = a.getBoundingClientRect(), y = b.getBoundingClientRect();
+    return ["left", "top", "right", "bottom"].every((side) => Math.abs(x[side] - y[side]) <= 1);
+  };
+  let target = subject;
+  if (%s)
+    for (let n = subject.parentElement; n && n !== document.body; n = n.parentElement)
+      if (!flush(n, subject)) { target = n; break; }
+  const isPainted = (el) => {
+    const style = getComputedStyle(el);
+    return el.matches("img, svg, video, canvas, iframe")
+      || style.backgroundColor !== "rgba(0, 0, 0, 0)"
+      || style.backgroundImage !== "none"
+      || style.boxShadow !== "none"
+      || ["Top", "Right", "Bottom", "Left"].some((side) =>
+        style["border" + side + "Style"] !== "none" && parseFloat(style["border" + side + "Width"]) > 0);
+  };
+  let contentRight = 0;
+  const measure = (el) => {
+    const style = getComputedStyle(el);
+    if (style.display === "none" || style.visibility === "hidden") return;
+    if (isPainted(el)) contentRight = Math.max(contentRight, el.getBoundingClientRect().right);
+    for (const child of el.childNodes) {
+      if (child.nodeType === Node.ELEMENT_NODE) measure(child);
+      else if (child.nodeType === Node.TEXT_NODE && child.textContent.trim()) {
+        const range = document.createRange();
+        range.selectNodeContents(child);
+        contentRight = Math.max(contentRight, range.getBoundingClientRect().right);
+      }
+    }
+  };
+  measure(target);
+  const pad = %s;
+  let background = "rgb(255, 255, 255)";
+  for (let n = target; n; n = n.parentElement) {
+    const color = getComputedStyle(n).backgroundColor;
+    if (color !== "rgba(0, 0, 0, 0)" && color !== "transparent") { background = color; break; }
+  }
+  const width = Math.ceil(contentRight - target.getBoundingClientRect().left);
+  const shot = document.createElement("div");
+  shot.style.cssText = `box-sizing:content-box;width:${width}px;padding:${pad}px;background:${background}`;
+  target.replaceWith(shot);
+  shot.append(target);
+  shot.setAttribute("data-shot-target", "");
+  for (let n = shot; n && n !== document.body; n = n.parentElement)
     for (const s of n.parentElement.children) if (s !== n) s.style.display = "none";
   scrollTo(0, 0);
   return "ok";
 })()
 """
+TARGET = "[data-shot-target]"
 
 
 def browser(*args):
@@ -49,6 +101,8 @@ def main():
     p.add_argument("selector")
     p.add_argument("--viewport", default="1280x800")
     p.add_argument("--note", default="")
+    p.add_argument("--bare", action="store_true")
+    p.add_argument("--pad", type=int, default=24)
     a = p.parse_args()
 
     session = os.environ.get("CLAUDE_CODE_SESSION_ID")
@@ -69,10 +123,10 @@ def main():
     browser("set", "viewport", width, height)
     browser("open", a.url)
     browser("wait", "2500")
-    if "missing" in browser("eval", ISOLATE % json.dumps(a.selector)):
+    if "missing" in browser("eval", ISOLATE % (json.dumps(a.selector), json.dumps(not a.bare), a.pad)):
         sys.exit(f"selector not found at {a.url}: {a.selector}")
     browser("wait", "800")
-    browser("screenshot", a.selector, str(image))
+    browser("screenshot", TARGET, str(image))
 
     key = "image" if a.phase == "shot" else a.phase
     if entry is None:

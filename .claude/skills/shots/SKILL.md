@@ -27,7 +27,7 @@ First match wins:
 2. The PR description, if one exists.
 3. The session context: pages and states the change touched.
 
-Each shot is one component or page state (URL, selector, viewport, data).
+Each shot is one component or page state (URL, selector, viewport, data). The selector names the subject; `shoot.py` shoots the subject's first ancestor that does not sit flush with it, so the image carries the heading, neighbours or padding around it. `--bare` shoots the subject alone. The target is cropped to its visible content and padded with 24px of the page's background on every side, so no edge is flush and no empty space trails it; `--pad N` changes the margin and `--pad 0` leaves a tight crop.
 
 When the shots span many components, render them on a throwaway untracked page with one fixture each and one `data-*` hook per component. Leave the page uncommitted.
 
@@ -39,7 +39,7 @@ Load `agent-browser`. Dev server must be running.
 python3 -I ~/.dotfiles/.claude/skills/shots/shoot.py shot <name> <url> <selector> [--viewport 1280x800] [--note "…"]
 ```
 
-`shoot.py` hides everything around the target (siblings of the element and its ancestors, so overlays and cookie banners go too), scrolls to the top and takes an element screenshot.
+`shoot.py` hides everything around the target (siblings of the target and its ancestors, so overlays and cookie banners go too), scrolls to the top and takes an element screenshot.
 
 Done when every chosen shot has an entry in `manifest.json`.
 
@@ -49,5 +49,6 @@ Read every image.
 
 - Blank, shifted, clipped at the bottom, or showing unrelated UI: retake.
 - Not what the shot was meant to show (wrong state, missing styles): fix the page or the selector, then retake.
+- A viewer cannot tell what the component is or what it sits in: select a subject deeper inside a larger block, or wrap it in a labelled container on the page, then retake.
 
 Done when every `manifest.json` entry has its image, each one read and showing its subject.
