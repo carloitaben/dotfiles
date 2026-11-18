@@ -28,7 +28,7 @@ SETUP = f"agent-browser --session {SESSION} --profile {PROFILE} --headed open ht
 TEXTAREA = 'textarea[aria-label="Markdown value"]'
 IMG_URL = re.compile(r'<img [^>]*src="(https://github\.com/user-attachments/assets/[^"]+)"')
 MIME = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg"}
-MAX_BYTES = 600_000  # base64 travels as one command-line argument
+MAX_BYTES = 10_000_000  # GitHub rejects larger images
 
 
 def log(msg):
@@ -39,11 +39,11 @@ def fail(msg):
     sys.exit(f"[pr-shots] {msg}")
 
 
-def browser(*args):
+def browser(*args, stdin=None):
     """Runs one agent-browser command. `open` is retried twice: the first navigation
-    can time out, and the previous run's daemon may still be shutting down."""
+    can time out, and the previous run's daemon may still be shutting down. `stdin` feeds the command's standard input."""
     for attempt in range(3):
-        r = subprocess.run(["agent-browser", "--session", SESSION, "--profile", PROFILE, *args], capture_output=True, text=True)
+        r = subprocess.run(["agent-browser", "--session", SESSION, "--profile", PROFILE, *args], input=stdin, capture_output=True, text=True)
         transient = any(m in r.stdout + r.stderr for m in ("Navigation failed", "Could not configure browser"))
         if not (r.returncode and args[0] == "open" and transient):
             break
@@ -55,7 +55,8 @@ def browser(*args):
 
 
 def evaluate(js):
-    return json.loads(browser("eval", js))
+    """Runs `js` in the page. The script travels over stdin: a pasted image is megabytes of base64, too big for argv."""
+    return json.loads(browser("eval", "--stdin", stdin=js))
 
 
 def require_session():
@@ -133,7 +134,7 @@ def main():
         if os.path.splitext(image)[1].lower() not in MIME:
             fail(f"only png and jpg are supported: {image}")
         if os.path.getsize(image) > MAX_BYTES:
-            fail(f"image over {MAX_BYTES // 1000} KB, shrink it first: {image}")
+            fail(f"image over GitHub's {MAX_BYTES // 1_000_000} MB limit, shrink it first: {image}")
 
     require_session()
     browser("open", pr_url)

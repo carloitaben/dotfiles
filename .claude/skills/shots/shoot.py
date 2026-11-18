@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 """Screenshot one element and record it in the session's shots manifest.
 
-Usage: shoot.py <before|after> <name> <url> <selector> [--viewport 1280x800] [--note TEXT]
+Usage: shoot.py <shot|before|after> <name> <url> <selector> [--viewport 1280x800] [--note TEXT]
 
 Writes ~/.claude/shots/$CLAUDE_CODE_SESSION_ID/<name>/<phase>.png and upserts the
 entry for <name> in manifest.json next to it. Needs agent-browser on PATH.
+
+`shot` records a single screenshot (entry kind "shot", key `image`). `before` and `after`
+record a comparison (entry kind "comparison", keys `before` and `after`).
 """
 import argparse
 import json
@@ -40,7 +43,7 @@ def git(*args):
 
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("phase", choices=["before", "after"])
+    p.add_argument("phase", choices=["shot", "before", "after"])
     p.add_argument("name")
     p.add_argument("url")
     p.add_argument("selector")
@@ -52,6 +55,13 @@ def main():
     if not session:
         sys.exit("CLAUDE_CODE_SESSION_ID is not set")
     root = Path.home() / ".claude" / "shots" / session
+    manifest_path = root / "manifest.json"
+    entries = json.loads(manifest_path.read_text()) if manifest_path.exists() else []
+    kind = "shot" if a.phase == "shot" else "comparison"
+    entry = next((e for e in entries if e["name"] == a.name), None)
+    if entry and entry["kind"] != kind:
+        sys.exit(f'"{a.name}" is already a {entry["kind"]}; pick another name')
+
     image = root / a.name / f"{a.phase}.png"
     image.parent.mkdir(parents=True, exist_ok=True)
 
@@ -64,17 +74,15 @@ def main():
     browser("wait", "800")
     browser("screenshot", a.selector, str(image))
 
-    manifest_path = root / "manifest.json"
-    entries = json.loads(manifest_path.read_text()) if manifest_path.exists() else []
-    entry = next((e for e in entries if e["name"] == a.name), None)
+    key = "image" if a.phase == "shot" else a.phase
     if entry is None:
-        entry = {"name": a.name}
+        entry = {"name": a.name, "kind": kind}
         entries.append(entry)
-    entry.update(url=a.url, selector=a.selector, viewport=a.viewport, **{a.phase: str(image)})
+    entry.update(url=a.url, selector=a.selector, viewport=a.viewport, **{key: str(image)})
     if a.note:
         entry["note"] = a.note
     entry.setdefault("note", "")
-    if a.phase == "after":
+    if a.phase != "before":
         entry["head_sha"] = git("rev-parse", "HEAD")
     manifest_path.write_text(json.dumps(entries, indent=2) + "\n")
     print(image)

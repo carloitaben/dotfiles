@@ -1,10 +1,10 @@
 ---
 name: pr-shots
-description: Upload this session's before/after screenshots to a PR and add them to its description.
+description: Upload this session's screenshots, single shots and before/after comparisons, to a PR and add them to its description.
 disable-model-invocation: true
 ---
 
-Put this session's before/after screenshots into the PR description as tables. The screenshots come from `/shots`.
+Put this session's screenshots into the PR description: a before/after table per comparison, one image per single shot. The screenshots come from `/shots`.
 
 ## 1. Resolve the PR
 
@@ -43,6 +43,6 @@ Failure: report the error; the user may need to clear the PR's comment box by ha
 python3 -I ~/.dotfiles/.claude/skills/pr-shots/update-body.py write <pr> <scratchpad>/urls.json
 ```
 
-It replaces the `## Proof` section, else appends it: one before/after table per shot, titled by name and note.
+It replaces the `## Proof` section, else appends it: one entry per shot titled by name and note: a table for a comparison, one image for a single shot.
 
 Done when it reports every image in the PR body (exit 0).
