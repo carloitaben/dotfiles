@@ -55,7 +55,8 @@ def check(entries):
 def section(entries, urls):
     out = ["## Proof", ""]
     for e in entries:
-        out += [f"**{e['name']}**" + (f": {e['note']}" if e["note"] else ""), ""]
+        device = f" ({e['device']})" if e.get("device") else ""
+        out += [f"**{e['name']}**{device}" + (f": {e['note']}" if e["note"] else ""), ""]
         if e["kind"] == "shot":
             out += [f"![{e['name']}]({urls[e['image']]})", ""]
         else:

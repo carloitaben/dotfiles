@@ -25,8 +25,7 @@ Done when `check` passes.
 ## 3. Upload
 
 ```
-python3 -I ~/.dotfiles/.claude/skills/pr-shots/update-body.py paths
-python3 -I ~/.dotfiles/.claude/skills/pr-shots/upload.py <pr-url> <image>... > <scratchpad>/urls.json
+python3 -I ~/.dotfiles/.claude/skills/pr-shots/update-body.py paths | xargs python3 -I ~/.dotfiles/.claude/skills/pr-shots/upload.py <pr-url> > <scratchpad>/urls.json
 ```
 
 All images in one call. It prints JSON `{image path: url}` and clears the comment box it used. It runs in agent-browser's own headless browser, so the user can keep working.

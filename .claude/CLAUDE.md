@@ -4,6 +4,7 @@
 - In all interaction and commit messages, be extremely concise and sacrifice grammar for the sake of concision.
 - When asked to reply, post, or rewrite, just do it. Don't walk through the reasoning first unless asked.
 - When explaining code, flow, architecture, or refactors: load `show-me` skill, prefer visuals over prose.
+- Never hard-wrap prose. One paragraph or list item = one line. Applies to PR bodies, PR/review comments, issue text, commit bodies, docs, and drafts. GitHub and other UIs wrap it.
 
 ## Code Quality
 
