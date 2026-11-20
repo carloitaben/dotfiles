@@ -28,11 +28,7 @@ customCommands:
       - type: "menuFromCommand"
         title: "Which PR do you want to check out?"
         key: "PullRequestNumber"
-        command: |-
-          f=~/.config/lazygit/github_pull_requests.json
-          mkdir -p "$(dirname "$f")"
-          [ -f "$f" ] || echo '{}' > "$f"
-          jq -r --arg repo "$(git rev-parse --show-toplevel)" '.[$repo] // [] | .[] | select(.state == "OPEN" or .state == "DRAFT") | "#\(.number): \(.title) - \(.headRefName)"' "$f"
+        command: "sh -c 'exec sh \"$HOME/.dotfiles/.config/lazygit/pr-menu.sh\"'"
         filter: "#(?P<number>[0-9]+): (?P<title>.+) - (?P<ref_name>[^ ]+)"
         valueFormat: "{{.number}}"
         labelFormat: '{{"#" | black | bold}}{{.number | white | bold}} {{.title | yellow | bold}}{{" [" | black | bold}}{{.ref_name | green}}{{"]" | black | bold}}'
