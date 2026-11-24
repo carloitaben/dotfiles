@@ -3,7 +3,7 @@ name: simplify
 description: Review the changed code for reuse, simplification, efficiency, and altitude cleanups, then apply the fixes. Quality only — it does not hunt for bugs; use /code-review for that.
 ---
 
-`/simplify → 4 cleanup agents in parallel → apply the fixes`
+`/simplify → cleanup agents (1 or 4, by diff size) → apply the fixes`
 
 Improve the quality of the changed code, not hunt for bugs. Review it for reuse,
 simplification, efficiency, and altitude issues, then fix what you find. Do not
@@ -18,13 +18,23 @@ include the working-tree changes in scope — the review often runs before the
 commit. If a PR number, branch name, or file path was passed as an argument,
 review that target instead. Treat this diff as the review scope.
 
-## Phase 1 — Review (4 cleanup agents in parallel)
+Write the diff to a file in the scratchpad (run `git add -N` on untracked files
+first so new files appear in it) and count its changed lines. Agents read the
+diff from that path.
 
-Launch **4 independent review agents** via the Agent tool, all in a single
-message so they run concurrently. Pass each agent the diff and one of the four
-angles below. Each returns its findings with `file`, `line`, a one-line
-`summary`, and the concrete cost (what is duplicated, wasted, or harder to
-maintain).
+## Phase 1 — Review in fresh context
+
+The review always runs in subagents: a **fresh context** reads the diff
+unanchored by the reasoning that wrote it. Size the dispatch to the diff:
+
+- **Under ~80 changed lines:** launch **1 review agent** with all four angles
+  below in its brief.
+- **Otherwise:** launch **4 review agents** in a single message so they run
+  concurrently, one angle each.
+
+Pass each agent the diff path and its angle(s). Each returns its findings with
+`file`, `line`, a one-line `summary`, and the concrete cost (what is
+duplicated, wasted, or harder to maintain).
 
 ### Reuse
 
@@ -58,7 +68,7 @@ that change.
 
 ## Phase 2 — Apply the fixes
 
-Wait for all four agents to complete, dedup findings that point at the same line
+Wait for every review agent to complete, dedup findings that point at the same line
 or mechanism, and fix each remaining one directly. Skip any finding whose fix
 would change intended behavior, require changes well outside the reviewed diff,
 or that you judge to be a false positive — note the skip rather than arguing
