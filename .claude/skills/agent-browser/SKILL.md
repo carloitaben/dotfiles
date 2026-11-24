@@ -9,6 +9,7 @@ Use the `agent-browser` CLI for anything that runs in a browser. Run `agent-brow
 
 - WebGL or any feature unavailable in headless: run headed.
 - Once used in the conversation, keep using it for further frontend changes without being asked.
+- Run `agent-browser close --all` before each `open --init-script`: init scripts persist across opens in a session and stack, so old probes keep running and clobber new state.
 - If a repro turns into repeated rechecking, pause and write a Playwright test instead when the project has Playwright installed.
 
 ## React re-renders / remounts

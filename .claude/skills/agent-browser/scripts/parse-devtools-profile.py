@@ -31,7 +31,7 @@ def summarize(path):
         for i, commit in enumerate(root["commitData"]):
             fibers = commit["fiberActualDurations"]
             counts = Counter(names.get(fid, f"?{fid}") for fid, _ in fibers)
-            updaters = sorted({u.get("displayName") or "?" for u in commit["updaters"]})
+            updaters = sorted({u.get("displayName") or "?" for u in commit["updaters"] or []})
             print(f"commit {i}: {len(fibers)} fibers, {commit['duration']}ms, updaters={updaters}")
             print(f"  top: {counts.most_common(8)}")
             total_fibers += len(fibers)

@@ -139,3 +139,13 @@ Raises an OS shell surface. On Windows and Linux it returns the window it presen
 ## Chromium and Electron apps
 
 The accessibility path is the default. It is the only path for an app that is already running and for native menus, dialogs and windows. For the web contents of an app you can launch fresh, `launch --cdp` plus a CDP client is faster than a skeleton walk. See `commands-system.md`.
+
+## Safari web content
+
+The web area sits deep, so a default `find` on the window runs out of budget. Read page text with a deep snapshot that waits for it:
+
+```bash
+agent-desktop snapshot --app Safari --wait-for 'statictext:done' --max-depth 40 --timeout-ms 40000 --compact
+```
+
+When a page exposes only one region, WebKit is honouring an `aria-modal` that was there once. Toggling `aria-modal` off on an element that stays mounted leaves the rest of the page hidden. Load the page fresh to confirm: a fresh load exposes everything. That's the page's bug, not agent-desktop's.

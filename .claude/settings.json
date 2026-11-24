@@ -14,18 +14,6 @@
     "defaultMode": "auto"
   },
   "model": "sonnet",
-  "statusLine": {
-    "type": "command",
-    "command": "bash ~/.claude/statusline-command.sh"
-  },
-  "feedbackDrafts": "off",
-  "effortLevel": "medium",
-  "tui": "default",
-  "skipWorkflowUsageWarning": true,
-  "theme": "dark-ansi",
-  "editorMode": "vim",
-  "remoteControlAtStartup": false,
-  "skipAutoPermissionPrompt": true,
   "hooks": {
     "PostToolUse": [
       {
@@ -57,5 +45,17 @@
         ]
       }
     ]
-  }
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
+  },
+  "feedbackDrafts": "off",
+  "effortLevel": "medium",
+  "tui": "default",
+  "skipWorkflowUsageWarning": true,
+  "theme": "dark-ansi",
+  "editorMode": "vim",
+  "remoteControlAtStartup": false,
+  "skipAutoPermissionPrompt": true
 }
