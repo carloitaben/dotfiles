@@ -28,6 +28,19 @@ customCommands:
     context: subCommits
     description: review selected commits in tuicr
     output: terminal
+  - key: "V"
+    context: "localBranches"
+    command: "tuicr pr {{.Form.PullRequestNumber}}"
+    description: "Select GitHub PR to review in tuicr"
+    output: terminal
+    prompts:
+      - type: "menuFromCommand"
+        title: "Which PR do you want to review?"
+        key: "PullRequestNumber"
+        command: 'sh -c ''exec sh "$HOME/.dotfiles/.config/lazygit/pr-menu.sh"'''
+        filter: "#(?P<number>[0-9]+): (?P<title>.+) - (?P<ref_name>[^ ]+)"
+        valueFormat: "{{.number}}"
+        labelFormat: '{{"#" | black | bold}}{{.number | white | bold}} {{.title | yellow | bold}}{{" [" | black | bold}}{{.ref_name | green}}{{"]" | black | bold}}'
 
   - key: "E"
     description: "Add empty commit"
