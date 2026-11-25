@@ -13,6 +13,22 @@ gui:
 quitOnTopLevelReturn: true
 # Some of these require `gh repo set-default` to work with forks
 customCommands:
+  - key: 'R'
+    command: 'tuicr -w'
+    context: files
+    description: review uncommitted changes in tuicr
+    output: terminal
+  - key: 'R'
+    command: 'tuicr -r {{.SelectedCommitRange.From}}^..{{.SelectedCommitRange.To}}'
+    context: commits
+    description: review selected commits in tuicr
+    output: terminal
+  - key: 'R'
+    command: 'tuicr -r {{.SelectedCommitRange.From}}^..{{.SelectedCommitRange.To}}'
+    context: subCommits
+    description: review selected commits in tuicr
+    output: terminal
+
   - key: "E"
     description: "Add empty commit"
     context: "commits"
