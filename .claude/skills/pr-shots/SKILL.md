@@ -12,6 +12,8 @@ PR = the one passed in, else `gh pr view --json url,number,body` for the current
 
 **No PR: stop.** Say the branch has no PR and none was passed; the user opens one first.
 
+Several PRs in one session: run steps 2 to 4 once per PR, on its branch, with that PR's store (`CLAUDE_CODE_SESSION_ID=pr-<number>`, see the `/shots` store).
+
 ## 2. Get current shots
 
 ```

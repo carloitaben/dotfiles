@@ -20,6 +20,8 @@ Entry shape, written by `shoot.py`:
  "head_sha": "<HEAD at the shot>", "note": ""}
 ```
 
+One store per PR when a session shoots several: run `shoot.py` and `/pr-shots` with `CLAUDE_CODE_SESSION_ID=pr-<number>`, on that PR's branch (`head_sha` must equal the branch's HEAD).
+
 ## 1. Choose shots
 
 First match wins:
@@ -75,6 +77,8 @@ An app behind a login: set `AGENT_BROWSER_SESSION` and `AGENT_BROWSER_RESTORE` t
 python3 -I ~/.dotfiles/.claude/skills/shots/shoot.py shot <name> <url> --scope page [--device desktop|mobile] [--zoom 0.8] [--full] [--note "…"]
 python3 -I ~/.dotfiles/.claude/skills/shots/shoot.py shot <name> <url> <selector> --scope element [--device desktop|mobile] [--bare] [--pad N] [--note "…"]
 ```
+
+`shoot.py` has no click steps: put the state in the URL (search params, `#hash`), so the fresh browser lands on it. A `#<id>` hash selects and expands that node in tree views.
 
 `shoot.py` opens a fresh browser at the device size, reads the size back and fails when it did not apply. A page shot takes the viewport. An element shot hides everything around the target (siblings of the target and its ancestors, so overlays and cookie banners go too), scrolls to the top and takes an element screenshot.
 
