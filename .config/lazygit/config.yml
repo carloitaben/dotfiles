@@ -13,18 +13,18 @@ gui:
 quitOnTopLevelReturn: true
 # Some of these require `gh repo set-default` to work with forks
 customCommands:
-  - key: 'R'
-    command: 'tuicr -w'
+  - key: "R"
+    command: "tuicr -w"
     context: files
     description: review uncommitted changes in tuicr
     output: terminal
-  - key: 'R'
-    command: 'tuicr -r {{.SelectedCommitRange.From}}^..{{.SelectedCommitRange.To}}'
+  - key: "R"
+    command: "tuicr -r {{.SelectedCommitRange.From}}^..{{.SelectedCommitRange.To}}"
     context: commits
     description: review selected commits in tuicr
     output: terminal
-  - key: 'R'
-    command: 'tuicr -r {{.SelectedCommitRange.From}}^..{{.SelectedCommitRange.To}}'
+  - key: "R"
+    command: "tuicr -r {{.SelectedCommitRange.From}}^..{{.SelectedCommitRange.To}}"
     context: subCommits
     description: review selected commits in tuicr
     output: terminal
@@ -50,14 +50,11 @@ customCommands:
       - type: "menuFromCommand"
         title: "Which PR do you want to check out?"
         key: "PullRequestNumber"
-        command: "sh -c 'exec sh \"$HOME/.dotfiles/.config/lazygit/pr-menu.sh\"'"
+        command: 'sh -c ''exec sh "$HOME/.dotfiles/.config/lazygit/pr-menu.sh"'''
         filter: "#(?P<number>[0-9]+): (?P<title>.+) - (?P<ref_name>[^ ]+)"
         valueFormat: "{{.number}}"
         labelFormat: '{{"#" | black | bold}}{{.number | white | bold}} {{.title | yellow | bold}}{{" [" | black | bold}}{{.ref_name | green}}{{"]" | black | bold}}'
-  - key: "x"
-    command: "open -R {{.SelectedFile.Name}}"
-    context: "files"
-    description: "Reveal in Finder"
+
   - key: "b"
     context: "files"
     command: "git checkout {{.Form.Branch}} -- {{.SelectedFile.Name}}"
@@ -71,6 +68,11 @@ customCommands:
         filter: "(?P<branch>.+)"
         valueFormat: "{{.branch}}"
         labelFormat: "{{.branch}}"
+
+  - key: "x"
+    command: "open -R {{.SelectedFile.Name}}"
+    context: "files"
+    description: "Reveal in Finder"
   - key: "x"
     command: "gh repo view --web --branch {{.SelectedLocalBranch.Name}}"
     context: "localBranches"
@@ -79,6 +81,7 @@ customCommands:
     command: "gh repo view --web --branch {{.SelectedRemoteBranch.Name}}"
     context: "remoteBranches"
     description: "Open branch in browser"
+
   # Mirrors native worktree remove (menu, main/current guard) but moves to Trash
   - key: "d"
     context: "worktrees"
