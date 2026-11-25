@@ -13,6 +13,12 @@ gui:
 quitOnTopLevelReturn: true
 # Some of these require `gh repo set-default` to work with forks
 customCommands:
+  - key: "E"
+    description: "Add empty commit"
+    context: "commits"
+    command: 'git commit --allow-empty -m "empty commit"'
+    loadingText: "Committing empty commit..."
+
   - key: "D"
     context: "localBranches"
     description: "Prune gone branches"
