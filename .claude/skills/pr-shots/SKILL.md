@@ -4,7 +4,7 @@ description: Upload this session's screenshots, single shots and before/after co
 disable-model-invocation: true
 ---
 
-Put this session's screenshots into the PR description: a before/after table per comparison, one image per single shot. The screenshots come from `/shots`.
+Put this session's screenshots into the PR description as full-width tables: Desktop | Mobile for each `<stem>-desktop` + `<stem>-mobile` pair, two side by side for other single shots, Before | After for a comparison. The screenshots come from `/shots`.
 
 ## 1. Resolve the PR
 
@@ -44,6 +44,6 @@ Failure: report the error; the user may need to clear the PR's comment box by ha
 python3 -I ~/.dotfiles/.claude/skills/pr-shots/update-body.py write <pr> <scratchpad>/urls.json
 ```
 
-It replaces the `## Proof` section, else appends it: one entry per shot titled by name and note: a table for a comparison, one image for a single shot.
+It replaces the `## Proof` section, else appends it, in the table layout above. Name a responsive pair `<stem>-desktop` and `<stem>-mobile` so it lands in one Desktop | Mobile table.
 
 Done when it reports every image in the PR body (exit 0).

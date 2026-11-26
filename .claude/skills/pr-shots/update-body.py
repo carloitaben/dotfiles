@@ -3,6 +3,13 @@
 
 An entry is a single `shot` (one image) or a before/after `comparison` (two images).
 
+Layout of the `## Proof` section:
+  `<stem>-desktop` + `<stem>-mobile` shots   one Desktop | Mobile table
+  other single shots                         two per table, side by side
+  comparison                                 a Before | After table
+Images carry a `width` far above the description's width. GitHub sizes a table to its content,
+so widths that overflow make it span the full width and scale the images down together.
+
 Usage:
   update-body.py check               exit 1 unless every shot is present and current
   update-body.py paths               print the image paths to upload, one per line
@@ -52,16 +59,64 @@ def check(entries):
         fail("\n".join(problems))
 
 
+# Widths in px. Their sums exceed the description's width on purpose (see the module doc).
+DESKTOP, MOBILE, SIDE = 1000, 300, 600
+
+
+def img(url, alt, width):
+    return f'<img src="{url}" width="{width}" alt="{alt}">'
+
+
+def cell(text):
+    return text.replace("|", "\\|")
+
+
+def table(heads, images):
+    return ["| " + " | ".join(heads) + " |", "|" + " --- |" * len(heads), "| " + " | ".join(images) + " |", ""]
+
+
+def pair_stem(e):
+    m = re.fullmatch(r"(.+)-(desktop|mobile)", e["name"])
+    return m.group(1) if e["kind"] == "shot" and m else None
+
+
 def section(entries, urls):
-    out = ["## Proof", ""]
+    by_stem = {}
     for e in entries:
-        device = f" ({e['device']})" if e.get("device") else ""
-        out += [f"**{e['name']}**{device}" + (f": {e['note']}" if e["note"] else ""), ""]
-        if e["kind"] == "shot":
-            out += [f"![{e['name']}]({urls[e['image']]})", ""]
+        stem = pair_stem(e)
+        if stem:
+            by_stem.setdefault(stem, {})[e["device"]] = e
+    paired = {s for s, d in by_stem.items() if set(d) == {"desktop", "mobile"}}
+
+    out, pending = ["## Proof", ""], []
+
+    def flush():
+        for i in range(0, len(pending), 2):
+            row = pending[i : i + 2]
+            out.extend(table([cell(e["note"] or e["name"]) for e in row],
+                             [img(urls[e["image"]], e["name"], SIDE) for e in row]))
+        pending.clear()
+
+    done = set()
+    for e in entries:
+        stem = pair_stem(e)
+        if stem in paired:
+            if stem in done:
+                continue
+            done.add(stem)
+            flush()
+            d, m = by_stem[stem]["desktop"], by_stem[stem]["mobile"]
+            out += [f"**{stem}**" + (f": {d['note']}" if d["note"] else ""), ""]
+            out += table(["Desktop", "Mobile"], [img(urls[d["image"]], d["name"], DESKTOP),
+                                                 img(urls[m["image"]], m["name"], MOBILE)])
+        elif e["kind"] == "shot":
+            pending.append(e)
         else:
-            out += ["|Before|After|", "|:-:|:-:|",
-                    f"|![Before]({urls[e['before']]})|![After]({urls[e['after']]})|", ""]
+            flush()
+            out += [f"**{e['name']}**" + (f": {e['note']}" if e["note"] else ""), ""]
+            out += table(["Before", "After"], [img(urls[e["before"]], "Before", SIDE),
+                                               img(urls[e["after"]], "After", SIDE)])
+    flush()
     return "\n".join(out)
 
 
