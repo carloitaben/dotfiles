@@ -4,7 +4,7 @@ description: Upload this session's screenshots, single shots and before/after co
 disable-model-invocation: true
 ---
 
-Put this session's screenshots into the PR description as full-width tables: Desktop | Mobile for each `<stem>-desktop` + `<stem>-mobile` pair, two side by side for other single shots, Before | After for a comparison. The screenshots come from `/shots`.
+Put this session's screenshots into the PR description with a full-width table only where two images belong together: Desktop | Mobile for each `<stem>-desktop` + `<stem>-mobile` pair, Before | After for a comparison. Every other single shot is one captioned image. The screenshots come from `/shots`.
 
 ## 1. Resolve the PR
 
