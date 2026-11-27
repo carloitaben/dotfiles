@@ -28,6 +28,23 @@ sh ~/.dotfiles/bootstrap.sh
 stow .
 ```
 
+## OpenCode worker model
+
+The `explore` and `implement` subagents use the model in `~/.config/opencode/worker-model`.
+
+```sh
+# GPT-6 Luna
+echo 'opencode-go/gpt-6-luna' > ~/.config/opencode/worker-model
+
+# DeepSeek
+echo 'opencode-go/deepseek-v4.1-flash' > ~/.config/opencode/worker-model
+
+# Check the current model
+cat ~/.config/opencode/worker-model
+```
+
+Run `/reload` in OpenCode if the change doesn't take effect immediately.
+
 ## Godot
 
 See [godot/README.md](godot/README.md) for the GodotVim + GDScript formatter
