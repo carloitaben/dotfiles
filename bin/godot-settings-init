@@ -1,0 +1,196 @@
+#!/usr/bin/env bash
+# Ensure the Godot editor and project settings this setup relies on.
+set -euo pipefail
+
+usage() {
+	cat <<'EOF'
+Usage: godot-settings-init [PROJECT_DIR]
+
+Ensures:
+  - Editor: Text Editor > Completion > Add Type Hints is enabled
+  - Project: debug/gdscript/warnings/untyped_declaration is set (default: Warn)
+
+  PROJECT_DIR    Godot project directory (default: current directory)
+
+Environment:
+  GODOT_UNTYPED_DECLARATION  Ignore, Warn, Error, or 0/1/2 (default: Warn)
+  GODOT_EDITOR_SETTINGS      Path to an editor_settings-*.tres
+                             (default: every one found for the current platform)
+EOF
+}
+
+die() {
+	echo "godot-settings-init: $*" >&2
+	exit 1
+}
+
+have() {
+	command -v "$1" >/dev/null 2>&1
+}
+
+project=""
+
+for arg in "$@"; do
+	case "$arg" in
+	-h | --help)
+		usage
+		exit 0
+		;;
+	-*)
+		echo "godot-settings-init: unknown option: $arg" >&2
+		usage >&2
+		exit 2
+		;;
+	*)
+		if [[ -n "$project" ]]; then
+			echo "godot-settings-init: only one project directory may be given" >&2
+			exit 2
+		fi
+		project="$arg"
+		;;
+	esac
+done
+
+case "${GODOT_UNTYPED_DECLARATION:-warn}" in
+Ignore | ignore | 0) untyped_level=0 untyped_name=Ignore ;;
+Warn | warn | 1) untyped_level=1 untyped_name=Warn ;;
+Error | error | 2) untyped_level=2 untyped_name=Error ;;
+*)
+	die "GODOT_UNTYPED_DECLARATION must be Ignore, Warn, Error, 0, 1, or 2"
+	;;
+esac
+
+project="${project:-$PWD}"
+project="${project%/}"
+
+[[ -d "$project" ]] || die "not a directory: $project"
+project="$(cd "$project" && pwd)"
+[[ -f "$project/project.godot" ]] || die "no project.godot in $project"
+
+have python3 || die "python3 is required"
+
+godot_config_dir() {
+	case "$(uname -s)" in
+	Darwin)
+		printf '%s\n' "$HOME/Library/Application Support/Godot"
+		;;
+	Linux)
+		printf '%s\n' "${XDG_CONFIG_HOME:-$HOME/.config}/godot"
+		;;
+	*)
+		return 1
+		;;
+	esac
+}
+
+godot_running() {
+	command -v pgrep >/dev/null 2>&1 || return 1
+	pgrep -x Godot >/dev/null 2>&1 ||
+		pgrep -x godot >/dev/null 2>&1 ||
+		pgrep -f "Godot.app/Contents/MacOS/Godot" >/dev/null 2>&1
+}
+
+editor_files=()
+
+if [[ -n "${GODOT_EDITOR_SETTINGS:-}" ]]; then
+	[[ -f "$GODOT_EDITOR_SETTINGS" ]] || die "no such file: $GODOT_EDITOR_SETTINGS"
+	editor_files+=("$GODOT_EDITOR_SETTINGS")
+else
+	config_dir="$(godot_config_dir)" || die "unsupported platform for Godot's editor settings"
+	for file in "$config_dir"/editor_settings-*.tres; do
+		[[ -f "$file" ]] && editor_files+=("$file")
+	done
+fi
+
+if [[ ${#editor_files[@]} -eq 0 ]]; then
+	echo "warning: no editor_settings-*.tres found; launch Godot once, then re-run" >&2
+elif godot_running; then
+	echo "warning: Godot is running; quit it first or Godot may overwrite the change on exit" >&2
+fi
+
+python3 - "$untyped_level" "$untyped_name" "$project/project.godot" \
+	${editor_files[@]+"${editor_files[@]}"} <<'PY'
+from pathlib import Path
+import re
+import sys
+
+untyped_level, untyped_name, project_path = sys.argv[1:4]
+editor_paths = [Path(path) for path in sys.argv[4:]]
+
+SECTION_HEADER = re.compile(r"^\[[^\[\]]+\]$")
+
+
+def set_setting(path, section, key, value, sep, create_section):
+    """Set key to value, adding it (and the section) if missing. Returns changed."""
+    text = path.read_text()
+    original = text
+    lines = text.splitlines()
+
+    pattern = re.compile(rf"^{re.escape(key)}\s*=\s*.*$")
+    for index, line in enumerate(lines):
+        if pattern.match(line):
+            lines[index] = f"{key}{sep}{value}"
+            break
+    else:
+        header = f"[{section}]"
+        header_index = next(
+            (i for i, line in enumerate(lines) if line.strip() == header), None
+        )
+
+        if header_index is None:
+            if not create_section:
+                raise SystemExit(f"{path}: missing section {header}")
+            insert_at = len(lines)
+            for index, line in enumerate(lines):
+                if SECTION_HEADER.match(line) and line.strip()[1:-1] > section:
+                    insert_at = index
+                    break
+            if insert_at < len(lines):
+                lines[insert_at:insert_at] = [header, "", f"{key}{sep}{value}", ""]
+            else:
+                if lines and lines[-1].strip() != "":
+                    lines.append("")
+                lines.extend([header, "", f"{key}{sep}{value}"])
+        else:
+            end = header_index + 1
+            while end < len(lines) and not SECTION_HEADER.match(lines[end]):
+                end += 1
+            while end > header_index + 1 and lines[end - 1].strip() == "":
+                end -= 1
+            lines.insert(end, f"{key}{sep}{value}")
+
+    updated = "\n".join(lines).rstrip("\n") + "\n"
+    if updated == original:
+        return False
+    path.write_text(updated)
+    return True
+
+
+for editor_path in editor_paths:
+    changed = set_setting(
+        editor_path,
+        section="resource",
+        key="text_editor/completion/add_type_hints",
+        value="true",
+        sep=" = ",
+        create_section=False,
+    )
+    if changed:
+        print(f"Enabled Add Type Hints -> {editor_path}")
+    else:
+        print(f"Add Type Hints already enabled: {editor_path}")
+
+project = Path(project_path)
+changed = set_setting(
+    project,
+    section="debug",
+    key="gdscript/warnings/untyped_declaration",
+    value=untyped_level,
+    sep="=",
+    create_section=True,
+)
+if changed:
+    print(f"Set UNTYPED_DECLARATION to {untyped_name} -> {project}")
+else:
+    print(f"UNTYPED_DECLARATION already {untyped_name}: {project}")
+PY

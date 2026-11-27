@@ -1,0 +1,34 @@
+" GodotVim configuration
+
+let mapleader = " "
+
+" Format the current script (GDQuest GDScript Formatter, via the bridge addon)
+nnoremap <Leader>f <Action>(godotvim/gdscript_format)
+
+" Show the symbol tooltip at the caret
+nnoremap gh <Action>(script_text_editor/show_tooltip)
+
+" Rename workaround: project-wide Replace in Files
+nnoremap <F2> <Action>(script_text_editor/replace_in_files)
+
+" Panel focus (Zed's ctrl-w h/j/k/l)
+nnoremap <C-w>h :action godotvim.focus.left<CR>
+nnoremap <C-w>j :action godotvim.focus.down<CR>
+nnoremap <C-w>k :action godotvim.focus.up<CR>
+nnoremap <C-w>l :action godotvim.focus.right<CR>
+
+" Move selected lines and keep the selection
+vnoremap J <Action>(script_text_editor/move_down)gv
+vnoremap K <Action>(script_text_editor/move_up)gv
+
+" Indent / auto-indent and keep the selection
+vnoremap > >gv
+vnoremap < <gv
+vnoremap = =gv
+
+" Zed's go -> gg0
+nnoremap go gg0
+
+" Previous / next script
+nnoremap H <Action>(script_editor/prev_script)
+nnoremap L <Action>(script_editor/next_script)

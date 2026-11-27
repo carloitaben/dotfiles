@@ -27,3 +27,9 @@ sh ~/.dotfiles/bootstrap.sh
 ```sh
 stow .
 ```
+
+## Godot
+
+See [godot/README.md](godot/README.md) for the GodotVim + GDScript formatter
+setup. Run `godot-setup .` inside a project to install everything; it also
+enables Add Type Hints and the UNTYPED_DECLARATION warning.

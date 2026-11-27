@@ -1,0 +1,374 @@
+#!/usr/bin/env bash
+# Install GodotVim + the GDQuest GDScript Formatter into a Godot project.
+set -euo pipefail
+
+usage() {
+	cat <<'EOF'
+Usage: godot-vim-init [PROJECT_DIR] [--force] [--force-vimrc]
+
+Installs into a Godot project:
+  - GodotVim
+  - GDQuest GDScript Formatter
+  - a small bridge that exposes the formatter to GodotVim
+  - a .godot-vimrc with Zed-style mappings
+
+  PROJECT_DIR    Godot project directory (default: current directory)
+  --force        Replace existing addons in the project
+  --force-vimrc  Replace an existing .godot-vimrc in the project
+
+Environment:
+  GODOT_VIM_HOME   Cache root (default: ~/.local/share/godot-vim)
+  GODOT_VIM_SRC    Path to addons/godot_vim to copy from
+  GODOT_VIM_CACHE  Path to cached addons/godot_vim
+EOF
+}
+
+die() {
+	echo "godot-vim-init: $*" >&2
+	exit 1
+}
+
+have() {
+	command -v "$1" >/dev/null 2>&1
+}
+
+force=0
+force_vimrc=0
+project=""
+
+for arg in "$@"; do
+	case "$arg" in
+	-h | --help)
+		usage
+		exit 0
+		;;
+	--force)
+		force=1
+		;;
+	--force-vimrc)
+		force_vimrc=1
+		;;
+	-*)
+		echo "godot-vim-init: unknown option: $arg" >&2
+		usage >&2
+		exit 2
+		;;
+	*)
+		if [[ -n "$project" ]]; then
+			echo "godot-vim-init: only one project directory may be given" >&2
+			exit 2
+		fi
+		project="$arg"
+		;;
+	esac
+done
+
+project="${project:-$PWD}"
+project="${project%/}"
+
+[[ -d "$project" ]] || die "not a directory: $project"
+project="$(cd "$project" && pwd)"
+[[ -f "$project/project.godot" ]] || die "no project.godot in $project"
+
+have python3 || die "python3 is required"
+have curl || die "curl is required"
+have unzip || die "unzip is required"
+
+# Resolve the script's real location, following symlinks.
+source_path="${BASH_SOURCE[0]}"
+while [[ -L "$source_path" ]]; do
+	link_dir="$(cd -P "$(dirname "$source_path")" && pwd)"
+	source_path="$(readlink "$source_path")"
+	[[ "$source_path" == /* ]] || source_path="$link_dir/$source_path"
+done
+script_dir="$(cd -P "$(dirname "$source_path")" && pwd)"
+dotfiles_dir="$(cd "$script_dir/.." && pwd)"
+
+vimrc_template="$dotfiles_dir/godot/godot-vimrc"
+bridge_template="$dotfiles_dir/godot/godotvim_formatter_bridge"
+
+[[ -f "$vimrc_template" ]] || die "missing template: $vimrc_template"
+[[ -f "$bridge_template/plugin.cfg" ]] || die "missing bridge addon: $bridge_template"
+
+data_dir="${GODOT_VIM_HOME:-${XDG_DATA_HOME:-$HOME/.local/share}/godot-vim}"
+addons_cache="$data_dir/addons"
+bin_cache="$data_dir/bin/gdscript-formatter"
+godot_vim_cache="${GODOT_VIM_CACHE:-$addons_cache/godot_vim}"
+gdquest_cache="$addons_cache/GDQuest_GDScript_formatter"
+
+tmp_dir="$(mktemp -d "${TMPDIR:-/tmp}/godot-vim-init.XXXXXX")"
+trap 'rm -rf "$tmp_dir"' EXIT
+
+download_godot_vim_addon() {
+	local dest="$1"
+	local url
+
+	echo "Downloading GodotVim..."
+	url="$(
+		curl -fsSL "https://api.github.com/repos/hmdfrds/godot-vim/releases/latest" |
+			python3 -c '
+import json, sys
+data = json.load(sys.stdin)
+for asset in data.get("assets", []):
+    name = asset.get("name", "")
+    if name.startswith("godot-vim") and name.endswith(".zip"):
+        print(asset["browser_download_url"])
+        break
+'
+	)"
+
+	[[ -n "$url" ]] || die "could not find a GodotVim release zip"
+	curl -fsSL "$url" -o "$tmp_dir/godot-vim.zip"
+	unzip -q "$tmp_dir/godot-vim.zip" -d "$tmp_dir/godot-vim"
+
+	local src
+	src="$(find "$tmp_dir/godot-vim" -type d -path '*/addons/godot_vim' -print -quit)"
+	[[ -n "$src" ]] || die "unexpected GodotVim zip layout"
+
+	mkdir -p "$(dirname "$dest")"
+	cp -R "$src" "$dest"
+}
+
+find_godot_vim_source() {
+	if [[ -n "${GODOT_VIM_SRC:-}" ]]; then
+		printf '%s\n' "$GODOT_VIM_SRC"
+		return
+	fi
+	if [[ -f "$godot_vim_cache/plugin.cfg" ]]; then
+		printf '%s\n' "$godot_vim_cache"
+		return
+	fi
+	local candidate
+	for candidate in \
+		"$HOME/Developer/godot-getting-started/addons/godot_vim" \
+		"$HOME/godot-tutorial-2d/addons/godot_vim"; do
+		if [[ -f "$candidate/plugin.cfg" ]]; then
+			printf '%s\n' "$candidate"
+			return
+		fi
+	done
+}
+
+if [[ ! -f "$godot_vim_cache/plugin.cfg" ]]; then
+	src="$(find_godot_vim_source || true)"
+	if [[ -n "$src" ]]; then
+		mkdir -p "$(dirname "$godot_vim_cache")"
+		cp -R "$src" "$godot_vim_cache"
+		echo "Cached GodotVim addon -> $godot_vim_cache"
+	else
+		download_godot_vim_addon "$godot_vim_cache"
+		echo "Cached GodotVim addon -> $godot_vim_cache"
+	fi
+fi
+
+download_gdquest_addon() {
+	local dest="$1"
+
+	echo "Downloading GDQuest GDScript Formatter..."
+	curl -fsSL "https://github.com/GDQuest/GDScript-formatter/releases/latest/download/godot-addon.zip" \
+		-o "$tmp_dir/gdquest.zip"
+	unzip -q "$tmp_dir/gdquest.zip" -d "$tmp_dir/gdquest"
+
+	local src
+	src="$(find "$tmp_dir/gdquest" -type d -path '*/addons/GDQuest_GDScript_formatter' -print -quit)"
+	[[ -n "$src" ]] || die "unexpected GDQuest formatter zip layout"
+
+	mkdir -p "$(dirname "$dest")"
+	cp -R "$src" "$dest"
+}
+
+if [[ ! -f "$gdquest_cache/plugin.cfg" ]]; then
+	src=""
+	for candidate in \
+		"$HOME/godot-tutorial-2d/addons/GDQuest_GDScript_formatter"; do
+		if [[ -f "$candidate/plugin.cfg" ]]; then
+			src="$candidate"
+			break
+		fi
+	done
+
+	if [[ -n "$src" ]]; then
+		mkdir -p "$(dirname "$gdquest_cache")"
+		cp -R "$src" "$gdquest_cache"
+		echo "Cached GDQuest formatter addon -> $gdquest_cache"
+	else
+		download_gdquest_addon "$gdquest_cache"
+		echo "Cached GDQuest formatter addon -> $gdquest_cache"
+	fi
+fi
+
+godot_cache_dir() {
+	case "$(uname -s)" in
+	Darwin)
+		printf '%s\n' "$HOME/Library/Caches/Godot"
+		;;
+	Linux)
+		printf '%s\n' "${XDG_CACHE_HOME:-$HOME/.cache}/godot"
+		;;
+	*)
+		return 1
+		;;
+	esac
+}
+
+formatter_platform() {
+	local os arch
+	os="$(uname -s)"
+	arch="$(uname -m)"
+
+	case "$os" in
+	Darwin) os=macos ;;
+	Linux) os=linux ;;
+	*) return 1 ;;
+	esac
+
+	case "$arch" in
+	arm64 | aarch64) arch=aarch64 ;;
+	x86_64 | amd64) arch=x86_64 ;;
+	*) return 1 ;;
+	esac
+
+	printf '%s %s\n' "$os" "$arch"
+}
+
+download_formatter_binary() {
+	local dest="$1"
+	local platform os arch url
+
+	platform="$(formatter_platform)" || die "unsupported platform for the formatter binary"
+	os="${platform% *}"
+	arch="${platform#* }"
+
+	echo "Downloading gdscript-formatter..."
+	url="$(
+		curl -fsSL "https://api.github.com/repos/GDQuest/GDScript-formatter/releases/latest" |
+			python3 -c '
+import json, sys
+os_name, arch = sys.argv[1], sys.argv[2]
+data = json.load(sys.stdin)
+for asset in data.get("assets", []):
+    name = asset.get("name", "")
+    if name.startswith("gdscript-formatter-") and name.endswith(f"-{os_name}-{arch}.zip"):
+        print(asset["browser_download_url"])
+        break
+' "$os" "$arch"
+	)"
+
+	[[ -n "$url" ]] || die "could not find a gdscript-formatter release for $os-$arch"
+	curl -fsSL "$url" -o "$tmp_dir/gdscript-formatter.zip"
+	unzip -q "$tmp_dir/gdscript-formatter.zip" -d "$tmp_dir/gdscript-formatter"
+
+	local extracted
+	extracted="$(find "$tmp_dir/gdscript-formatter" -type f -print -quit)"
+	[[ -n "$extracted" ]] || die "unexpected gdscript-formatter zip layout"
+
+	mkdir -p "$(dirname "$dest")"
+	cp "$extracted" "$dest"
+	chmod +x "$dest"
+}
+
+godot_cache="$(godot_cache_dir)" || die "unsupported platform for Godot's cache directory"
+godot_formatter_dir="$godot_cache/gdquest"
+godot_formatter_bin="$godot_formatter_dir/gdscript-formatter"
+
+if [[ ! -x "$godot_formatter_bin" ]]; then
+	if [[ -x "$bin_cache" ]]; then
+		mkdir -p "$godot_formatter_dir"
+		cp "$bin_cache" "$godot_formatter_bin"
+		chmod +x "$godot_formatter_bin"
+		echo "Installed formatter binary -> $godot_formatter_bin"
+	else
+		download_formatter_binary "$bin_cache"
+		mkdir -p "$godot_formatter_dir"
+		cp "$bin_cache" "$godot_formatter_bin"
+		chmod +x "$godot_formatter_bin"
+		echo "Installed formatter binary -> $godot_formatter_bin"
+	fi
+elif [[ ! -x "$bin_cache" ]]; then
+	mkdir -p "$(dirname "$bin_cache")"
+	cp "$godot_formatter_bin" "$bin_cache"
+	chmod +x "$bin_cache"
+fi
+
+install_addon() {
+	local name="$1"
+	local src="$2"
+	local dest="$project/addons/$name"
+
+	if [[ -e "$dest" && "$force" -eq 0 ]]; then
+		echo "Addon already present: $dest"
+	else
+		if [[ "$force" -eq 1 ]]; then
+			rm -rf "$dest"
+		fi
+		mkdir -p "$project/addons"
+		cp -R "$src" "$dest"
+		echo "Copied $name -> $dest"
+	fi
+}
+
+install_addon godot_vim "$godot_vim_cache"
+install_addon GDQuest_GDScript_formatter "$gdquest_cache"
+install_addon godotvim_formatter_bridge "$bridge_template"
+
+vimrc_dest="$project/.godot-vimrc"
+if [[ -f "$vimrc_dest" && "$force_vimrc" -eq 0 ]]; then
+	echo "Keeping existing .godot-vimrc: $vimrc_dest"
+else
+	cp "$vimrc_template" "$vimrc_dest"
+	echo "Copied .godot-vimrc -> $vimrc_dest"
+fi
+
+python3 - "$project/project.godot" \
+	"res://addons/godotvim_formatter_bridge/plugin.cfg" \
+	"res://addons/GDQuest_GDScript_formatter/plugin.cfg" \
+	"res://addons/godot_vim/plugin.cfg" <<'PY'
+from pathlib import Path
+import re
+import sys
+
+path = Path(sys.argv[1])
+plugins = sys.argv[2:]
+text = path.read_text()
+
+if "[editor_plugins]" not in text:
+    values = ", ".join(f'"{plugin}"' for plugin in plugins)
+    text = text.rstrip() + (
+        "\n\n[editor_plugins]\n\n"
+        f"enabled=PackedStringArray({values})\n"
+    )
+    path.write_text(text)
+    print("Enabled plugins in project.godot: " + ", ".join(plugins))
+    raise SystemExit(0)
+
+start = text.index("[editor_plugins]")
+end = text.find("\n[", start + len("[editor_plugins]"))
+if end == -1:
+    end = len(text)
+
+section = text[start:end]
+match = re.search(r"enabled\s*=\s*PackedStringArray\(([^)]*)\)", section, re.S)
+
+if not match:
+    values = ", ".join(f'"{plugin}"' for plugin in plugins)
+    section = section.rstrip() + f"\nenabled=PackedStringArray({values})\n"
+    path.write_text(text[:start] + section + text[end:])
+    print("Enabled plugins in project.godot: " + ", ".join(plugins))
+    raise SystemExit(0)
+
+items = re.findall(r'"([^"]*)"', match.group(1))
+added = [plugin for plugin in plugins if plugin not in items]
+
+if not added:
+    print("All plugins are already enabled in project.godot")
+    raise SystemExit(0)
+
+items.extend(added)
+replacement = "enabled=PackedStringArray(" + ", ".join(f'"{item}"' for item in items) + ")"
+section = section[: match.start()] + replacement + section[match.end() :]
+path.write_text(text[:start] + section + text[end:])
+print("Enabled plugins in project.godot: " + ", ".join(added))
+PY
+
+echo
+echo "Done. Reload the project in Godot: Project > Reload Current Project."

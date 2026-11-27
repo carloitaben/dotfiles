@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+# Run every Godot setup step for a project.
+set -euo pipefail
+
+usage() {
+	cat <<'EOF'
+Usage: godot-setup [PROJECT_DIR]
+
+Runs every bin/godot-*-init script, in filename order, against PROJECT_DIR:
+  godot-settings-init  editor + project settings
+  godot-vim-init       GodotVim, formatter, bridge, .godot-vimrc
+
+Add bin/godot-<name>-init to extend the setup.
+
+  PROJECT_DIR    Godot project directory (default: current directory)
+
+For a step's own options, run it directly, e.g.:
+
+  godot-vim-init . --force-vimrc
+EOF
+}
+
+die() {
+	echo "godot-setup: $*" >&2
+	exit 1
+}
+
+project=""
+
+for arg in "$@"; do
+	case "$arg" in
+	-h | --help)
+		usage
+		exit 0
+		;;
+	-*)
+		echo "godot-setup: unknown option: $arg" >&2
+		usage >&2
+		exit 2
+		;;
+	*)
+		if [[ -n "$project" ]]; then
+			echo "godot-setup: only one project directory may be given" >&2
+			exit 2
+		fi
+		project="$arg"
+		;;
+	esac
+done
+
+project="${project:-$PWD}"
+project="${project%/}"
+
+[[ -d "$project" ]] || die "not a directory: $project"
+project="$(cd "$project" && pwd)"
+[[ -f "$project/project.godot" ]] || die "no project.godot in $project"
+
+# Resolve the script's real location, following symlinks.
+source_path="${BASH_SOURCE[0]}"
+while [[ -L "$source_path" ]]; do
+	link_dir="$(cd -P "$(dirname "$source_path")" && pwd)"
+	source_path="$(readlink "$source_path")"
+	[[ "$source_path" == /* ]] || source_path="$link_dir/$source_path"
+done
+script_dir="$(cd -P "$(dirname "$source_path")" && pwd)"
+
+shopt -s nullglob
+steps=("$script_dir"/godot-*-init)
+shopt -u nullglob
+
+[[ ${#steps[@]} -gt 0 ]] || die "no godot-*-init scripts found in $script_dir"
+
+for step in "${steps[@]}"; do
+	echo
+	echo "==> $(basename "$step")"
+	"$step" "$project" || die "$(basename "$step") failed"
+done
+
+echo
+echo "All setup steps completed."
