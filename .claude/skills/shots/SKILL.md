@@ -1,10 +1,12 @@
 ---
 name: shots
-description: Screenshot pages or components and file them under this session. Before/after comparison on request.
+description: Screenshot pages or components, or record loading sequences as video, and file them under this session. Before/after comparison on request.
 disable-model-invocation: true
 ---
 
 Screenshot the UI the user named and file it under this session. `/pr-shots` later uploads it.
+
+**Video**: when the point is a sequence in time (loading states, spinner order, a transition) and not one moment, read [VIDEO.md](VIDEO.md) and follow it in place of steps 3 and 4. A video comparison reads [COMPARE.md](COMPARE.md) for the base-files swap too.
 
 **Comparison**: when the user asks for before/after, to screenshot the changes, or to compare with a baseline, read [COMPARE.md](COMPARE.md) and follow it in place of steps 3 and 4. Every other request is a single shot per page or component.
 
@@ -12,7 +14,7 @@ Screenshot the UI the user named and file it under this session. `/pr-shots` lat
 
 `~/.claude/shots/$CLAUDE_CODE_SESSION_ID/`: `manifest.json` plus `<name>/shot.png`. The session has shots when `manifest.json` exists.
 
-Entry shape, written by `shoot.py`:
+Entry shape, written by `shoot.py` (`clip.py` writes `"kind": "video"` with `video`, or `"video-comparison"` with `before` and `after`):
 
 ```json
 {"name": "text-block", "kind": "shot", "url": "…", "scope": "element", "device": "desktop",

@@ -4,7 +4,7 @@ description: Upload this session's screenshots, single shots and before/after co
 disable-model-invocation: true
 ---
 
-Put this session's screenshots into the PR description with a full-width table only where two images belong together: Desktop | Mobile for each `<stem>-desktop` + `<stem>-mobile` pair, Before | After for a comparison. Every other single shot is one captioned image. The screenshots come from `/shots`.
+Put this session's screenshots into the PR description with a full-width table only where two images belong together: Desktop | Mobile for each `<stem>-desktop` + `<stem>-mobile` pair, Before | After for a comparison. Every other single shot is one captioned image. The screenshots come from `/shots`. A video entry (`clip.py`) is one captioned video; a video comparison is a Before | After table of two videos.
 
 ## 1. Resolve the PR
 
@@ -30,7 +30,7 @@ Done when `check` passes.
 python3 -I ~/.dotfiles/.claude/skills/pr-shots/update-body.py paths | xargs python3 -I ~/.dotfiles/.claude/skills/pr-shots/upload.py <pr-url> > <scratchpad>/urls.json
 ```
 
-All images in one call. It prints JSON `{image path: url}` and clears the comment box it used. It runs in agent-browser's own headless browser, so the user can keep working.
+All files in one call (png, jpg, webm). It prints JSON `{image path: url}` and clears the comment box it used. It runs in agent-browser's own headless browser, so the user can keep working.
 
 Needs the `gh` agent-browser session signed in to GitHub (profile `~/.agent-browser/profiles/gh`). The script exits at once with the setup command when it is not. One-time setup: run that command, sign in, close the window.
 

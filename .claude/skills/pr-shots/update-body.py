@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """Read this session's shots manifest; fill a PR description's `## Proof` section.
 
-An entry is a single `shot` (one image) or a before/after `comparison` (two images).
+An entry is a single `shot` (one image), a before/after `comparison` (two images), a `video`
+(one video) or a `video-comparison` (before and after videos).
 
 Layout of the `## Proof` section:
   `<stem>-desktop` + `<stem>-mobile` shots   one Desktop | Mobile table
   other single shots                         one image each, captioned
   comparison                                 a Before | After table
+  video                                      one captioned video, a bare URL GitHub plays inline
+  video-comparison                           a Before | After table of the two videos
 Images carry a `width` far above the description's width. GitHub sizes a table to its content,
 so widths that overflow make it span the full width and scale the images down together.
 
@@ -43,7 +46,13 @@ def run(*args):
 
 
 def images(e):
-    return [e["image"]] if e["kind"] == "shot" else [e["before"], e["after"]]
+    """The files to upload for an entry."""
+    return {
+        "shot": lambda: [e["image"]],
+        "comparison": lambda: [e["before"], e["after"]],
+        "video": lambda: [e["video"]],
+        "video-comparison": lambda: [e["before"], e["after"]],
+    }[e["kind"]]()
 
 
 def check(entries):
@@ -65,6 +74,10 @@ DESKTOP, MOBILE, SIDE = 1000, 300, 600  # SIDE: Before | After
 
 def img(url, alt, width):
     return f'<img src="{url}" width="{width}" alt="{alt}">'
+
+
+def video(url):
+    return f'<video src="{url}" width="{SIDE}" controls muted></video>'
 
 
 def table(heads, images):
@@ -95,6 +108,11 @@ def section(entries, urls):
             out += [f"**{stem}**" + (f": {d['note']}" if d["note"] else ""), ""]
             out += table(["Desktop", "Mobile"], [img(urls[d["image"]], d["name"], DESKTOP),
                                                  img(urls[m["image"]], m["name"], MOBILE)])
+        elif e["kind"] == "video":
+            out += [f"**{e['name']}**" + (f": {e['note']}" if e["note"] else ""), "", urls[e["video"]], ""]
+        elif e["kind"] == "video-comparison":
+            out += [f"**{e['name']}**" + (f": {e['note']}" if e["note"] else ""), ""]
+            out += table(["Before", "After"], [video(urls[e["before"]]), video(urls[e["after"]])])
         elif e["kind"] == "shot":
             out += [f"**{e['name']}**" + (f": {e['note']}" if e["note"] else ""), "", f"![{e['name']}]({urls[e['image']]})", ""]
         else:
@@ -116,7 +134,7 @@ def write(pr, urls_file):
     final = run("gh", "pr", "view", pr, "--json", "body", "-q", ".body")
     count = final.count("user-attachments/assets/")
     expected = sum(len(images(e)) for e in entries)
-    print(f"{count} images in the PR body, expected {expected}")
+    print(f"{count} uploads in the PR body, expected {expected}")
     sys.exit(0 if count == expected else 1)
 
 

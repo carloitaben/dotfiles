@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Upload images to GitHub through a PR's comment box, then clear the box.
 
-Usage: upload.py <pr-url> <image>...   (png or jpg)
+Usage: upload.py <pr-url> <file>...   (png, jpg or webm)
 
 Prints a JSON object {image path: github.com/user-attachments URL} on stdout.
 Progress goes to stderr. Nothing is ever posted: the draft is cleared at the end.
@@ -26,9 +26,9 @@ SESSION = "gh"
 PROFILE = os.path.expanduser("~/.agent-browser/profiles/gh")
 SETUP = f"agent-browser --session {SESSION} --profile {PROFILE} --headed open https://github.com/login"
 TEXTAREA = 'textarea[aria-label="Markdown value"]'
-IMG_URL = re.compile(r'<img [^>]*src="(https://github\.com/user-attachments/assets/[^"]+)"')
-MIME = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg"}
-MAX_BYTES = 10_000_000  # GitHub rejects larger images
+ASSET_URL = re.compile(r"(https://github\.com/user-attachments/assets/[0-9a-f-]+)")  # inside an <img> for images, bare for videos
+MIME = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webm": "video/webm"}
+MAX_BYTES = {"image": 10_000_000, "video": 100_000_000}  # GitHub rejects larger files
 
 
 def log(msg):
@@ -74,7 +74,7 @@ def require_session():
 
 def draft_urls():
     value = evaluate(f"document.querySelector({json.dumps(TEXTAREA)})?.value || ''")
-    return IMG_URL.findall(value)
+    return ASSET_URL.findall(value)
 
 
 def wait_for(what, probe, timeout):
@@ -126,15 +126,17 @@ def clear_draft():
 
 def main():
     if len(sys.argv) < 3:
-        fail("usage: upload.py <pr-url> <image>...")
+        fail("usage: upload.py <pr-url> <file>...")
     pr_url, images = sys.argv[1], [os.path.abspath(p) for p in sys.argv[2:]]
     for image in images:
         if not os.path.isfile(image):
             fail(f"not a file: {image}")
-        if os.path.splitext(image)[1].lower() not in MIME:
-            fail(f"only png and jpg are supported: {image}")
-        if os.path.getsize(image) > MAX_BYTES:
-            fail(f"image over GitHub's {MAX_BYTES // 1_000_000} MB limit, shrink it first: {image}")
+        mime = MIME.get(os.path.splitext(image)[1].lower())
+        if not mime:
+            fail(f"only png, jpg and webm are supported: {image}")
+        limit = MAX_BYTES[mime.split("/")[0]]
+        if os.path.getsize(image) > limit:
+            fail(f"file over GitHub's {limit // 1_000_000} MB limit, shrink it first: {image}")
 
     require_session()
     browser("open", pr_url)
