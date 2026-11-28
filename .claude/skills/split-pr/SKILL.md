@@ -23,7 +23,7 @@ Split the diff between the current branch and its target into independent (or st
 
 **Neat conceptual slices.** Each PR reads as one idea. Group by final logical ownership; *when* a hunk was introduced or touched never decides its group. A hunk that adds `Foo` and a later one that guts it belong to one `Foo` group, not "introduce Foo" under "simplify Foo".
 
-**Reviewable unit.** A group is one behavior a reviewer judges in one sitting. Budget **200–400 changed LOC** (excluding generated files, snapshots, locale strings); over ~500 or two concepts: split. Under ~100 without standalone value: fold into a neighbor. Fewest PRs under the budget: 5–8 per stack reads as a story; 15+ is notification and merge-chain noise.
+**Reviewable unit.** A group is one behavior a reviewer judges in one sitting. Budget **~500 changed LOC** (excluding generated files, snapshots, locale strings); over ~1000 or two concepts: split. Without standalone value: fold into a neighbor.
 
 - **Vertical.** Slice by behavior, backend and frontend together ("filter text fields", then "add number operators"), so each PR is demoable and the feature reverts cleanly. Split by layer only when the sides ship independently.
 - **Spend review on risk.** Isolate what needs real scrutiny (data model, queries, permissions, migrations) in its own PR. Fold mechanical code (helpers, wiring, barrels, locale strings) into the PR that uses it.
